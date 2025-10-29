@@ -15,7 +15,7 @@ const DEFAULT_IDS = [
   "tron",
   "polkadot",
   "litecoin",
-  "matic-network", // MATIC (Polygon)
+  "polygon", // MATIC (Polygon)
   "usd-coin",
 ];
 
@@ -109,7 +109,6 @@ export default function NewsTicker({
         // LTC
         litecoin: ["ltc.svg", "litecoin.svg"],
         // MATIC / POL
-        "matic-network": ["matic.svg", "pol.svg", "poly.svg"],
         polygon: ["matic.svg", "pol.svg", "poly.svg"],
         // USDC
         "usd-coin": ["usdc.svg", "usd-coin.svg"],
