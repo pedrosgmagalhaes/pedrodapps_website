@@ -1,0 +1,168 @@
+.banner {
+  --banner-bg-start: #72e230;
+  --banner-bg-end: #6fdf2e;
+  position: relative;
+  border-radius: 20px;
+  overflow: hidden;
+  /* fundo com imagem (top layer) + gradiente abaixo */
+  background-image:
+    url("../assets/coins.png"),
+    linear-gradient(30deg, var(--banner-bg-start) 0%, var(--banner-bg-end) 100%);
+  background-repeat: no-repeat, no-repeat;
+  background-position:
+    right bottom,
+    center;
+  background-size:
+    auto 80%,
+    cover; /* imagem menor para reduzir impacto visual */
+  color: var(--neutral-white);
+  box-shadow: 0 6px 24px rgb(0 0 0 / 20%);
+  width: 80%;
+  margin: clamp(12px, 3vw, 24px) auto; /* centraliza e dá respiro externo */
+  padding: clamp(12px, 2.5vw, 24px);
+  max-height: 300px; /* reduz a altura máxima do banner */
+}
+
+.banner__container {
+  display: grid;
+  grid-template-columns: 1fr; /* remove coluna de mídia */
+  align-items: center;
+  gap: var(--spacing-xl);
+  min-height: clamp(160px, 22vw, 300px); /* altura mínima reduzida, mantendo responsividade */
+}
+
+.banner__content {
+  padding: clamp(16px, 3vw, 32px); /* reduz padding para diminuir a altura total */
+}
+
+.banner__title {
+  font-family:
+    "Bungee",
+    cursive,
+    -apple-system,
+    blinkmacsystemfont,
+    "Segoe UI",
+    "Roboto",
+    "Saira",
+    sans-serif;
+  font-weight: 700;
+  font-size: clamp(var(--font-size-lg), 3vw, var(--font-size-2xl));
+  line-height: 1.15;
+  margin: 0 0 var(--spacing-md);
+  color: #22243a; /* solicitado: texto na cor #22243A */
+  text-shadow: 0 1px 0 rgb(255 255 255 / 20%);
+}
+
+.banner__description {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 400;
+  font-size: clamp(var(--font-size-sm), 1.8vw, var(--font-size-md));
+  color: #22243a; /* solicitado: texto na cor #22243A */
+  margin-bottom: var(--spacing-lg);
+}
+
+.banner__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: 0.75rem 1.1rem;
+  background: #24263b; /* botão escuro como no exemplo */
+  color: var(--neutral-white);
+  border-radius: 999px;
+  border: 1px solid rgb(255 255 255 / 10%);
+  text-decoration: none;
+  font-weight: 500;
+  will-change: transform;
+  transition:
+    transform 0.2s ease,
+    background-color 0.2s ease,
+    color 0.2s ease;
+  font-family:
+    "Bungee",
+    cursive,
+    -apple-system,
+    blinkmacsystemfont,
+    "Segoe UI",
+    "Roboto",
+    "Saira",
+    sans-serif;
+}
+
+.banner__cta:hover {
+  transform: translateY(-1px);
+  background: #2c2f49;
+}
+
+.banner__cta-icon {
+  width: 18px;
+  height: 18px;
+}
+
+@media (width < 920px) {
+  .banner__container {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Ajustes para tablets e mobile */
+@media (max-width: 768px) {
+  .banner {
+    width: 94%;
+    padding: clamp(10px, 3vw, 18px);
+    max-height: none; /* permite altura flexível em telas menores */
+    background-size:
+      auto 44%,
+      cover; /* reduz tamanho das moedas */
+    background-position:
+      right -10px bottom -6px,
+      center; /* empurra para fora do conteúdo */
+  }
+
+  .banner__container {
+    min-height: auto; /* remove a restrição de altura mínima */
+    gap: var(--spacing-lg);
+  }
+
+  .banner__content {
+    padding: clamp(14px, 4vw, 22px);
+  }
+
+  .banner__title {
+    font-size: clamp(var(--font-size-base), 5.2vw, var(--font-size-xl));
+    line-height: 1.25;
+    text-shadow: none; /* texto limpo para legibilidade em telas pequenas */
+  }
+
+  .banner__description {
+    font-size: clamp(var(--font-size-xs), 4.2vw, var(--font-size-sm));
+    margin-bottom: var(--spacing-md);
+  }
+
+  .banner__cta {
+    padding: 0.6rem 0.9rem;
+    font-size: var(--font-size-sm);
+  }
+}
+
+@media (max-width: 480px) {
+  .banner {
+    width: 96%;
+    background-size:
+      auto 38%,
+      cover; /* ainda menor no celular */
+    background-position:
+      right -16px bottom -10px,
+      center;
+    border-radius: 14px;
+  }
+
+  .banner__content {
+    padding: clamp(12px, 5vw, 18px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .banner__cta {
+    transition: none;
+  }
+}

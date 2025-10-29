@@ -75,7 +75,7 @@
   --gradient-bg: linear-gradient(180deg, #000 0%, #0f0e16 50%, #23154c 100%);
 
   /* Tipografia */
-  --font-family: "Bungee", cursive, -apple-system, blinkmacsystemfont, "Segoe UI", "Roboto", "Saira", sans-serif;
+  --font-family: "Montserrat", -apple-system, blinkmacsystemfont, "Segoe UI", "Inter", "Roboto", "Saira", sans-serif;
   --font-family-mono: "Roboto Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
   --font-size-xs: 0.75rem;
   --font-size-sm: 0.875rem;

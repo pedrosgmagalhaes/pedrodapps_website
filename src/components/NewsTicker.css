@@ -115,12 +115,22 @@
 
 .news-ticker__track::before {
   left: 0;
-  background: linear-gradient(to right, var(--black) 0%, rgb(25 25 28 / 0%) 100%);
+  /* sombra lateral adaptada para combinar com o fundo #24263B */
+  background: linear-gradient(
+    to right,
+    rgb(36 38 59 / 1) 0%,
+    rgb(36 38 59 / 0) 100%
+  );
 }
 
 .news-ticker__track::after {
   right: 0;
-  background: linear-gradient(to left, var(--black) 0%, rgb(25 25 28 / 0%) 100%);
+  /* sombra lateral adaptada para combinar com o fundo #24263B */
+  background: linear-gradient(
+    to left,
+    rgb(36 38 59 / 1) 0%,
+    rgb(36 38 59 / 0) 100%
+  );
 }
 
 .news-ticker__list {
@@ -163,7 +173,7 @@
 
 /* Itens de cotação */
 .news-ticker__symbol {
-  font-weight: 700;
+  font-weight: 500;
   font-size: var(--font-size-sm);
   letter-spacing: 0.02em;
 }

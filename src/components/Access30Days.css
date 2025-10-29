@@ -1,0 +1,123 @@
+.access30 {
+  background: #ffffff; /* solicitado: fundo branco */
+  color: #24263b; /* solicitado: textos escuros */
+  padding: var(--spacing-4xl) 0;
+  margin-top: 10vh;
+}
+
+.access30__grid {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr; /* esquerda: texto; direita: lista */
+  align-items: start;
+  gap: var(--spacing-3xl);
+}
+
+@media (max-width: 1024px) {
+  .access30__grid {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-2xl);
+  }
+}
+
+.access30__left {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.access30__title {
+  font-family: "Bungee", cursive, -apple-system, blinkmacsystemfont, "Segoe UI", "Roboto", "Saira", sans-serif;
+  font-weight: 800;
+  font-size: clamp(1.6rem, 3.4vw, 2.2rem);
+  line-height: 1.25;
+  color: #24263b; /* título escuro sobre fundo branco */
+  margin: 0 0 var(--spacing-sm);
+}
+
+.access30__description {
+  font-family: "Montserrat", sans-serif;
+  font-size: clamp(var(--font-size-sm), 1.6vw, var(--font-size-base));
+  color: #24263b; /* descrição escura */
+  max-width: 640px;
+}
+
+.access30__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  margin-top: var(--spacing-md);
+}
+
+.access30__cta {
+  border-radius: 9999px;
+  font-weight: 500;
+  padding: 12px 22px;
+  background: var(--accent-primary); /* remover degradê: cor sólida da marca */
+  color: #24263b; /* texto escuro sobre fundo claro */
+  font-family:
+    "Bungee",
+    cursive,
+    -apple-system,
+    blinkmacsystemfont,
+    "Segoe UI",
+    "Roboto",
+    "Saira",
+    sans-serif;
+}
+
+.access30__cta.btn.btn-primary:hover {
+  filter: brightness(0.97);
+}
+
+.access30__cta-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 9999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgb(255 255 255 / 20%);
+  background: rgb(255 255 255 / 4%);
+}
+.access30__cta-icon img {
+  width: 18px;
+  height: 18px;
+  display: block;
+}
+
+.access30__list {
+  list-style: none;
+  display: grid;
+  gap: var(--spacing-lg);
+}
+
+.access30__item {
+  display: grid;
+  grid-template-columns: 24px 1fr;
+  gap: var(--spacing-md);
+  align-items: start;
+}
+
+.access30__item-icon {
+  width: 24px;
+  height: 24px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.access30__item-icon img {
+  width: 20px;
+  height: 20px;
+  display: block;
+}
+
+.access30__item-text {
+  color: #24263b; /* texto dos itens escuro */
+  font-size: clamp(var(--font-size-sm), 1.6vw, var(--font-size-base));
+  line-height: 1.55;
+}
+
+/* realce do trecho final em ênfase */
+.access30__item-text strong {
+  color: var(--neutral-white);
+}

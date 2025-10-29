@@ -22,7 +22,15 @@
 }
 
 .hero__title {
-  font-family: 'Montserrat', 'Inter', 'Segoe UI', 'Roboto', sans-serif; /* Montserrat no título */
+  font-family:
+    "Bungee",
+    cursive,
+    -apple-system,
+    blinkmacsystemfont,
+    "Segoe UI",
+    "Roboto",
+    "Saira",
+    sans-serif;
   font-weight: 900;
   font-size: clamp(2rem, 3.8vw, 3.25rem);
   line-height: 1.2;
@@ -33,7 +41,8 @@
 }
 
 .hero__desc {
-  font-family: 'Montserrat', 'Inter', 'Segoe UI', 'Roboto', sans-serif; /* Montserrat na descrição */
+  font-family:
+    "Montserrat", "Inter", "Segoe UI", "Roboto", sans-serif; /* Montserrat na descrição */
   color: var(--black-light);
   font-size: var(--font-size-base);
   max-width: 640px;
@@ -55,6 +64,10 @@
   font-family: var(--font-family);
   font-weight: 600;
   text-decoration: none;
+  cursor: pointer; /* cursor pointer conforme pedido */
+  transition: transform 240ms ease-out; /* animação de expansão mais suave */
+  will-change: transform;
+  transform-origin: center center;
 }
 
 .hero__btn--primary {
@@ -63,6 +76,11 @@
   padding: 14px 28px; /* mais padding para aumentar o botão */
   font-size: var(--font-size-lg); /* torna o texto um pouco maior */
   font-weight: 400;
+  font-family:
+    "Bungee",
+    cursive,
+    -apple-system,
+    blinkmacsyst;
 }
 .hero__btn--primary:hover {
   filter: brightness(0.97);
@@ -76,8 +94,109 @@
   color: #fff;
 }
 .hero__btn-icon {
-  width: 18px;
-  height: 18px;
+  width: 22px; /* maior */
+  height: 22px;
+  color: #ff0000; /* vermelho YouTube */
+}
+/* Expande o botão inteiro 2x no hover */
+.hero__btn:hover {
+  transform: scale(1.12); /* expansão leve */
+}
+/* Pausa a animação de atenção enquanto hover para evitar conflito de transform */
+.hero__btn--attention:hover {
+  animation: none;
+}
+
+/* Botão chamando atenção com leve animação */
+.hero__btn--attention {
+  gap: 10px;
+  position: relative;
+  animation: attentionPulse 1.8s ease-in-out infinite;
+  will-change: transform, box-shadow;
+}
+.hero__btn-label {
+  display: inline-block;
+}
+@keyframes attentionPulse {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(129, 223, 77, 0.25);
+  }
+  50% {
+    transform: scale(1.035);
+    box-shadow: 0 0 24px 6px rgba(129, 223, 77, 0.35);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(129, 223, 77, 0.25);
+  }
+}
+
+/* Modal de vídeo fullscreen */
+.video-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 9999; /* garante que fique acima de qualquer header */
+  background: rgba(0, 0, 0, 0.9);
+  display: grid;
+  place-items: center;
+  padding: 20px;
+}
+.video-modal__content {
+  width: min(1200px, 92vw);
+}
+.video-modal__frame {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+}
+.video-modal__iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+.video-modal__close {
+  position: absolute;
+  top: 150px; /* posicionado ~50px abaixo do topo */
+  right: 16px;
+  width: 44px;
+  height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.24);
+  z-index: 10000; /* garante que o botão esteja acima do conteúdo do modal */
+  cursor: pointer;
+}
+.video-modal__close:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+@media (max-width: 960px) {
+  .hero__btn--primary.hero__btn--attention {
+    padding: 12px 22px;
+    font-size: var(--font-size-base);
+  }
+  .video-modal {
+    padding: 12px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero__btn {
+    transition: none;
+  }
+  .hero__btn:hover {
+    transform: none;
+  }
+  .hero__btn--attention {
+    animation: none;
+  }
 }
 
 /* Figura à direita (Pedro) */
@@ -108,14 +227,54 @@
   will-change: opacity, filter;
   animation: dotsTwinkleRight 6s ease-in-out infinite;
   background-image:
-    radial-gradient(36px 36px at 84% 18%, rgba(129, 223, 77, 0.30) 0, rgba(129, 223, 77, 0.14) 35%, rgba(129, 223, 77, 0) 60%),
-    radial-gradient(24px 24px at 72% 32%, rgba(129, 223, 77, 0.28) 0, rgba(129, 223, 77, 0.12) 38%, rgba(129, 223, 77, 0) 60%),
-    radial-gradient(48px 48px at 90% 48%, rgba(129, 223, 77, 0.22) 0, rgba(129, 223, 77, 0.10) 40%, rgba(129, 223, 77, 0) 70%),
-    radial-gradient(28px 28px at 66% 56%, rgba(129, 223, 77, 0.28) 0, rgba(129, 223, 77, 0.12) 36%, rgba(129, 223, 77, 0) 62%),
-    radial-gradient(16px 16px at 80% 70%, rgba(129, 223, 77, 0.32) 0, rgba(129, 223, 77, 0.16) 40%, rgba(129, 223, 77, 0) 68%),
-    radial-gradient(40px 40px at 94% 72%, rgba(129, 223, 77, 0.24) 0, rgba(129, 223, 77, 0.10) 40%, rgba(129, 223, 77, 0) 70%),
-    radial-gradient(22px 22px at 70% 84%, rgba(129, 223, 77, 0.30) 0, rgba(129, 223, 77, 0.14) 40%, rgba(129, 223, 77, 0) 68%),
-    radial-gradient(12px 12px at 88% 86%, rgba(129, 223, 77, 0.35) 0, rgba(129, 223, 77, 0.18) 40%, rgba(129, 223, 77, 0) 68%);
+    radial-gradient(
+      36px 36px at 84% 18%,
+      rgba(129, 223, 77, 0.3) 0,
+      rgba(129, 223, 77, 0.14) 35%,
+      rgba(129, 223, 77, 0) 60%
+    ),
+    radial-gradient(
+      24px 24px at 72% 32%,
+      rgba(129, 223, 77, 0.28) 0,
+      rgba(129, 223, 77, 0.12) 38%,
+      rgba(129, 223, 77, 0) 60%
+    ),
+    radial-gradient(
+      48px 48px at 90% 48%,
+      rgba(129, 223, 77, 0.22) 0,
+      rgba(129, 223, 77, 0.1) 40%,
+      rgba(129, 223, 77, 0) 70%
+    ),
+    radial-gradient(
+      28px 28px at 66% 56%,
+      rgba(129, 223, 77, 0.28) 0,
+      rgba(129, 223, 77, 0.12) 36%,
+      rgba(129, 223, 77, 0) 62%
+    ),
+    radial-gradient(
+      16px 16px at 80% 70%,
+      rgba(129, 223, 77, 0.32) 0,
+      rgba(129, 223, 77, 0.16) 40%,
+      rgba(129, 223, 77, 0) 68%
+    ),
+    radial-gradient(
+      40px 40px at 94% 72%,
+      rgba(129, 223, 77, 0.24) 0,
+      rgba(129, 223, 77, 0.1) 40%,
+      rgba(129, 223, 77, 0) 70%
+    ),
+    radial-gradient(
+      22px 22px at 70% 84%,
+      rgba(129, 223, 77, 0.3) 0,
+      rgba(129, 223, 77, 0.14) 40%,
+      rgba(129, 223, 77, 0) 68%
+    ),
+    radial-gradient(
+      12px 12px at 88% 86%,
+      rgba(129, 223, 77, 0.35) 0,
+      rgba(129, 223, 77, 0.18) 40%,
+      rgba(129, 223, 77, 0) 68%
+    );
 }
 
 /* Bolinhas à esquerda também, com brilho alternado */
@@ -131,10 +290,30 @@
   will-change: opacity, filter;
   animation: dotsTwinkleLeft 7.5s ease-in-out infinite;
   background-image:
-    radial-gradient(20px 20px at 18% 22%, rgba(129, 223, 77, 0.28) 0, rgba(129, 223, 77, 0.12) 40%, rgba(129, 223, 77, 0) 68%),
-    radial-gradient(16px 16px at 30% 36%, rgba(129, 223, 77, 0.26) 0, rgba(129, 223, 77, 0.12) 38%, rgba(129, 223, 77, 0) 60%),
-    radial-gradient(24px 24px at 12% 54%, rgba(129, 223, 77, 0.22) 0, rgba(129, 223, 77, 0.10) 40%, rgba(129, 223, 77, 0) 70%),
-    radial-gradient(14px 14px at 26% 72%, rgba(129, 223, 77, 0.30) 0, rgba(129, 223, 77, 0.14) 42%, rgba(129, 223, 77, 0) 68%);
+    radial-gradient(
+      20px 20px at 18% 22%,
+      rgba(129, 223, 77, 0.28) 0,
+      rgba(129, 223, 77, 0.12) 40%,
+      rgba(129, 223, 77, 0) 68%
+    ),
+    radial-gradient(
+      16px 16px at 30% 36%,
+      rgba(129, 223, 77, 0.26) 0,
+      rgba(129, 223, 77, 0.12) 38%,
+      rgba(129, 223, 77, 0) 60%
+    ),
+    radial-gradient(
+      24px 24px at 12% 54%,
+      rgba(129, 223, 77, 0.22) 0,
+      rgba(129, 223, 77, 0.1) 40%,
+      rgba(129, 223, 77, 0) 70%
+    ),
+    radial-gradient(
+      14px 14px at 26% 72%,
+      rgba(129, 223, 77, 0.3) 0,
+      rgba(129, 223, 77, 0.14) 42%,
+      rgba(129, 223, 77, 0) 68%
+    );
 }
 
 /* Moedas decorativas saltando lentamente */
@@ -177,15 +356,33 @@
 
 /* Animações de brilho das bolinhas do fundo */
 @keyframes dotsTwinkleRight {
-  0% { opacity: 0.55; filter: brightness(1); }
-  50% { opacity: 1; filter: brightness(1.15); }
-  100% { opacity: 0.6; filter: brightness(1); }
+  0% {
+    opacity: 0.55;
+    filter: brightness(1);
+  }
+  50% {
+    opacity: 1;
+    filter: brightness(1.15);
+  }
+  100% {
+    opacity: 0.6;
+    filter: brightness(1);
+  }
 }
 
 @keyframes dotsTwinkleLeft {
-  0% { opacity: 0.45; filter: brightness(1); }
-  50% { opacity: 0.95; filter: brightness(1.12); }
-  100% { opacity: 0.5; filter: brightness(1); }
+  0% {
+    opacity: 0.45;
+    filter: brightness(1);
+  }
+  50% {
+    opacity: 0.95;
+    filter: brightness(1.12);
+  }
+  100% {
+    opacity: 0.5;
+    filter: brightness(1);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -194,12 +391,11 @@
   }
 }
 
-
 @media (width <= 768px) {
   .hero {
     padding: 100px 0 0;
     flex: content;
-   justify-content: center;
+    justify-content: center;
   }
   .hero__layout {
     grid-template-columns: 1fr;

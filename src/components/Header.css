@@ -17,6 +17,7 @@
 .header--scrolled {
   background: #24263B;
   box-shadow: 0 10px 28px rgb(0 0 0 / 32%);
+  height: 120px;
 }
 
 .header__content {
@@ -61,7 +62,7 @@
 
 /* Imagem do logo (GIF 16-bit) */
 .logo__image {
-  height: 120px;
+  height: 100px;
   width: auto;
   display: block;
   image-rendering: pixelated; /* preserva o visual 16 bits quando escalado */
@@ -317,7 +318,7 @@
 .header__btn.header__btn--primary {
   background: #7BE33D;
   border-color: transparent;
-  color: #000;
+  color: #24263B;
 }
 .header__btn.header__btn--primary:hover {
   transform: translateY(-1px) scale(1.02);

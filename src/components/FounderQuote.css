@@ -1,0 +1,263 @@
+.founder {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, #24263b 0%, #22243a 100%);
+  color: #f2f2f2;
+}
+
+.founder::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+  background-size: 42px 42px;
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+.founder__container {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 1.05fr 0.95fr;
+  gap: 40px;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.founder__quote-mark {
+  font-size: 48px;
+  line-height: 1;
+  color: var(--accent-primary, #7be33d);
+  margin-bottom: 8px;
+}
+
+.founder__title {
+  font-size: clamp(24px, 3.2vw, 36px);
+  line-height: 1.25;
+  font-weight: 800;
+  margin: 0 0 12px 0;
+  font-family:
+    "Bungee",
+    cursive,
+    -apple-system,
+    blinkmacsystemfont,
+    "Segoe UI",
+    "Roboto",
+    "Saira",
+    sans-serif;
+}
+
+.founder__title--accent {
+  color: var(--accent-primary, #7be33d);
+}
+
+.founder__subtitle {
+  color: rgba(242, 242, 242, 0.92);
+  font-size: 16px;
+  line-height: 1.7;
+  max-width: 54ch;
+  margin: 0 0 20px 0;
+}
+
+.founder__signature {
+  border-left: 2px solid rgba(255, 255, 255, 0.25);
+  padding-left: 14px;
+  margin: 0 0 16px 0;
+}
+
+.founder__signature strong {
+  display: block;
+  font-weight: 800;
+}
+
+.founder__signature span {
+  color: rgba(242, 242, 242, 0.78);
+  font-size: 14px;
+}
+
+.founder__social {
+  display: flex;
+  gap: 10px;
+}
+
+.founder__social-item {
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.12);
+  color: #24263b; /* cor base do ícone */
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  transition:
+    transform 0.25s ease,
+    background-color 0.25s ease,
+    color 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.founder__social-item svg {
+  width: 18px;
+  height: 18px;
+}
+
+.founder__social-item:hover {
+  background: rgba(255, 255, 255, 0.22);
+  color: var(--accent-primary, #7be33d);
+  transform: translateY(-2px) scale(1.1) rotate(-3deg);
+  box-shadow:
+    0 6px 16px rgba(0, 0, 0, 0.25),
+    0 0 10px rgba(123, 227, 61, 0.35);
+}
+
+.founder__social-item:active {
+  transform: scale(0.96);
+}
+
+.founder__photo-wrap {
+  display: grid;
+  place-items: center;
+  position: absolute;
+  right: 0;
+  bottom: 0; /* extremo inferior direito do componente */
+  z-index: 2; /* acima das camadas de grid/glow */
+}
+
+.founder__photo-wrap img {
+  height: clamp(360px, 72vh, 640px); /* mais altura */
+  width: auto;
+  /* remover brilho branco, manter apenas sombra suave para profundidade */
+  filter: drop-shadow(0 16px 30px rgba(0, 0, 0, 0.35));
+}
+
+@media (max-width: 960px) {
+  .founder__container {
+    grid-template-columns: 1fr;
+  }
+  .founder__right {
+    align-items: center;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 0 !important;
+  }
+  .founder__photo-wrap {
+    position: relative;
+    right: auto;
+    bottom: auto;
+  }
+  .founder__photo-wrap img {
+    width: clamp(240px, 80%, 460px);
+    height: auto;
+  }
+}
+
+/* Coluna direita com grid de linhas e glow atrás do retrato */
+.founder__right {
+  display: flex;
+  align-items: flex-end; /* alinhar ao fundo */
+  justify-content: flex-end; /* alinhar à direita */
+  position: relative; /* habilita pseudo-elementos */
+  min-height: clamp(320px, 56vh, 620px); /* garante área para posicionar a foto no canto */
+}
+
+.founder__right::before {
+  content: "";
+  position: absolute;
+  inset: -20px -40px; /* expande além da coluna para suavidade */
+  background-image:
+    repeating-linear-gradient(to right, rgba(255, 255, 255, 0.08) 0 1px, transparent 1px 60px),
+    repeating-linear-gradient(to bottom, rgba(255, 255, 255, 0.08) 0 1px, transparent 1px 60px);
+  /* gradiente para foco na área central (degradê) */
+  mask: radial-gradient(
+    ellipse at 85% 80%,
+    rgba(0, 0, 0, 1) 0%,
+    rgba(0, 0, 0, 0.85) 55%,
+    rgba(0, 0, 0, 0.55) 80%,
+    rgba(0, 0, 0, 0) 100%
+  );
+  z-index: 0;
+  pointer-events: none;
+}
+
+.founder__right::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse at 85% 78%,
+    rgba(255, 255, 255, 0.12) 0%,
+    rgba(255, 255, 255, 0.08) 30%,
+    rgba(255, 255, 255, 0.03) 55%,
+    transparent 70%
+  );
+  filter: blur(8px);
+  z-index: 1; /* abaixo da foto, acima do grid */
+  pointer-events: none;
+}
+
+/* Efeito de "fluxo de dados" verde no canto inferior direito */
+.founder__dataflow {
+  position: absolute;
+  inset: 0;
+  z-index: 1; /* abaixo da foto (z-index:2), acima do grid */
+  pointer-events: none;
+}
+
+.founder__dataflow::before {
+  content: "";
+  position: absolute;
+  right: -8%;
+  bottom: 10%;
+  width: 72%;
+  height: 14px;
+  transform: rotate(-28deg);
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0) 0%,
+    rgba(var(--accent-rgb, 123, 227, 61), 0.35) 40%,
+    rgba(var(--accent-rgb, 123, 227, 61), 0.55) 50%,
+    rgba(var(--accent-rgb, 123, 227, 61), 0.35) 60%,
+    rgba(0, 0, 0, 0) 100%
+  );
+  box-shadow:
+    0 0 28px rgba(123, 227, 61, 0.28),
+    0 0 66px rgba(123, 227, 61, 0.18);
+  filter: blur(6px);
+  border-radius: 999px;
+}
+
+.founder__dataflow::after {
+  content: "";
+  position: absolute;
+  right: -8%;
+  bottom: 10%;
+  width: 72%;
+  height: 10px;
+  transform: rotate(-28deg);
+  background-image: repeating-linear-gradient(
+    to right,
+    rgba(123, 227, 61, 0) 0 42px,
+    rgba(123, 227, 61, 0.9) 42px 52px,
+    rgba(123, 227, 61, 0) 52px 90px
+  );
+  filter: blur(1.5px);
+  mix-blend-mode: screen;
+  animation: dataflow-move 3s linear infinite;
+}
+
+@keyframes dataflow-move {
+  0% {
+    background-position: 0 0;
+    opacity: 0.9;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    background-position: -220px 0;
+    opacity: 0.9;
+  }
+}

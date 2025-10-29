@@ -86,7 +86,7 @@
 
 .course-card {
   position: relative;
-  background: #7be33d;
+  background: #22243A; /* solicitado: fundo dos cards #22243A */
   border: 1px solid rgb(255 255 255 / 12%);
   border-radius: var(--border-radius-xl);
   padding: var(--spacing-xl);
@@ -186,7 +186,7 @@
     sans-serif;
   font-size: clamp(var(--font-size-lg), 2.5vw, var(--font-size-xl));
   font-weight: 400; /* título em negrito */
-  color: var(--bg-primary);
+  color: #F2F2F2; /* solicitado: texto dos títulos #F2F2F2 */
   margin: 0;
   position: relative;
   z-index: 2;
@@ -196,7 +196,7 @@
   font-family: "Montserrat", sans-serif;
   font-size: clamp(var(--font-size-xs), 2vw, var(--font-size-sm));
   font-weight: 400; /* descrição com peso normal */
-  color: var(--bg-primary);
+  color: #F2F2F2; /* solicitado: texto das descrições #F2F2F2 */
   line-height: 1.6;
   margin-bottom: var(--spacing-xl);
   flex: 1;
