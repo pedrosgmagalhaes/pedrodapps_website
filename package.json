@@ -1,0 +1,48 @@
+{
+  "name": "pedrodapps_website",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "lint": "yarn lint:eslint:fix && yarn lint:stylelint:fix && yarn lint:prettier:fix",
+    "lint:eslint:fix": "eslint . --ext .js,.jsx --fix",
+    "lint:stylelint:fix": "stylelint \"**/*.css\" --fix",
+    "lint:prettier:fix": "prettier --write \"**/*.{html,yaml,yml,css,js,jsx,json,md}\"",
+    "lint:check": "yarn lint:eslint:check && yarn lint:stylelint:check && yarn lint:prettier:check",
+    "lint:eslint:check": "eslint . --ext .js,.jsx",
+    "lint:stylelint:check": "stylelint \"**/*.css\"",
+    "lint:prettier:check": "prettier --check \"**/*.{html,yaml,yml,css,js,jsx,json,md}\"",
+    "preview": "vite preview",
+    "start": "vite preview --port $PORT --host",
+    "deploy:firebase": "node scripts/deploy-firebase.js",
+    "deploy:staging": "node scripts/deploy-firebase.js --channel staging",
+    "optimize:svg:card-machine": "svgo src/assets/card-machine.svg -o src/assets/card-machine.svg",
+    "optimize:svg:card-machine:multipass": "svgo --multipass src/assets/card-machine.svg -o src/assets/card-machine.svg"
+  },
+  "dependencies": {
+    "lucide-react": "^0.548.0",
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1",
+    "react-icons": "^5.5.0",
+    "sharp": "^0.34.4"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.36.0",
+    "@types/react": "^19.1.16",
+    "@types/react-dom": "^19.1.9",
+    "@vitejs/plugin-react": "^5.0.4",
+    "eslint": "^9.36.0",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "eslint-plugin-react-refresh": "^0.4.22",
+    "globals": "^16.4.0",
+    "png-to-ico": "^3.0.1",
+    "prettier": "^3.6.2",
+    "stylelint": "^16.25.0",
+    "stylelint-config-standard": "^39.0.1",
+    "svgo": "^4.0.0",
+    "vite": "^7.1.7"
+  },
+  "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
+}

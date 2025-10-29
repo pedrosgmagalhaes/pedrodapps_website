@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 128" role="img" aria-label="Ethereum logo monochrome">
+  <title>Ethereum</title>
+  <g fill="#282828">
+    <!-- Ethereum mark (diamond) -->
+    <polygon points="60,16 20,64 60,112 100,64" />
+    <!-- Wordmark -->
+    <text x="140" y="84" font-family="Satoshi, Arial, sans-serif" font-size="56" font-weight="700">Ethereum</text>
+  </g>
+</svg>

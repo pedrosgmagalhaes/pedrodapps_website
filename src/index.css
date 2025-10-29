@@ -1,0 +1,424 @@
+/* Reset e configurações globais */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  /* Cores principais baseadas no esquema fornecido */
+  --bg-primary: #0d0c13;
+  --bg-primary-rgb: 13 12 19; /* RGB equivalente para permitir alpha no overlay */
+  --bg-secondary: #050508;
+  --bg-tertiary: #0f0e16;
+  --bg-quaternary: #23154c;
+  --bg-card: #0f0e16;
+  --surface-color: #050508;
+  --background-color: #0d0c13;
+
+  /* Cores de texto */
+  --text-primary: #fff;
+  --text-secondary: #f2f2f2;
+  --text-muted: #595960;
+
+  /* Cores neutras da paleta */
+  --neutral-white: #fff;
+  --neutral-lightest: #f2f2f2;
+  --neutral-lighter: #d8d8d8;
+  --neutral-light: #d2d2d2;
+  --neutral: #7f7f7f;
+  --neutral-dark: #4c4c4c;
+  --neutral-darker: #191919;
+  --neutral-darkest: #000;
+
+  /* Cores pretas da paleta */
+  --black-lightest: #e7e7e8;
+  --black-lighter: #cfcfd1;
+  --black-light: #555560;
+  --black: #19191c;
+  --black-dark: #0f0e16;
+  --black-darker: #070708;
+  --black-darkest: #050508;
+
+  /* Cores Electric Violet da paleta */
+  --electric-violet-lightest: #f8ecff;
+  --electric-violet-lighter: #e3daff;
+  --electric-violet-light: #bf7eff;
+  --electric-violet: #7747ff;
+  --electric-violet-dark: #5f3bcc;
+  --electric-violet-darker: #2FC56;
+  --electric-violet-darkest: #23154c;
+
+  /* Cores adicionais da paleta fornecida */
+  --color-scheme-1: #0f0e16;
+  --color-scheme-2: #050508;
+  --color-scheme-3: #000;
+  --color-scheme-4: #23154c;
+  --color-scheme-5: #595960;
+
+  /* Cores Concrete da paleta */
+  --concrete-lightest: #fdfdfd;
+  --concrete-lighter: #fcfcfc;
+  --concrete-light: #f8f8f8;
+  --concrete: #f3f3f3;
+  --concrete-dark: #c2c2c2;
+  --concrete-darker: #616161;
+  --concrete-darkest: #484848;
+
+  /* Cores de destaque */
+  --primary-color: #7747ff;
+  --accent-primary: #7747ff;
+  --accent-secondary: #7747ff;
+  --accent-tertiary: #23154c;
+  --border-color: #23154c;
+  --gradient-primary: linear-gradient(135deg, #bf7eff 0%, #7747ff 50%, #23154c 100%);
+  --gradient-bg: linear-gradient(180deg, #000 0%, #0f0e16 50%, #23154c 100%);
+
+  /* Tipografia */
+  --font-family: "Saira", -apple-system, blinkmacsystemfont, "Segoe UI", "Roboto", sans-serif;
+  --font-size-xs: 0.75rem;
+  --font-size-sm: 0.875rem;
+  --font-size-base: 1rem;
+  --font-size-lg: 1.125rem;
+  --font-size-xl: 1.25rem;
+  --font-size-2xl: 1.5rem;
+  --font-size-3xl: 1.875rem;
+  --font-size-4xl: 2.25rem;
+  --font-size-5xl: 3rem;
+  --font-size-6xl: 3.75rem;
+
+  /* Espaçamentos */
+  --spacing-xs: 0.25rem;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --spacing-xl: 2rem;
+  --spacing-2xl: 3rem;
+  --spacing-3xl: 4rem;
+  --spacing-4xl: 6rem;
+
+  /* Bordas */
+  --border-radius-sm: 0.375rem;
+  --border-radius-md: 0.5rem;
+  --border-radius-lg: 0.75rem;
+  --border-radius-xl: 1rem;
+
+  /* Sombras */
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 5%);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 10%);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 10%);
+  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 10%);
+}
+
+html {
+  scroll-behavior: smooth;
+
+  /* Firefox scrollbar colors: thumb track */
+  scrollbar-color: #7747ff var(--bg-secondary);
+}
+
+body {
+  font-family: var(--font-family);
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Bloqueia scroll quando o menu estiver aberto */
+body.menu-open {
+  overflow: hidden;
+}
+
+/* Utilitários de texto */
+.text-primary {
+  color: var(--text-primary);
+}
+
+.text-secondary {
+  color: var(--text-secondary);
+}
+
+.text-muted {
+  color: var(--text-muted);
+}
+
+.text-accent {
+  color: var(--accent-primary);
+}
+
+/* Utilitários de background */
+.bg-primary {
+  background: var(--bg-primary);
+}
+
+.bg-secondary {
+  background: var(--bg-secondary);
+}
+
+.bg-card {
+  background: var(--bg-card);
+}
+
+/* Utilitários de gradiente */
+.gradient-text {
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Container responsivo */
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--spacing-md);
+}
+
+@media (width >= 768px) {
+  .container {
+    padding: 0 var(--spacing-xl);
+  }
+}
+
+/* Botões */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-sm) var(--spacing-lg);
+  border: none;
+  border-radius: var(--border-radius-md);
+  font-family: var(--font-family);
+  font-weight: 500;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: var(--font-size-base);
+}
+
+.btn-primary {
+  background: var(--gradient-primary);
+  color: var(--bg-primary);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+.btn-secondary {
+  background: transparent;
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+}
+
+.btn-secondary:hover {
+  border-color: var(--accent-primary);
+  color: var(--accent-primary);
+}
+
+/* Animações */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Generic fade-in */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.fade-in {
+  animation: fadeIn 0.6s ease both;
+}
+
+/* Slow transition utility */
+.transition-slow {
+  transition: all 0.8s ease;
+}
+
+/* Loading overlay styles */
+.loading-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-xl);
+}
+
+.loading-overlay__content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-xl);
+}
+
+.loading-overlay__logo {
+  object-fit: contain;
+}
+
+.loading-overlay__fallback {
+  color: var(--neutral-white);
+  font-size: var(--font-size-6xl);
+  font-weight: 700;
+}
+
+/* Loading dots */
+.loading-dots {
+  display: flex;
+  gap: 8px;
+}
+
+.loading-dot {
+  width: 8px;
+  height: 8px;
+  background: rgb(255 255 255 / 60%);
+  border-radius: 50%;
+}
+
+@keyframes pulseSlow {
+  0% {
+    opacity: 0.4;
+    transform: scale(0.9);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  100% {
+    opacity: 0.4;
+    transform: scale(0.9);
+  }
+}
+
+.animate-pulse-slow {
+  animation: pulseSlow 1.2s ease-in-out infinite;
+}
+
+/* Content opacity fade based on loading */
+.content-fade {
+  transition: opacity 500ms ease;
+}
+
+.content-fade.is-loading {
+  opacity: 0;
+}
+
+.content-fade.is-ready {
+  opacity: 1;
+}
+
+.reveal-on-scroll {
+  opacity: 0;
+  transform: translateY(20px);
+  transition:
+    opacity 0.6s ease-out,
+    transform 0.6s ease-out;
+  will-change: opacity, transform;
+}
+
+.reveal-on-scroll.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal-on-scroll {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* Scrollbar personalizada */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-secondary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: #7747ff;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #7747ff;
+}
+
+/* Offset global do header e responsividade */
+:root {
+  --header-offset: 96px; /* desktop default, acompanha min-height ~90px do header */
+}
+
+/* Compensação global para header fixo */
+main {
+  padding-top: var(--header-offset);
+}
+
+/* Ajuste para telas médias */
+@media (width <= 1024px) {
+  :root {
+    --header-offset: 90px;
+  }
+}
+
+/* Ajuste para tablets e celulares */
+@media (width <= 768px) {
+  :root {
+    --font-size-5xl: 2.5rem;
+    --font-size-6xl: 3rem;
+    --header-offset: 80px;
+  }
+}
+
+/* Ajuste para celulares pequenos */
+@media (width <= 480px) {
+  :root {
+    --header-offset: 75px;
+  }
+}
+
+.lazy-fallback {
+  min-height: 48px;
+}
+
+.lazy-wallet {
+  min-height: 180px;
+}
+
+.lazy-faq {
+  min-height: 220px;
+}
+
+.lazy-banner {
+  min-height: 160px;
+}
+
+.lazy-footer {
+  min-height: 120px;
+}

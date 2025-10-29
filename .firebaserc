@@ -1,0 +1,15 @@
+{
+  "projects": {
+    "default": "pixley-website"
+  },
+  "targets": {
+    "pixley-website": {
+      "hosting": {
+        "oficial": [
+          "pixleywebsite-98c8e3"
+        ]
+      }
+    }
+  },
+  "etags": {}
+}
