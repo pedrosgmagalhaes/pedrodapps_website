@@ -1,12 +1,12 @@
 {
   "projects": {
-    "default": "pixley-website"
+    "default": "pedrodapps-website"
   },
   "targets": {
-    "pixley-website": {
+    "pedrodapps-website": {
       "hosting": {
         "oficial": [
-          "pixleywebsite-98c8e3"
+          "pedrodapps-website"
         ]
       }
     }
