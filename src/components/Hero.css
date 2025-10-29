@@ -1,0 +1,221 @@
+/* Seção Hero */
+.hero {
+  background: var(--concrete-lightest);
+  padding: 160px 0 0px; /* mais altura e espaçamento inferior */
+  color: var(--black);
+  text-shadow: none; /* remove quaisquer sombras no bloco */
+  position: relative; /* permite sobreposição decorativa à direita */
+}
+
+.hero__layout {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr; /* texto à esquerda, imagem à direita */
+  align-items: center;
+  gap: 40px;
+  position: relative; /* garante conteúdo acima do pseudo-elemento de fundo */
+  z-index: 1;
+}
+
+.hero__content {
+  max-width: 720px;
+  text-align: left; /* alinha como na referência */
+}
+
+.hero__title {
+  font-family: 'Montserrat', 'Inter', 'Segoe UI', 'Roboto', sans-serif; /* Montserrat no título */
+  font-weight: 900;
+  font-size: clamp(2rem, 3.8vw, 3.25rem);
+  line-height: 1.2;
+  color: var(--black);
+  margin-bottom: 28px; /* mais espaço entre título e subtítulo */
+  letter-spacing: normal; /* sem efeitos de espaçamento */
+  text-shadow: none; /* letra pura */
+}
+
+.hero__desc {
+  font-family: 'Montserrat', 'Inter', 'Segoe UI', 'Roboto', sans-serif; /* Montserrat na descrição */
+  color: var(--black-light);
+  font-size: var(--font-size-base);
+  max-width: 640px;
+  margin-bottom: 24px; /* ligeiramente mais espaço abaixo da descrição */
+  text-shadow: none; /* sem sombras na descrição */
+}
+
+.hero__actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.hero__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px;
+  font-family: var(--font-family);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.hero__btn--primary {
+  background: var(--accent-primary);
+  color: #000;
+  padding: 14px 28px; /* mais padding para aumentar o botão */
+  font-size: var(--font-size-lg); /* torna o texto um pouco maior */
+  font-weight: 400;
+}
+.hero__btn--primary:hover {
+  filter: brightness(0.97);
+}
+
+.hero__btn--icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 9999px;
+  background: var(--bg-primary);
+  color: #fff;
+}
+.hero__btn-icon {
+  width: 18px;
+  height: 18px;
+}
+
+/* Figura à direita (Pedro) */
+.hero__figure {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  align-self: end; /* posiciona a figura mais próxima da base do Hero */
+  position: relative; /* permite posicionar as moedas sobre a imagem */
+}
+.hero__image {
+  width: clamp(320px, 48vw, 680px); /* mais altura/largura para o Pedro */
+  height: auto;
+  border-radius: 12px;
+  border: none; /* remove a borda verde */
+}
+
+/* Bolinhas brilhando (#81DF4D) concentradas no lado direito do Hero */
+.hero::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 52%; /* concentra no lado direito */
+  pointer-events: none;
+  z-index: 0;
+  will-change: opacity, filter;
+  animation: dotsTwinkleRight 6s ease-in-out infinite;
+  background-image:
+    radial-gradient(36px 36px at 84% 18%, rgba(129, 223, 77, 0.30) 0, rgba(129, 223, 77, 0.14) 35%, rgba(129, 223, 77, 0) 60%),
+    radial-gradient(24px 24px at 72% 32%, rgba(129, 223, 77, 0.28) 0, rgba(129, 223, 77, 0.12) 38%, rgba(129, 223, 77, 0) 60%),
+    radial-gradient(48px 48px at 90% 48%, rgba(129, 223, 77, 0.22) 0, rgba(129, 223, 77, 0.10) 40%, rgba(129, 223, 77, 0) 70%),
+    radial-gradient(28px 28px at 66% 56%, rgba(129, 223, 77, 0.28) 0, rgba(129, 223, 77, 0.12) 36%, rgba(129, 223, 77, 0) 62%),
+    radial-gradient(16px 16px at 80% 70%, rgba(129, 223, 77, 0.32) 0, rgba(129, 223, 77, 0.16) 40%, rgba(129, 223, 77, 0) 68%),
+    radial-gradient(40px 40px at 94% 72%, rgba(129, 223, 77, 0.24) 0, rgba(129, 223, 77, 0.10) 40%, rgba(129, 223, 77, 0) 70%),
+    radial-gradient(22px 22px at 70% 84%, rgba(129, 223, 77, 0.30) 0, rgba(129, 223, 77, 0.14) 40%, rgba(129, 223, 77, 0) 68%),
+    radial-gradient(12px 12px at 88% 86%, rgba(129, 223, 77, 0.35) 0, rgba(129, 223, 77, 0.18) 40%, rgba(129, 223, 77, 0) 68%);
+}
+
+/* Bolinhas à esquerda também, com brilho alternado */
+.hero::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 55%;
+  bottom: 0;
+  left: 0; /* lado esquerdo */
+  pointer-events: none;
+  z-index: 0;
+  will-change: opacity, filter;
+  animation: dotsTwinkleLeft 7.5s ease-in-out infinite;
+  background-image:
+    radial-gradient(20px 20px at 18% 22%, rgba(129, 223, 77, 0.28) 0, rgba(129, 223, 77, 0.12) 40%, rgba(129, 223, 77, 0) 68%),
+    radial-gradient(16px 16px at 30% 36%, rgba(129, 223, 77, 0.26) 0, rgba(129, 223, 77, 0.12) 38%, rgba(129, 223, 77, 0) 60%),
+    radial-gradient(24px 24px at 12% 54%, rgba(129, 223, 77, 0.22) 0, rgba(129, 223, 77, 0.10) 40%, rgba(129, 223, 77, 0) 70%),
+    radial-gradient(14px 14px at 26% 72%, rgba(129, 223, 77, 0.30) 0, rgba(129, 223, 77, 0.14) 42%, rgba(129, 223, 77, 0) 68%);
+}
+
+/* Moedas decorativas saltando lentamente */
+.hero__coin {
+  position: absolute;
+  display: block;
+  pointer-events: none;
+  z-index: 2;
+  will-change: transform;
+  filter: drop-shadow(0 8px 12px rgb(0 0 0 / 25%));
+  animation: coinBounce 3.6s ease-in-out infinite;
+}
+
+.hero__coin--right {
+  width: clamp(36px, 5.5vw, 64px);
+  right: -2%; /* lado direito, extremo inferior do hero content */
+  bottom: -6%;
+  animation-delay: 0.2s;
+}
+
+.hero__coin--left {
+  width: clamp(24px, 4.5vw, 44px);
+  left: -4%; /* lado esquerdo do Pedro */
+  bottom: 2%;
+  transform: scaleX(-1);
+  animation-delay: 0.9s;
+}
+
+@keyframes coinBounce {
+  0% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-16px) rotate(8deg);
+  }
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+}
+
+/* Animações de brilho das bolinhas do fundo */
+@keyframes dotsTwinkleRight {
+  0% { opacity: 0.55; filter: brightness(1); }
+  50% { opacity: 1; filter: brightness(1.15); }
+  100% { opacity: 0.6; filter: brightness(1); }
+}
+
+@keyframes dotsTwinkleLeft {
+  0% { opacity: 0.45; filter: brightness(1); }
+  50% { opacity: 0.95; filter: brightness(1.12); }
+  100% { opacity: 0.5; filter: brightness(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero__coin {
+    animation: none;
+  }
+}
+
+
+@media (width <= 768px) {
+  .hero {
+    padding: 100px 0 0;
+    flex: content;
+   justify-content: center;
+  }
+  .hero__layout {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+  .hero__figure {
+    justify-content: center;
+  }
+  .hero::before {
+    left: 0; /* espalha pelo fundo no mobile */
+    opacity: 0.5; /* menos intenso no mobile */
+    animation-duration: 6.5s; /* suaviza no mobile */
+  }
+  .hero::after {
+    right: 0;
+    opacity: 0.5;
+    animation-duration: 7.5s;
+  }
+}

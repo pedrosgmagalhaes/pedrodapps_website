@@ -1,0 +1,227 @@
+.news-ticker {
+  background: #24263B;
+  color: var(--neutral-white);
+  border-top: 1px solid rgb(255 255 255 / 8%);
+  border-bottom: 1px solid rgb(255 255 255 / 8%);
+}
+
+.news-ticker .container {
+  /* garante que a barra ocupe toda a largura do container */
+  padding-top: var(--spacing-sm);
+  padding-bottom: var(--spacing-sm);
+}
+
+.news-ticker__viewport {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  min-height: 44px;
+}
+
+.news-ticker__label {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  color: inherit;
+  padding: 0;
+  border-radius: 999px;
+}
+
+.news-ticker__label--live {
+  width: 28px;
+  height: 28px;
+  border: 1px solid rgb(255 255 255 / 16%);
+  background: rgb(255 255 255 / 6%);
+}
+
+.live-indicator {
+  position: relative;
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background: var(--accent-primary); /* verde da marca para "ao vivo" */
+  box-shadow: 0 0 0 4px rgb(123 227 61 / 0.18), 0 0 12px rgb(123 227 61 / 0.35);
+}
+
+.live-indicator::before,
+.live-indicator::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  transform-origin: center;
+  animation: livePulse 1.8s ease-out infinite;
+}
+
+.live-indicator::after {
+  animation-delay: 0.9s; /* segunda onda para efeito mais claro */
+}
+
+@keyframes livePulse {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgb(123 227 61 / 0.55);
+    opacity: 0.8;
+  }
+  70% {
+    transform: scale(2.4);
+    box-shadow: 0 0 0 16px rgb(123 227 61 / 0);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(2.4);
+    box-shadow: 0 0 0 0 rgb(123 227 61 / 0);
+    opacity: 0;
+  }
+}
+
+/* Texto apenas para leitores de tela */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .live-indicator::before,
+  .live-indicator::after {
+    animation: none;
+  }
+}
+
+.news-ticker__track {
+  position: relative;
+  flex: 1;
+  overflow: hidden;
+}
+
+.news-ticker__track::before,
+.news-ticker__track::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 3rem;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.news-ticker__track::before {
+  left: 0;
+  background: linear-gradient(to right, var(--black) 0%, rgb(25 25 28 / 0%) 100%);
+}
+
+.news-ticker__track::after {
+  right: 0;
+  background: linear-gradient(to left, var(--black) 0%, rgb(25 25 28 / 0%) 100%);
+}
+
+.news-ticker__list {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-lg);
+  white-space: nowrap;
+  will-change: transform;
+  animation: tickerMove 38s linear infinite;
+}
+
+.news-ticker__item {
+  list-style: none;
+}
+
+.news-ticker__link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  color: var(--neutral-white);
+  text-decoration: none;
+  opacity: 0.9;
+  transition: color 0.2s ease, opacity 0.2s ease;
+}
+
+.news-ticker__link:hover {
+  color: var(--accent-primary);
+  opacity: 1;
+}
+
+/* Ícone da cripto (16~20px) */
+.news-ticker__icon-img {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+  border-radius: 4px;
+  display: inline-block;
+}
+
+/* Itens de cotação */
+.news-ticker__symbol {
+  font-weight: 700;
+  font-size: var(--font-size-sm);
+  letter-spacing: 0.02em;
+}
+
+.news-ticker__price {
+  font-size: var(--font-size-sm);
+}
+
+.news-ticker__change {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--font-size-xs);
+  border-radius: 999px;
+  padding: 0.1rem 0.5rem;
+  background: rgb(255 255 255 / 8%);
+}
+
+.news-ticker__change.up {
+  color: #7BE33D; /* verde da paleta */
+}
+
+.news-ticker__change.down {
+  color: #e74c3c; /* vermelho para queda */
+}
+
+.news-ticker__loading,
+.news-ticker__error {
+  font-size: var(--font-size-sm);
+  color: var(--neutral-light);
+}
+
+/* Pausa quando o usuário interage */
+.news-ticker:hover .news-ticker__list {
+  animation-play-state: paused;
+}
+
+@keyframes tickerMove {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    /* move metade do conteúdo para que o clone entre e simule loop */
+    transform: translateX(-50%);
+  }
+}
+
+/* Reduz movimento para usuários com preferência */
+@media (prefers-reduced-motion: reduce) {
+  .news-ticker__list {
+    animation: none;
+    transform: none;
+  }
+}
+
+/* Responsivo: ajustar velocidade em telas menores */
+@media (width < 768px) {
+  .news-ticker__list {
+    animation-duration: 32s;
+  }
+}

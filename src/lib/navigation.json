@@ -1,34 +1,12 @@
 {
-  "header_quick_links": [
-  ],
-  "login": { "label": "Acessar sua conta", "href": "#login" },
+  "header_quick_links": [],
+  "login": { "label": "Entrar", "href": "#login" },
   "groups": [
     {
-      "key": "industries",
-      "title": "Indústrias",
+      "key": "menu",
+      "title": "Menu",
       "items": [
-        { "label": "Varejo", "href": "/varejo" },
-        { "label": "Fintechs", "href": "#" },
-        { "label": "Câmbio", "href": "#" },
-        { "label": "TDIC", "href": "#" }
-      ]
-    },
-    {
-      "key": "solutions",
-      "title": "Soluções",
-      "items": [
-        { "label": "Maquininha Cripto", "href": "#" },
-        { "label": "Consultoria DeFi", "href": "#" },
-        { "label": "API de Cripto", "href": "#" }
-      ]
-    },
-    {
-      "key": "company",
-      "title": "Empresa",
-      "items": [
-        { "label": "Sobre nós", "href": "#" },
-        { "label": "Cursos", "href": "#" },
-        { "label": "Blog", "href": "#" }
+        { "label": "Entrar", "href": "#login" }
       ]
     }
   ]

@@ -1,0 +1,493 @@
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+
+  /* Fundo sólido solicitado */
+  background: #24263B;
+  backdrop-filter: none;
+
+  /* Sem borda inferior */
+  box-shadow: 0 8px 24px rgb(0 0 0 / 28%);
+  transition: all 0.3s ease;
+}
+
+.header--scrolled {
+  background: #24263B;
+  box-shadow: 0 10px 28px rgb(0 0 0 / 32%);
+}
+
+.header__content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--spacing-md) 0;
+}
+
+/* Logo */
+.header__logo {
+  flex-shrink: 0;
+}
+/* Badge educativo ao lado do logo */
+.header__badge {
+  margin-left: 10px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  line-height: 1;
+  color: #7ee241;
+  background: rgb(126 226 65 / 12%);
+  border: 1px solid rgb(126 226 65 / 45%);
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  text-decoration: none;
+  color: var(--text-primary);
+}
+
+.logo__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Imagem do logo (GIF 16-bit) */
+.logo__image {
+  height: 120px;
+  width: auto;
+  display: block;
+  image-rendering: pixelated; /* preserva o visual 16 bits quando escalado */
+}
+
+@media (max-width: 768px) {
+  .logo__image { height: 62px; }
+}
+
+.logo__text {
+  font-size: var(--font-size-xl);
+  font-weight: 700;
+  color: var(--text-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  /* leve efeito "pixel" com sombras em passos */
+  text-shadow: none;
+}
+
+/* Logo em CSS (grid de quadrados com gradiente) */
+.logo__icon--css {
+  width: 30px;
+  height: 30px;
+  display: grid;
+  grid-template-columns: repeat(3, 10px);
+  grid-template-rows: repeat(3, 10px);
+  gap: 2px;
+}
+.logo-sq {
+  width: 10px;
+  height: 10px;
+  border-radius: 3px;
+  background: var(--gradient-primary);
+  box-shadow: 0 2px 8px rgb(0 0 0 / 35%);
+}
+.logo-sq--1 { grid-area: 1 / 1; }
+.logo-sq--2 { grid-area: 1 / 2; }
+.logo-sq--3 { grid-area: 2 / 1; }
+.logo-sq--4 { grid-area: 2 / 2; }
+.logo-sq--5 { grid-area: 3 / 3; } /* deslocado para dar efeito dinâmico */
+
+/* Navegação principal */
+.header__nav {
+  display: none;
+  align-items: center;
+  gap: var(--spacing-lg);
+  margin-left: var(--spacing-xl);
+}
+.header__nav-link {
+  color: var(--neutral-lighter);
+  text-decoration: none;
+  font-size: var(--font-size-base);
+  font-weight: 600;
+  font-family: 'Bungee', cursive;
+  padding: 8px 12px;
+  border-radius: 12px;
+  border: 1px solid rgb(126 226 65 / 35%);
+  background: transparent;
+  transition: color 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+}
+.header__nav-link:hover {
+  color: #000;
+  background: var(--bg-secondary);
+  border-color: transparent;
+}
+
+/* Ações com variações de botão */
+.header__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+.header__btn--primary {
+  border-color: transparent;
+  background-color: #7BE33D;
+  color: #000; /* texto preto sobre verde, conforme referência */
+}
+.header__btn--outline {
+  background: transparent;
+  border: 1px solid rgb(255 255 255 / 30%);
+}
+.header__btn--outline:hover {
+  background: transparent; /* sem efeito no hover */
+}
+
+/* Mostrar navegação em telas médias/grandes */
+@media (width >= 768px) {
+  .header__nav { display: flex; }
+  .header__menu-btn { display: none; }
+}
+
+/* Overlay simples de menu */
+.menu-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1100;
+}
+
+.menu-overlay__backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgb(var(--bg-primary-rgb) / 0.6);
+  backdrop-filter: blur(4px);
+}
+
+.menu-overlay__panel {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: min(84vw, 420px);
+  height: 100%;
+  background: var(--bg-tertiary);
+  border-left: 1px solid rgb(255 255 255 / 12%);
+  box-shadow: -12px 0 28px rgb(0 0 0 / 32%);
+  padding: var(--spacing-xl);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+  color: #000; /* melhora legibilidade em fundo claro */
+}
+
+.menu-overlay__close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 36px;
+  height: 36px;
+  border-radius: 12px;
+  border: 1px solid rgb(0 0 0 / 18%);
+  background: rgb(0 0 0 / 06%);
+  color: #111;
+  cursor: pointer;
+}
+
+.menu-overlay__nav {
+  margin-top: 24px;
+  overflow-y: auto;
+}
+
+.menu-overlay__group {
+  margin-bottom: var(--spacing-lg);
+}
+
+.menu-overlay__group-title {
+  font-size: var(--font-size-lg);
+  margin-bottom: var(--spacing-sm);
+  color: #111;
+}
+
+.menu-overlay__list {
+  list-style: none;
+  display: grid;
+  gap: 8px;
+}
+
+.menu-overlay__link {
+  display: block;
+  padding: 10px 12px;
+  border-radius: 12px;
+  color: #111;
+  text-decoration: none;
+  font-family: 'Bungee', cursive;
+  border: 1px solid rgb(0 0 0 / 10%);
+  background: rgb(0 0 0 / 03%);
+}
+
+.menu-overlay__link:hover {
+  border-color: rgb(0 0 0 / 18%);
+  background: rgb(0 0 0 / 06%);
+}
+
+/* Link CTA "Entrar" no overlay */
+.menu-overlay__link--cta {
+  background: var(--bg-secondary);
+  border-color: transparent;
+  color: #000;
+  font-weight: 700;
+}
+.menu-overlay__link--cta:hover {
+  filter: brightness(0.95);
+}
+
+/* Header Actions */
+.header__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.header__btn {
+  padding: 14px 24px;
+  font-size: var(--font-size-sm);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border-radius: 9999px; /* pílula */
+  background: transparent; /* sem vidro, sem brilho */
+  border: 1px solid rgb(255 255 255 / 20%);
+  color: white;
+  font-family: 'Bungee', cursive; /* fonte do menu */
+  text-decoration: none; /* remove sublinhado dos links */
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+}
+
+.header__btn::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -120%;
+  width: 40%;
+  height: 100%;
+  background: linear-gradient(90deg, rgba(255,255,255,0), rgba(255,255,255,0.15), rgba(255,255,255,0));
+  transform: skewX(-20deg);
+  transition: left 0.6s ease;
+  pointer-events: none;
+}
+
+.header__btn:hover::before {
+  left: 120%;
+}
+
+.header__btn:hover {
+  transform: translateY(-1px) scale(1.01);
+  box-shadow: 0 6px 16px rgb(0 0 0 / 25%);
+}
+
+.header__btn:focus-visible {
+  outline: 2px solid #7BE33D; /* foco acessível sem sombra */
+  box-shadow: none;
+}
+.header__btn-icon {
+  width: 18px;
+  height: 18px;
+  color: white; /* garante cor correta para ícones SVG (react-icons) */
+  transition: transform 0.3s ease;
+  flex-shrink: 0;
+}
+
+.header__btn:hover .header__btn-icon {
+  transform: none; /* sem animação de ícone */
+}
+
+/* Hover específico para o botão primário verde */
+.header__btn--primary:hover {
+  filter: none;
+  background: #7BE33D; /* mantém verde no hover */
+  border-color: transparent;
+}
+
+/* Reforço de especificidade para variantes (evita que a base .header__btn sobrescreva) */
+.header__btn.header__btn--primary {
+  background: #7BE33D;
+  border-color: transparent;
+  color: #000;
+}
+.header__btn.header__btn--primary:hover {
+  transform: translateY(-1px) scale(1.02);
+  box-shadow: 0 8px 20px rgba(123, 227, 61, 0.25);
+}
+.header__btn.header__btn--outline {
+  background: transparent;
+  border-color: rgb(255 255 255 / 40%);
+  color: #fff;
+}
+.header__btn.header__btn--outline:hover {
+  border-color: rgb(255 255 255 / 60%);
+  transform: translateY(-1px) scale(1.02);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.25);
+}
+
+/* Mobile Styles */
+@media (width <= 768px) {
+  .header__content {
+    padding: var(--spacing-sm) 0;
+  }
+
+  .header__actions {
+    display: flex;
+  }
+
+  .header__menu-btn {
+    box-sizing: border-box;
+    width: 46px;
+    height: 46px;
+    padding: 10px; /* para ícone 24px + borda 1px = 46px exatos */
+    aspect-ratio: 1 / 1;
+    border-radius: 14px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1001; /* acima do conteúdo, sem competir com o overlay */
+    touch-action: manipulation;
+  }
+  .header__menu-btn .header__btn-icon {
+    width: 24px;
+    height: 24px;
+  }
+  .header__btn:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 2px rgb(119 71 255 / 45%), 0 10px 24px rgb(0 0 0 / 35%);
+  }
+  .header__btn-icon {
+    width: 18px;
+    height: 18px;
+    color: white; /* garante cor correta para ícones SVG (react-icons) */
+    transition: transform 0.3s ease;
+    flex-shrink: 0;
+  }
+
+  .header__btn:hover .header__btn-icon {
+    transform: scale(1.1);
+  }
+
+  @media (max-width: 768px) {
+    .header__menu-btn {
+      box-sizing: border-box;
+      width: 46px;
+      height: 46px;
+      padding: 10px; /* garante 46x46 */
+      min-width: 44px;
+      min-height: 44px;
+    }
+  }
+}
+
+@media (width <= 480px) {
+  .header__content {
+    min-height: 75px;
+  }
+
+  .logo__text {
+    font-size: var(--font-size-base);
+  }
+
+  .header__btn {
+    padding: 8px 16px;
+    font-size: 12px;
+  }
+}
+
+/* Efeito espelhado removido. Aplicamos efeito vidro (glassmorphism) nas classes base do header. */
+
+
+
+/* CTA “Agende uma call” com ícone-only no mobile */
+.header__cta-call .header__btn-label {
+  margin-right: 8px; /* espaçamento entre texto e ícone no desktop */
+}
+
+@media (max-width: 768px) {
+  .header__cta-call {
+    box-sizing: border-box;
+    width: 46px;
+    height: 46px;
+    padding: 10px; /* para ícone 24px + borda 1px = 46px exatos */
+    aspect-ratio: 1 / 1;
+    border-radius: 14px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .header__cta-call .header__btn-label {
+    display: none; /* esconder texto no mobile, mantendo aria-label acessível */
+  }
+  .header__cta-call .header__btn-icon {
+    width: 20px;
+    height: 20px;
+  }
+}
+/* Tamanhos consistentes para os dois ícones (CTA e Menu) */
+.header__cta-call .header__btn-icon,
+.header__menu-btn .header__btn-icon {
+  width: 18px;
+  height: 18px;
+}
+
+@media (max-width: 768px) {
+  .header__cta-call .header__btn-icon,
+  .header__menu-btn .header__btn-icon {
+    width: 24px;
+    height: 24px;
+  }
+}
+/* Logo Pixel‑Art 16 bits (5x5) */
+.pixel-logo {
+  width: 34px;
+  height: 34px;
+  display: grid;
+  grid-template-columns: repeat(5, 6px);
+  grid-template-rows: repeat(5, 6px);
+  gap: 2px;
+  margin-right: var(--spacing-sm);
+}
+.pixel {
+  width: 6px;
+  height: 6px;
+  border-radius: 1px;
+  background: var(--accent-primary);
+  box-shadow: 0 1px 0 rgb(0 0 0 / 35%);
+}
+.pixel--hi { background: #ffffff; }
+.pixel--base { background: #ffffff; }
+.pixel--sh { background: #ffffff; }
+.pixel--empty { opacity: 0; }
+.logo__text-group {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.logo__text--pedro {
+  font-weight: 800;
+  color: #ffffff;
+  text-shadow: none;
+}
+
+/* Título "dApps" com estética 16‑bits */
+.logo__text--dapps {
+  font-family: 'Press Start 2P', monospace;
+  font-size: var(--font-size-xl); /* altura igual ao PEDRO */
+  line-height: 1;
+  text-transform: none;
+  color: #ffffff; /* tudo branco */
+  -webkit-text-fill-color: initial;
+  -webkit-text-stroke: 0;
+  text-shadow: none;
+}

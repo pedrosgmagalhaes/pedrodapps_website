@@ -7,14 +7,14 @@
 
 :root {
   /* Cores principais baseadas no esquema fornecido */
-  --bg-primary: #0d0c13;
-  --bg-primary-rgb: 13 12 19; /* RGB equivalente para permitir alpha no overlay */
-  --bg-secondary: #050508;
-  --bg-tertiary: #0f0e16;
-  --bg-quaternary: #23154c;
-  --bg-card: #0f0e16;
-  --surface-color: #050508;
-  --background-color: #0d0c13;
+  --bg-primary: #24263b;
+  --bg-primary-rgb: 34 36 58; /* RGB equivalente para permitir alpha no overlay */
+  --bg-secondary: #7BE33D;
+  --bg-tertiary: #ffffff;
+  --bg-quaternary: #000000;
+  --bg-card: #24263b;
+  --surface-color: #24263b;
+  --background-color: #24263b;
 
   /* Cores de texto */
   --text-primary: #fff;
@@ -50,11 +50,11 @@
   --electric-violet-darkest: #23154c;
 
   /* Cores adicionais da paleta fornecida */
-  --color-scheme-1: #0f0e16;
-  --color-scheme-2: #050508;
-  --color-scheme-3: #000;
-  --color-scheme-4: #23154c;
-  --color-scheme-5: #595960;
+  --color-scheme-1: #24263b;
+  --color-scheme-2: #7ee241;
+  --color-scheme-3: #ffffff;
+  --color-scheme-4: #000000;
+  --color-scheme-5: #24263b;
 
   /* Cores Concrete da paleta */
   --concrete-lightest: #fdfdfd;
@@ -65,17 +65,18 @@
   --concrete-darker: #616161;
   --concrete-darkest: #484848;
 
-  /* Cores de destaque */
-  --primary-color: #7747ff;
-  --accent-primary: #7747ff;
-  --accent-secondary: #7747ff;
-  --accent-tertiary: #23154c;
-  --border-color: #23154c;
-  --gradient-primary: linear-gradient(135deg, #bf7eff 0%, #7747ff 50%, #23154c 100%);
+  /* Cores de destaque (alinhadas à paleta solicitada) */
+  --primary-color: #7BE33D;
+  --accent-primary: #7BE33D;
+  --accent-secondary: #7BE33D;
+  --accent-tertiary: #000000;
+  --border-color: rgb(255 255 255 / 20%);
+  --gradient-primary: linear-gradient(135deg, #A5F57B 0%, #7BE33D 50%, #2a3117 100%);
   --gradient-bg: linear-gradient(180deg, #000 0%, #0f0e16 50%, #23154c 100%);
 
   /* Tipografia */
-  --font-family: "Saira", -apple-system, blinkmacsystemfont, "Segoe UI", "Roboto", sans-serif;
+  --font-family: "Bungee", cursive, -apple-system, blinkmacsystemfont, "Segoe UI", "Roboto", "Saira", sans-serif;
+  --font-family-mono: "Roboto Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
   --font-size-xs: 0.75rem;
   --font-size-sm: 0.875rem;
   --font-size-base: 1rem;
@@ -114,7 +115,7 @@ html {
   scroll-behavior: smooth;
 
   /* Firefox scrollbar colors: thumb track */
-  scrollbar-color: #7747ff var(--bg-secondary);
+  scrollbar-color: #22243A #010001;
 }
 
 body {
@@ -280,7 +281,7 @@ body.menu-open {
 .loading-overlay__fallback {
   color: var(--neutral-white);
   font-size: var(--font-size-6xl);
-  font-weight: 700;
+  font-weight: 500;
 }
 
 /* Loading dots */
@@ -358,16 +359,16 @@ body.menu-open {
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--bg-secondary);
+  background: #010001;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #7747ff;
+  background: #22243A;
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #7747ff;
+  background: #22243A;
 }
 
 /* Offset global do header e responsividade */
