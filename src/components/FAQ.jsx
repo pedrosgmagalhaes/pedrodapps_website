@@ -13,7 +13,7 @@ const faqs = [
   },
   {
     q: "Terei suporte durante o curso?",
-    a: "Sim! O suporte é feito via comunidade e canais diretos com o time da Pixley.",
+    a: "Sim! O suporte é feito via comunidade e canais diretos com o time do Pedro dApp.",
   },
   {
     q: "Posso começar mesmo com pouco dinheiro?",

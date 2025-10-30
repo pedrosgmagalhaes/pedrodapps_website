@@ -1,6 +1,6 @@
-# Pixley Website
+# Pedro dApps Website
 
-Site institucional da Pixley desenvolvido em React com Vite.
+Site institucional da Pedro dApps desenvolvido em React com Vite.
 
 ## 🚀 Tecnologias
 
@@ -59,8 +59,8 @@ yarn deploy:firebase
 ```
 
 ### Configuração
-- Projeto: `pixley-website`
-- Site produção: `pixleywebsite-98c8e3`
+- Projeto: `pedrodapps-website`
+- Site produção: `pedrodapps-website`
 - Multi-site configurado via `.firebaserc`
 
 ### Acesso em Produção
@@ -72,4 +72,4 @@ yarn deploy:firebase
 
 ## 📄 Licença
 
-Todos os direitos reservados à Pixley.
+Todos os direitos reservados à Pedro dApps.
