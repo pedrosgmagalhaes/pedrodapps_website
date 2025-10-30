@@ -3,18 +3,23 @@ import "./Access30Days.css";
 import checkPurple from "../assets/check_purple.svg";
 
 const BENEFITS = [
+  "Scripts de Flash Loan para operações avançadas",
+  "Operação Estruturada em DeFi envolvendo stablecoin",
+  "Plataformas de tokenização e suas aplicações",
+  "Hacks de cripto para estudos e análise de segurança",
+  "Banco de dados de scam para evitar golpes na web3",
+  "Ferramentas para operar no mercado de forma segura",
   "Como funciona o mercado de exchanges e corretoras",
   "Como montar uma estrutura segura, autônoma e descentralizada",
   "Como enviar e receber valores globalmente com criptomoedas",
   "Estratégias de proteção patrimonial e receita passiva",
   "Como dolarizar patrimônio com cripto",
   "Legalização e operação de uma empresa de cripto",
-  "Comece a operar com a sua própria exchange personalizada durante os 30 dias de acesso à infraestrutura White Label.",
 ];
 
 export default function Access30Days() {
   return (
-    <section className="access30" id="acessos" aria-label="O que você vai acessar nos primeiros 30 dias">
+    <section className="access30" id="acessos" aria-label="O que você vai acessar no grupo VIP">
       <div className="container">
         <div className="access30__grid">
           {/* Coluna esquerda: título, descrição e CTA */}
@@ -22,16 +27,16 @@ export default function Access30Days() {
             <h2 className="access30__title">
               O que você vai acessar
               <br />
-              nos primeiros 30 dias!
+              no grupo VIP!
             </h2>
             <p className="access30__description">
-              Você terá acesso imediato a todos os cursos do Pedro dApps disponíveis.
-              Desde operação de exchanges, até remessas internacionais com stablecoins.
+              Acesso exclusivo a scripts prontos, operações DeFi avançadas e conteúdo especializado.
+              Desde Flash Loans até proteção contra golpes na web3.
             </p>
 
             <div className="access30__actions">
               <a href="#cursos" className="access30__cta btn btn-primary">
-                Quero montar minha corretora
+                Quero fazer parte do VIP
               </a>
             </div>
           </div>

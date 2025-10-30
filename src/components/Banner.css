@@ -29,6 +29,7 @@
   align-items: center;
   gap: var(--spacing-xl);
   min-height: clamp(160px, 22vw, 300px); /* altura mínima reduzida, mantendo responsividade */
+  max-height: 1258px; /* altura máxima para evitar estouro */
 }
 
 .banner__content {
@@ -59,6 +60,7 @@
   font-size: clamp(var(--font-size-sm), 1.8vw, var(--font-size-md));
   color: #22243a; /* solicitado: texto na cor #22243A */
   margin-bottom: var(--spacing-lg);
+  max-width: 450px;
 }
 
 .banner__cta {

@@ -21,6 +21,19 @@
   text-align: left; /* alinha como na referência */
 }
 
+/* Badge de destaque */
+.hero__badge {
+  display: inline-block;
+  background: linear-gradient(135deg, #ff6b35, #ff8c42);
+  color: white;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 16px;
+  box-shadow: 0 4px 12px rgba(255, 107, 53, 0.3);
+}
+
 .hero__title {
   font-family:
     "Bungee",
@@ -50,10 +63,99 @@
   text-shadow: none; /* sem sombras na descrição */
 }
 
+/* Seção do vídeo */
+.hero__video-section {
+  margin: 20px 0;
+}
+
+.hero__btn--video {
+  background: rgba(255, 0, 0, 0.1);
+  color: var(--black);
+  padding: 12px 24px;
+  border: 2px solid #ff0000;
+  border-radius: 8px;
+  font-size: var(--font-size-base);
+  font-weight: 500;
+  gap: 8px;
+  transition: all 0.3s ease;
+}
+
+.hero__btn--video:hover {
+  background: rgba(255, 0, 0, 0.2);
+  transform: translateY(-2px);
+}
+
+/* Informações da live */
+.hero__live-info {
+  background: rgba(129, 223, 77, 0.1);
+  border: 2px solid var(--accent-primary);
+  border-radius: 12px;
+  padding: 20px;
+  margin: 24px 0;
+}
+
+.hero__countdown {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid rgba(129, 223, 77, 0.3);
+}
+
+.hero__countdown-icon {
+  color: var(--accent-primary);
+  font-size: 18px;
+}
+
+.hero__countdown-text {
+  font-size: var(--font-size-base);
+  color: var(--black);
+}
+
+.hero__countdown-timer {
+  background: var(--accent-primary);
+  color: var(--black);
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-weight: 700;
+  font-size: 14px;
+  margin-left: auto;
+}
+
+.hero__benefits-title {
+  font-size: var(--font-size-lg);
+  color: var(--black);
+  margin-bottom: 12px;
+  font-weight: 600;
+}
+
+.hero__benefits-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.hero__benefits-list li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+  font-size: var(--font-size-base);
+  color: var(--black-light);
+}
+
+.hero__benefits-list li svg {
+  color: var(--accent-primary);
+  font-size: 12px;
+  flex-shrink: 0;
+}
+
 .hero__actions {
   display: flex;
   align-items: center;
   gap: 10px;
+  margin-top: 24px;
 }
 
 .hero__btn {
@@ -413,5 +515,39 @@
     right: 0;
     opacity: 0.5;
     animation-duration: 7.5s;
+  }
+  
+  /* Responsivo para novos elementos */
+  .hero__badge {
+    font-size: 12px;
+    padding: 6px 12px;
+  }
+  
+  .hero__live-info {
+    padding: 16px;
+    margin: 20px 0;
+  }
+  
+  .hero__countdown {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  
+  .hero__countdown-timer {
+    margin-left: 0;
+    align-self: flex-start;
+  }
+  
+  .hero__benefits-title {
+    font-size: var(--font-size-base);
+  }
+  
+  .hero__benefits-list li {
+    font-size: 14px;
+  }
+  
+  .hero__btn--primary .hero__btn-label {
+    font-size: 14px;
   }
 }

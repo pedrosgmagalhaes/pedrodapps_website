@@ -110,6 +110,64 @@
   font-size: 11px;
   letter-spacing: 0.2px;
 }
+/* Cronômetro */
+.vip-card__countdown {
+  background: linear-gradient(135deg, #2d5016 0%, #72e230 100%);
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 20px;
+  text-align: center;
+  box-shadow: 0 4px 15px rgba(45, 80, 22, 0.3);
+}
+
+.countdown-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: #ffffff;
+  margin-bottom: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.countdown-timer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.countdown-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 40px;
+}
+
+.countdown-number {
+  font-size: 20px;
+  font-weight: 800;
+  color: #ffffff;
+  line-height: 1;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.countdown-label {
+  font-size: 10px;
+  color: #ffffff;
+  margin-top: 2px;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  opacity: 0.9;
+}
+
+.countdown-separator {
+  font-size: 18px;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0 4px;
+  opacity: 0.8;
+}
+
 .vip-card__header {
   display: flex;
   align-items: center;
@@ -194,5 +252,22 @@
   }
   .vip__right {
     order: -1;
+  }
+  
+  .countdown-timer {
+    gap: 6px;
+  }
+  
+  .countdown-item {
+    min-width: 35px;
+  }
+  
+  .countdown-number {
+    font-size: 18px;
+  }
+  
+  .countdown-separator {
+    font-size: 16px;
+    margin: 0 2px;
   }
 }

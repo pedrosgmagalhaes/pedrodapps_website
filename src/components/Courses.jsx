@@ -29,8 +29,8 @@ export default function Courses() {
       <div className="container">
         <div className="courses__header">
           <h2 className="courses__title">
-            Por que escolher o<br />
-            <span className="courses__title-highlight">curso do Pedro dApps?</span>
+            Treinamento, Cursos e<br />
+            <span className="courses__title-highlight">Scripts Prontos</span>
           </h2>
         </div>
         <div className="courses__grid">

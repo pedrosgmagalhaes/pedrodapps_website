@@ -6,6 +6,8 @@ const ITEMS = [
   "Empreendedores iniciantes no mercado cripto",
   "Operadores que querem transformar conhecimento em negócio",
   "Criadores de conteúdo que desejam lançar suas próprias plataformas",
+  "Desenvolvedores que querem liberdade econômica e trabalhar por conta própria",
+  "Startups que querem explorar novos modelos de negócio online para web3",
   "Quem busca liberdade financeira com tecnologias descentralizadas",
 ];
 
@@ -33,7 +35,7 @@ export default function Audience() {
 
         <div className="audience__footer">
           <p className="audience__note">
-            Você terá <strong>acesso imediato</strong> à plataforma White Label e ao curso completo para dar o primeiro passo hoje mesmo.
+            Você terá <strong>acesso imediato</strong> ao grupo VIP e todo conteúdo exclusivo para dar o primeiro passo hoje mesmo.
           </p>
         </div>
       </div>

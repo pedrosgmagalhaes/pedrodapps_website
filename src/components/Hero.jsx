@@ -33,9 +33,9 @@ const Hero = () => {
         <div className="hero__layout">
           <div className="hero__content">
             <h1 className="hero__title">
-              CURSOS, CAPACITAÇÃO E
+              CURSOS, TREINAMENTO,
               <br />
-              TREINAMENTO EM CRIPTO
+              SCRIPTS
             </h1>
             <p className="hero__desc">
               Aprenda de vez como operar em uma rede descentralizada através de

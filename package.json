@@ -18,6 +18,7 @@
     "start": "vite preview --port $PORT --host",
     "deploy:firebase": "node scripts/deploy-firebase.js",
     "deploy:staging": "node scripts/deploy-firebase.js --channel staging",
+    "deploy:all": "node scripts/deploy-all.cjs",
     "optimize:svg:card-machine": "svgo src/assets/card-machine.svg -o src/assets/card-machine.svg",
     "optimize:svg:card-machine:multipass": "svgo --multipass src/assets/card-machine.svg -o src/assets/card-machine.svg"
   },
