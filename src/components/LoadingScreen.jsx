@@ -7,14 +7,16 @@ import pedroDappsLogo from "../assets/pedro_dapps_logo.png";
 const LoadingScreen = ({ isLoading, logoPath, logoAlt = "Pedro dApps", fallbackText = "Pedro dApps" }) => {
   const [imageError, setImageError] = useState(false);
 
-  const handleImageError = useCallback(() => setImageError(true), []);
+  const handleImageError = useCallback(() => {
+    console.warn("Erro ao carregar logo do Pedro dApps, usando fallback");
+    setImageError(true);
+  }, []);
 
   if (!isLoading) return null;
 
   return (
     <div
-      className={`loading-overlay ${TRANSITIONS.slow}`}
-      style={{ background: "#24263b" }}
+      className={`loading-overlay ${TRANSITIONS?.slow || ""}`}
       aria-live="polite"
       aria-busy={true}
       role="alert"
@@ -24,15 +26,20 @@ const LoadingScreen = ({ isLoading, logoPath, logoAlt = "Pedro dApps", fallbackT
           <img
             src={logoPath || pedroDappsLogo}
             alt={logoAlt}
-            width={200}
-            height="auto"
-            className={`${ANIMATIONS.fadeIn} loading-overlay__logo`}
+            className={`${ANIMATIONS?.fadeIn || ""} loading-overlay__logo`}
             loading="eager"
             decoding="async"
             onError={handleImageError}
+            style={{
+              maxWidth: "200px",
+              height: "auto",
+              display: "block"
+            }}
           />
         ) : (
-          <div className={`loading-overlay__fallback ${ANIMATIONS.fadeIn}`}>{fallbackText}</div>
+          <div className={`loading-overlay__fallback ${ANIMATIONS?.fadeIn || ""}`}>
+            {fallbackText}
+          </div>
         )}
         <LoadingDots />
       </div>

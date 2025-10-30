@@ -265,6 +265,7 @@ body.menu-open {
   align-items: center;
   justify-content: center;
   padding: var(--spacing-xl);
+  background: #24263b !important;
 }
 
 .loading-overlay__content {
@@ -272,29 +273,37 @@ body.menu-open {
   flex-direction: column;
   align-items: center;
   gap: var(--spacing-xl);
+  text-align: center;
 }
 
 .loading-overlay__logo {
   object-fit: contain;
+  max-width: 200px;
+  height: auto;
+  filter: brightness(1.1) contrast(1.1);
 }
 
 .loading-overlay__fallback {
-  color: var(--neutral-white);
+  color: #ffffff;
   font-size: var(--font-size-6xl);
-  font-weight: 500;
+  font-weight: 600;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  letter-spacing: 0.5px;
 }
 
 /* Loading dots */
 .loading-dots {
   display: flex;
   gap: 8px;
+  margin-top: 16px;
 }
 
 .loading-dot {
-  width: 8px;
-  height: 8px;
-  background: rgb(255 255 255 / 60%);
+  width: 10px;
+  height: 10px;
+  background: #ffffff;
   border-radius: 50%;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 @keyframes pulseSlow {
