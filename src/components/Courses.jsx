@@ -13,7 +13,7 @@ const courses = [
     id: "estrategia-mercado",
     title: "Estratégia de Mercado",
     description:
-      "Baseado em experiências reais do mercado cripto, incluindo desenvolvimento de soluções como Crypto POS e Pix to Wire.",
+      "Baseado em experiências reais do mercado cripto, incluindo desenvolvimento de soluções como Pix pra Cripto, e Criação de Stablecoins.",
   },
   {
     id: "estruturacao-tecnica",
