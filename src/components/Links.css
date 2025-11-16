@@ -23,6 +23,11 @@
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
 }
 
+/* Card Pixely isolado: espaçamento extra em relação ao Pedro dApps */
+.links__card--pixely {
+  margin-top: 24px;
+}
+
 .links__header {
   display: flex;
   flex-direction: column;
@@ -204,5 +209,146 @@
   }
   .links__title {
     font-size: 1.25rem;
+  }
+}
+
+/* Destaque: Builders de Elite */
+.links__highlight {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 18px 16px;
+  margin-bottom: 20px;
+  border-radius: 14px;
+  background:
+    linear-gradient(90deg, rgba(34, 197, 94, 0.20), rgba(12, 84, 44, 0.18));
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.35), inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+  text-align: left;
+  animation: highlight-glow 6s ease-in-out infinite;
+}
+
+@keyframes highlight-glow {
+  0%, 100% {
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.35), inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+  }
+  50% {
+    box-shadow: 0 16px 36px rgba(34, 197, 94, 0.28), 0 0 22px rgba(34, 197, 94, 0.22), inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+  }
+}
+
+.links__highlight-hero {
+  width: 90%;
+  height: auto;
+  max-width: 680px;
+  border-radius: 12px;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 12px rgba(34, 197, 94, 0.35));
+}
+
+.links__highlight-content {
+  display: grid;
+  gap: 6px;
+}
+
+.links__highlight-eyebrow {
+  font-size: 0.8rem;
+  color: #a9a9c8;
+  letter-spacing: 0.4px;
+}
+
+.links__highlight-title {
+  font-size: 1.15rem;
+  font-weight: 800;
+  letter-spacing: 0.6px;
+}
+
+.links__highlight-subtitle {
+  font-size: 0.95rem;
+  color: #d6d6ee;
+}
+
+.links__highlight-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 4px;
+}
+
+.links__highlight-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 14px;
+  border-radius: 10px;
+  font-weight: 700;
+  text-decoration: none;
+  color: #ffffff;
+  background: rgba(34, 197, 94, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  transition: transform 0.18s ease, background 0.18s ease, box-shadow 0.18s ease;
+}
+
+.links__highlight-btn:hover {
+  transform: translateY(-1px);
+  background: rgba(34, 197, 94, 0.95);
+  box-shadow: 0 8px 18px rgba(34, 197, 94, 0.32);
+}
+
+.links__highlight-btn--secondary {
+  background: rgba(255, 255, 255, 0.14);
+}
+
+.links__highlight-btn--secondary:hover {
+  background: rgba(255, 255, 255, 0.22);
+}
+
+@media (max-width: 480px) {
+  .links__highlight {
+    gap: 12px;
+    padding: 16px 14px;
+    text-align: center;
+  }
+  .links__highlight-hero {
+    width: 95%;
+    max-width: 100%;
+  }
+  .links__highlight-content {
+    justify-items: center;
+  }
+  .links__highlight-title {
+    font-size: 1.1rem;
+  }
+  .links__highlight-subtitle {
+    font-size: 0.9rem;
+  }
+}
+/* Bloco de marca Pixely */
+.links__brand {
+  display: grid;
+  place-items: center;
+  margin: 12px 0 8px;
+}
+
+.links__brand-logo {
+  width: 200px;
+  max-width: 360px;
+  height: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 8px rgba(255, 255, 255, 0.18));
+}
+
+/* Tamanho fixo do logo da Pixely no card isolado */
+.links__card--pixely .links__brand-logo {
+  width: 200px;
+  max-width: none;
+}
+
+@media (max-width: 480px) {
+  .links__brand-logo {
+    width: 150px;
+    max-width: 300px;
   }
 }

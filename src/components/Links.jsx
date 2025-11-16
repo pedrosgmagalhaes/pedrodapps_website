@@ -1,8 +1,11 @@
 import React from "react";
 import "./Links.css";
 import pedrodappsIcon from "../assets/pedrodapps_icon.png";
+import buildersEliteImg from "../assets/builderselite.png";
+import buildersImg from "../assets/builders.png";
 import pedroLogo from "../assets/pedro_dapps_logo.png";
 import pixleyLogoViolet from "../assets/pixley_logo_icon_violet.svg";
+import pixleyLogoWhite from "../assets/pixley_logo_violet.png";
 import appleIcon from "../assets/apple.svg";
 import playstoreIcon from "../assets/playstore.svg";
 import { FaYoutube, FaInstagram, FaLinkedinIn, FaWhatsapp } from "react-icons/fa";
@@ -12,7 +15,36 @@ export default function Links() {
   return (
     <section className="links" aria-label="Links rápidos">
       <div className="links__container">
-        <div className="links__card" role="navigation" aria-label="Lista de links">
+        {/* Destaque do Programa Builders de Elite no topo */}
+        <div className="links__highlight" role="region" aria-label="Programa Builders de Elite">
+          <img
+            src={buildersImg}
+            alt="Builders de Elite"
+            className="links__highlight-hero"
+            loading="eager"
+            decoding="async"
+          />
+          <div className="links__highlight-content">
+            <span className="links__highlight-eyebrow">Programa</span>
+            <h2 className="links__highlight-title">BUILDERS DE ELITE</h2>
+            <p className="links__highlight-subtitle">
+              Torne-se um programador avançado, livre das amarras — dominando scripts poderosos, tutoriais diretos ao ponto e uma comunidade que vive a liberdade tecnológica. Entre, evolua e construa sua própria independência.
+            </p>
+            <div className="links__highlight-actions">
+              <a href="#vip" className="links__highlight-btn" aria-label="Conhecer o Programa Builders de Elite">
+                Conheça o programa
+              </a>
+              <a
+                href="#checkout"
+                className="links__highlight-btn links__highlight-btn--secondary"
+                aria-label="Entrar agora no Builders de Elite"
+              >
+                Entrar agora
+              </a>
+            </div>
+          </div>
+        </div>
+      <div className="links__card" role="navigation" aria-label="Lista de links">
           <div className="links__header">
             <img
               src={pedroLogo}
@@ -38,6 +70,21 @@ export default function Links() {
                   <span className="links__label-super">Pedro dApps</span>
                   <span className="links__label-title">Site oficial</span>
                   <span className="links__label-sub">Scripts, automaçÕes, hacks e tutoriais avançados de operacoses fi</span>
+                </div>
+              </a>
+
+              {/* Programa Builders de Elite */}
+              <a
+                className="links__item"
+                href="#vip"
+                rel="noopener noreferrer"
+                aria-label="Abrir Programa Builders de Elite"
+              >
+                <img src={buildersEliteImg} alt="Builders de Elite" className="links__icon" />
+                <div className="links__label">
+                  <span className="links__label-super">PROGRAMA BUILDERS DE ELITE</span>
+                  <span className="links__label-title">Seja um builder avançado e independente</span>
+                  <span className="links__label-sub">Scripts prontos, tutoriais e comunidade para acelerar seu crescimento</span>
                 </div>
               </a>
 
@@ -99,7 +146,24 @@ export default function Links() {
             </div>
           </div>
 
+          
+
+          
+        </div>
+
+        {/* Card isolado: Pixely Wallet */}
+        <div className="links__card links__card--pixely" role="region" aria-label="Pixely Wallet">
           <div className="links__section" aria-label="Links Pixely Wallet">
+            {/* Bloco de marca Pixely separado com logo branca (antes do título) */}
+            <div className="links__brand" role="img" aria-label="Marca Pixely Wallet">
+              <img
+                src={pixleyLogoWhite}
+                alt="Pixely Wallet"
+                className="links__brand-logo"
+                loading="eager"
+                decoding="async"
+              />
+            </div>
             <div className="links__section-title">Pixely Wallet</div>
             <div className="links__list">
               <a
@@ -176,7 +240,9 @@ export default function Links() {
             </div>
           </div>
 
-          <div className="links__footer" role="contentinfo">
+     
+        </div>
+             <div className="links__footer" role="contentinfo">
             <p className="links__footer-text">
               Esta página constitui <strong>ambiente externo</strong>, não pertencente nem operado por
               <strong> Meta Platforms, Inc. (Facebook/Instagram)</strong> ou <strong>YouTube/Google</strong>.
@@ -189,7 +255,6 @@ export default function Links() {
               <a href="#privacidade" aria-label="Abrir Política de Privacidade"><strong>Política de Privacidade</strong></a>.
             </p>
           </div>
-        </div>
       </div>
     </section>
   );
