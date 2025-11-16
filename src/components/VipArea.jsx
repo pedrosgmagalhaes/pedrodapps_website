@@ -3,6 +3,7 @@ import "./VipArea.css";
 import checkNavy from "../assets/check_navy.svg";
 import cardsImg from "../assets/cards.svg";
 import pixleyLogo from "../assets/pixley_logo_white.png";
+import usdtIcon from "../assets/icons/usdt.svg";
 
 const benefits = [
   "Acesso completo à plataforma exclusiva com scripts, treinamentos, insights, dicas e atualizações",
@@ -98,7 +99,11 @@ export default function VipArea() {
                     <span className="vip__item-icon" aria-hidden="true">
                       <img src={checkNavy} alt="" />
                     </span>
-                    <span className="vip__pixley-benefit-text">Cashbacks em <strong>USDT</strong> em serviços selecionados</span>
+                    <span className="vip__pixley-benefit-text">
+                      Cashbacks em <strong>USDT</strong>
+                      <img src={usdtIcon} alt="USDT" className="vip__inline-icon" />
+                      em serviços selecionados
+                    </span>
                   </li>
                   <li className="vip__pixley-benefit">
                     <span className="vip__item-icon" aria-hidden="true">
