@@ -2,9 +2,7 @@
   min-height: 100vh;
   display: grid;
   place-items: center;
-  background:
-    radial-gradient(1200px 600px at 50% -200px, rgba(137, 87, 255, 0.22), transparent),
-    linear-gradient(180deg, rgba(10, 10, 13, 1) 0%, rgba(12, 12, 18, 1) 100%);
+  background: linear-gradient(180deg, rgba(10, 10, 13, 1) 0%, rgba(12, 12, 18, 1) 100%);
   color: #e9e9f1;
   width: 100%;
   overflow-x: hidden; /* evita overflow horizontal em mobile */
