@@ -31,7 +31,7 @@ const Header = () => {
           <div className="header__actions">
             <a
               href="#checkout"
-              className="header__btn header__btn--primary"
+              className="header__btn header__btn--primary header__btn--attention"
               aria-label="Faça parte"
             >
               <span className="header__btn-label">Faça parte!</span>

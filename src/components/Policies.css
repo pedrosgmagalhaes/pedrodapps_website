@@ -26,6 +26,7 @@
 .policy__subtitle { font-size: 14px; color: rgba(255,255,255,0.8); margin: 0 0 16px 0; }
 .policy__section { margin-bottom: 14px; }
 .policy__section h3 { font-size: 18px; margin: 0 0 8px 0; }
+.policy__section p strong { display: block; font-size: 18px; margin: 0 0 8px 0; color: var(--neutral-white); font-weight: 800; }
 .policy__section p, .policy__section ul { font-size: 14px; line-height: 1.7; color: rgba(255,255,255,0.88); margin: 0; }
 .policy__section ul { padding-left: 18px; }
 

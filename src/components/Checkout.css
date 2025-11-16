@@ -72,6 +72,19 @@
 .checkout__footnote a { color: rgba(255,255,255,0.85); text-decoration: none; font-weight: 700; }
 .checkout__footnote a:hover { color: #fff; text-decoration: underline; }
 
+/* Nota discreta de uso responsável de automação */
+.checkout__automation-note {
+  margin-top: 6px;
+  color: rgba(255,255,255,0.66);
+  font-size: 12px;
+}
+.checkout__automation-note a {
+  color: rgba(255,255,255,0.85);
+  text-decoration: none;
+  font-weight: 700;
+}
+.checkout__automation-note a:hover { color: #fff; text-decoration: underline; }
+
 @media (max-width: 600px) {
   .checkout__grid { grid-template-columns: 1fr; }
 }

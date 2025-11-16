@@ -236,6 +236,13 @@ export default function Checkout() {
                 <a href="#privacidade" aria-label="Abrir Política de Privacidade">Política de Privacidade</a>.
               </small>
             </div>
+
+            <div className="checkout__automation-note" aria-live="polite">
+              <small>
+                Uso responsável de automação: teste em ambiente controlado, defina limites e monitore execuções. Leia os {" "}
+                <a href="#servicos" aria-label="Abrir Termos de Serviço">Termos</a>.
+              </small>
+            </div>
           </form>
         </div>
       </div>

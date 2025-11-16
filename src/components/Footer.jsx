@@ -13,13 +13,6 @@ const Footer = () => {
           </a>
           <p className="footer__copy">
             Pedro dApps © 2025
-            <span className="footer__rights">Todos os direitos reservados.</span>
-            <span className="footer__legal">
-              Ao acessar nossa plataforma, você automaticamente aceita nossos {" "}
-              <a href="#servicos" aria-label="Abrir Termos de Serviço">Termos de Serviço</a>, nossa {" "}
-              <a href="#privacidade" aria-label="Abrir Política de Privacidade">Política de Privacidade</a>, bem como nossa {" "}
-              <a href="#cookies" aria-label="Abrir Política de Cookies">Política de Cookies</a>.
-            </span>
           </p>
         </div>
 
@@ -38,6 +31,15 @@ const Footer = () => {
             </a>
           </div>
         </div>
+      </div>
+      <div className="container footer__bottom">
+        <p className="footer__bottom-text">
+          Conteúdo educacional; não oferecemos aconselhamento financeiro. {""}
+          Ao acessar nossa plataforma, você automaticamente aceita nossos {""}
+          <a href="#servicos" aria-label="Abrir Termos de Serviço">Termos de Serviço</a>, nossa {""}
+          <a href="#privacidade" aria-label="Abrir Política de Privacidade">Política de Privacidade</a>, bem como nossa {""}
+          <a href="#cookies" aria-label="Abrir Política de Cookies">Política de Cookies</a>.
+        </p>
       </div>
     </footer>
   );

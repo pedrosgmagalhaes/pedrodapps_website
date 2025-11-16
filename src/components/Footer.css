@@ -132,3 +132,41 @@
   color: #fff;
   text-decoration: underline;
 }
+
+/* Aviso resumido de conteúdo educacional */
+.footer__disclaimer {
+  display: block;
+  margin-top: 6px;
+  color: rgba(255, 255, 255, 0.68);
+  font-size: 12px;
+  line-height: 1.6;
+}
+.footer__disclaimer a {
+  color: rgba(255, 255, 255, 0.85);
+  text-decoration: none;
+  font-weight: 700;
+}
+.footer__disclaimer a:hover {
+  color: #fff;
+  text-decoration: underline;
+}
+
+/* Linha inferior isolada e centralizada */
+.footer__bottom {
+  margin-top: 16px;
+}
+.footer__bottom-text {
+  text-align: center;
+  font-size: 12px;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.68);
+}
+.footer__bottom-text a {
+  color: rgba(255, 255, 255, 0.85);
+  text-decoration: none;
+  font-weight: 700;
+}
+.footer__bottom-text a:hover {
+  color: #fff;
+  text-decoration: underline;
+}

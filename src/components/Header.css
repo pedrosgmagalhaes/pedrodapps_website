@@ -334,6 +334,48 @@
   box-shadow: 0 6px 16px rgba(0,0,0,0.25);
 }
 
+/* Atenção extra para o CTA “Faça parte!” */
+.header__btn--attention {
+  will-change: box-shadow, transform;
+  animation: header-btn-pulse 2.2s ease-in-out infinite;
+}
+.header__btn--attention::before {
+  /* brilho em passagem automática, além do hover */
+  animation: header-btn-shine 3s ease-in-out infinite;
+}
+.header__btn--attention::after {
+  content: "";
+  position: absolute;
+  inset: -4px;
+  border-radius: inherit;
+  pointer-events: none;
+  border: 2px solid rgba(123, 227, 61, 0.28);
+  animation: header-btn-ring 2.2s ease-in-out infinite;
+}
+
+@keyframes header-btn-pulse {
+  0%, 100% { box-shadow: 0 8px 20px rgba(123, 227, 61, 0.20); }
+  50% { box-shadow: 0 10px 26px rgba(123, 227, 61, 0.35); }
+}
+
+@keyframes header-btn-ring {
+  0% { opacity: 0.55; transform: scale(1); }
+  50% { opacity: 0.12; transform: scale(1.06); }
+  100% { opacity: 0.55; transform: scale(1); }
+}
+
+@keyframes header-btn-shine {
+  0% { left: -120%; }
+  50% { left: 120%; }
+  100% { left: 120%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .header__btn--attention { animation: none; }
+  .header__btn--attention::before { animation: none; }
+  .header__btn--attention::after { animation: none; }
+}
+
 /* Mobile Styles */
 @media (width <= 768px) {
   .header__content {
