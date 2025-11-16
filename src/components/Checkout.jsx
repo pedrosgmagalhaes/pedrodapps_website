@@ -240,7 +240,7 @@ export default function Checkout() {
             </div>
             <div className="checkout__summary-row">
               <span>Total</span>
-              <strong>R$ 987,58</strong>
+              <strong>R$ 487,58</strong>
             </div>
           </div>
 

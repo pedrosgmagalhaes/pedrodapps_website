@@ -150,11 +150,11 @@ export default function VipArea() {
                 </div>
               </div>
               <div className="vip-card__header">
-                <span className="vip-card__old-price">De R$ 1.258,00</span>
+                <span className="vip-card__old-price">De R$ 2.358,00</span>
               </div>
               <div className="vip-card__price">
                 <span className="vip-card__currency">R$</span>
-                <span className="vip-card__amount">987,58</span>
+                <span className="vip-card__amount">487,58</span>
                 <span className="vip-card__period">por ano</span>
               </div>
               <a href="#checkout" className="vip-card__cta" aria-label="Quero comprar agora">
