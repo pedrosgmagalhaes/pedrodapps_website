@@ -1,5 +1,5 @@
 import React, { useEffect, useState, Suspense } from "react";
-const Hero = React.lazy(() => import("./components/Hero"));
+import Hero from "./components/Hero";
 const NewsTicker = React.lazy(() => import("./components/NewsTicker"));
 const Courses = React.lazy(() => import("./components/Courses"));
 const Banner = React.lazy(() => import("./components/Banner"));
