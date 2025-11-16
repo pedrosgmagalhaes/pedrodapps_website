@@ -60,7 +60,6 @@ export default function Links() {
           </div>
 
           <div className="links__section" aria-label="Links Pedro dApps">
-            <div className="links__section-title">Pedro dApps</div>
             <div className="links__list">
               <a
                 className="links__item"
@@ -154,7 +153,6 @@ export default function Links() {
                 decoding="async"
               />
             </div>
-            <div className="links__section-title">Pixely Wallet</div>
             <div className="links__list">
               <a
                 className="links__item"
