@@ -9,7 +9,8 @@ const __dirname = path.dirname(__filename);
 
 (async () => {
   try {
-    const input = path.resolve(__dirname, "../src/assets/thumbnail.png");
+    // Fonte do thumbnail social: usar builderselite.png fornecido
+    const input = path.resolve(__dirname, "../src/assets/builderselite.png");
     const outDir = path.resolve(__dirname, "../public");
     const outWebp = path.join(outDir, "thumbnail-social.webp");
     const outJpg = path.join(outDir, "thumbnail-social.jpg");
