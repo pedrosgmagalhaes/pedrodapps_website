@@ -198,10 +198,33 @@
   font-weight: 400; /* descrição com peso normal */
   color: #F2F2F2; /* solicitado: texto das descrições #F2F2F2 */
   line-height: 1.6;
-  margin-bottom: var(--spacing-xl);
+  margin-bottom: var(--spacing-md);
   flex: 1;
   position: relative;
   z-index: 2;
+}
+
+/* Lista de recursos nos cards */
+.course-card__features {
+  list-style: none;
+  margin: 0 0 var(--spacing-md) 0;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+}
+
+.course-card__feature-item {
+  position: relative;
+  padding-left: 1rem;
+  color: #f2f2f2;
+  font-size: 14px;
+}
+
+.course-card__feature-item::before {
+  content: "-"; /* hífen como solicitado */
+  position: absolute;
+  left: 0;
+  color: currentColor;
 }
 
 .course-card__action {

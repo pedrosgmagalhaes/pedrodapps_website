@@ -1,0 +1,39 @@
+/* Layout base para páginas de políticas */
+.policy {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  padding: 72px 0;
+  min-height: 100vh;
+}
+
+.policy__container { max-width: 860px; margin: 0 auto; padding: 0 16px; }
+.policy__card {
+  background: rgba(34, 36, 58, 0.82);
+  border: 1px solid transparent;
+  border-radius: var(--border-radius-lg);
+  box-shadow: 0 12px 28px rgb(0 0 0 / 35%);
+  padding: 24px;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  background-image:
+    linear-gradient(rgba(34, 36, 58, 0.82), rgba(34, 36, 58, 0.82)),
+    linear-gradient(135deg, rgba(123, 227, 61, 0.28), rgba(119, 71, 255, 0.22));
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
+}
+
+.policy__title { font-size: 26px; font-weight: 800; margin: 0 0 12px 0; color: var(--neutral-white); }
+.policy__subtitle { font-size: 14px; color: rgba(255,255,255,0.8); margin: 0 0 16px 0; }
+.policy__section { margin-bottom: 14px; }
+.policy__section h3 { font-size: 18px; margin: 0 0 8px 0; }
+.policy__section p, .policy__section ul { font-size: 14px; line-height: 1.7; color: rgba(255,255,255,0.88); margin: 0; }
+.policy__section ul { padding-left: 18px; }
+
+/* Links dentro do conteúdo das políticas: negrito e cor alinhada ao texto */
+.policy__section a {
+  color: rgba(255,255,255,0.88);
+  text-decoration: none;
+  font-weight: 700;
+}
+
+.policy__updated { margin-top: 12px; font-size: 12px; color: rgba(255,255,255,0.68); }

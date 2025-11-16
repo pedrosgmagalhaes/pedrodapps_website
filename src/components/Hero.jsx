@@ -46,13 +46,10 @@ const Hero = () => {
         <div className="hero__layout">
           <div className="hero__content">
             <h1 className="hero__title">
-              CURSOS, TREINAMENTO,
-              <br />
-              SCRIPTS
+              BUILDERS DE ELITE
             </h1>
             <p className="hero__desc">
-              Aprenda de vez como operar em uma rede descentralizada através de
-              criptomoedas, stablecoins e DeFi
+              Grupo Exclusivo para Builders de Elite em Cripto. Scripts, Tutoriais, 
             </p>
 
             <div className="hero__actions">
@@ -125,7 +122,7 @@ const Hero = () => {
               />
             </div>
             <div className="video-modal__actions">
-              <a href="#faca-parte" className="video-modal__btn video-modal__btn--primary" aria-label="Faça parte">
+              <a href="#checkout" className="video-modal__btn video-modal__btn--primary" aria-label="Faça parte">
                 <img 
                   src={pedrodappsIcon} 
                   alt="Pedro dApps" 

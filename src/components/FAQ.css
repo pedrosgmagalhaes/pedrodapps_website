@@ -83,11 +83,51 @@
   margin: 0 0 4px 0;
 }
 
+.faq__question-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+}
+
+.faq__question-btn:focus-visible {
+  outline: 2px solid var(--accent-primary, #7be33d);
+  outline-offset: 2px;
+}
+
+.faq__item--open .faq__question {
+  color: #22243a;
+}
+
 .faq__answer {
   font-size: 14px;
   line-height: 1.6;
   color: rgba(34, 36, 58, 0.85);
   margin: 0;
+  white-space: pre-line; /* permite quebrar linhas nas respostas com bullets */
+}
+
+/* Lista de benefícios com hífens dentro da resposta */
+.faq__answer-list {
+  list-style: none;
+  margin: 6px 0 0 0;
+  padding: 0;
+}
+
+.faq__answer-list li {
+  position: relative;
+  padding-left: 1rem;
+  margin: 4px 0;
+}
+
+.faq__answer-list li::before {
+  content: "-";
+  position: absolute;
+  left: 0;
+  color: currentColor;
 }
 
 .faq__right {
@@ -97,8 +137,8 @@
 }
 
 .faq__device {
-  width: clamp(280px, 80%, 520px);
-  aspect-ratio: 4/3;
+  /* width: clamp(280px, 80%, 520px); */
+  /* aspect-ratio: 4/3; */
   border-radius: 16px;
   display: grid;
   place-items: center;
@@ -107,8 +147,29 @@
 
 .faq__device img {
   width: 100%;
-  height: auto;
+  height: 500px;
   filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.15));
+}
+
+.faq__panel {
+  overflow: hidden;
+  max-height: 0;
+  opacity: 0;
+  transform: translateY(-4px);
+  transition:
+    max-height 300ms ease,
+    opacity 240ms ease,
+    transform 240ms ease,
+    margin-top 240ms ease;
+  margin-top: 0;
+  will-change: max-height, opacity, transform;
+}
+
+.faq__item--open .faq__panel {
+  max-height: 800px; /* valor alto o suficiente para conteúdo maior */
+  opacity: 1;
+  transform: translateY(0);
+  margin-top: 4px;
 }
 
 @media (max-width: 980px) {
@@ -118,5 +179,11 @@
   .faq__right {
     order: -1;
     margin-bottom: 24px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .faq__panel {
+    transition: none;
   }
 }

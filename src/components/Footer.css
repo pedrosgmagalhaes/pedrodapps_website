@@ -32,6 +32,27 @@
   color: #fff;
 }
 
+/* Links das políticas */
+.footer__links {
+  display: block;
+  margin-top: 6px;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.72);
+}
+.footer__links a {
+  color: rgba(255, 255, 255, 0.88);
+  text-decoration: none;
+  font-weight: 700;
+}
+.footer__links a:hover {
+  color: #fff;
+  text-decoration: underline;
+}
+.footer__separator {
+  margin: 0 8px;
+  color: rgba(255, 255, 255, 0.44);
+}
+
 .footer__divider {
   width: 1px;
   height: 44px;
@@ -92,4 +113,22 @@
   }
   .footer__divider { display: none; }
   .footer__logo img { height: 34px; }
+}
+/* Texto legal por extenso no rodapé */
+.footer__legal {
+  display: block;
+  margin-top: 8px;
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.footer__legal a {
+  color: rgba(255, 255, 255, 0.88);
+  text-decoration: none;
+  font-weight: 700;
+}
+.footer__legal a:hover {
+  color: #fff;
+  text-decoration: underline;
 }

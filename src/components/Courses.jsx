@@ -5,21 +5,39 @@ import checkIcon from "../assets/check.svg";
 const courses = [
   {
     id: "conteudo-pratico",
-    title: "Conteúdo prático e direto",
+    title: "Operação real, direta ao ponto",
     description:
-      "Tudo o que você precisa para criar e operar sua corretora de forma clara e acessível.",
+      "Tudo o que você precisa para estruturar, automatizar e operar com cripto de forma clara e acessível.",
   },
   {
     id: "estrategia-mercado",
     title: "Estratégia de Mercado",
     description:
-      "Baseado em experiências reais do mercado cripto, incluindo desenvolvimento de soluções como Pix pra Cripto, e Criação de Stablecoins.",
+      "Baseado em experiências reais, com automações DeFi, criação de tokens e soluções de pagamentos.",
   },
   {
     id: "estruturacao-tecnica",
-    title: "Estruturação técnica com hands on",
+    title: "Estrutura técnica com mãos na massa",
     description:
-      "Aprenda a montar o negócio com autonomia, segurança e foco em receita, colocando a mão na massa.",
+      "Monte operação segura e autônoma, com foco em receita previsível e crescimento.",
+  },
+  {
+    id: "personalizacao",
+    title: "Personalização sob medida",
+    description:
+      "Desenvolvimento de soluções personalizadas, adaptadas às necessidades específicas do seu negócio.",
+  },
+  {
+    id: "scripts-defi",
+    title: "Scripts DeFi Prontos",
+    description:
+      "Coleção curada de automações e bots para operar com segurança e eficiência.",
+  },
+  {
+    id: "beneficios-pixley",
+    title: "Benefícios do Pixley Wallet",
+    description:
+      "Descubra os benefícios exclusivos do Pixley, como segurança, eficiência e suporte exclusivo.",
   },
 ];
 
@@ -49,6 +67,13 @@ export default function Courses() {
                 <h3 className="course-card__title reveal-on-scroll is-visible">{item.title}</h3>
               </div>
               <p className="course-card__description reveal-on-scroll is-visible">{item.description}</p>
+              {Array.isArray(item.features) && item.features.length > 0 && (
+                <ul className="course-card__features" aria-label={`Recursos do ${item.title}`}>
+                  {item.features.map((feat, i) => (
+                    <li key={i} className="course-card__feature-item">{feat}</li>
+                  ))}
+                </ul>
+              )}
             </div>
           ))}
         </div>

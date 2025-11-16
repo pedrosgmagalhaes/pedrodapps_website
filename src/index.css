@@ -390,6 +390,11 @@ main {
   padding-top: var(--header-offset);
 }
 
+/* Sem header na página de login: remove compensação do topo */
+.main--login {
+  padding-top: 0;
+}
+
 /* Ajuste para telas médias */
 @media (width <= 1024px) {
   :root {

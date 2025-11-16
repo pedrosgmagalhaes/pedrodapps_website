@@ -19,8 +19,17 @@
   box-shadow: 0 6px 24px rgb(0 0 0 / 20%);
   width: 80%;
   margin: clamp(12px, 3vw, 24px) auto; /* centraliza e dá respiro externo */
-  padding: clamp(12px, 2.5vw, 24px);
+  padding: clamp(16px, 3vw, 28px);
   max-height: 300px; /* reduz a altura máxima do banner */
+}
+
+/* Overlay escuro para aumentar legibilidade do texto */
+.banner::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgb(0 0 0 / 0.28);
+  pointer-events: none;
 }
 
 .banner__container {
@@ -33,7 +42,10 @@
 }
 
 .banner__content {
-  padding: clamp(16px, 3vw, 32px); /* reduz padding para diminuir a altura total */
+  position: relative;
+  z-index: 1; /* acima do overlay */
+  padding-inline: clamp(16px, 3vw, 32px);
+  padding-block: clamp(24px, 4vw, 40px);
 }
 
 .banner__title {
@@ -50,15 +62,15 @@
   font-size: clamp(var(--font-size-lg), 3vw, var(--font-size-2xl));
   line-height: 1.15;
   margin: 0 0 var(--spacing-md);
-  color: #22243a; /* solicitado: texto na cor #22243A */
-  text-shadow: 0 1px 0 rgb(255 255 255 / 20%);
+  color: var(--neutral-white);
+  text-shadow: 0 1px 0 rgb(0 0 0 / 20%);
 }
 
 .banner__description {
   font-family: "Montserrat", sans-serif;
   font-weight: 400;
   font-size: clamp(var(--font-size-sm), 1.8vw, var(--font-size-md));
-  color: #22243a; /* solicitado: texto na cor #22243A */
+  color: var(--neutral-white);
   margin-bottom: var(--spacing-lg);
   max-width: 450px;
 }
@@ -126,7 +138,8 @@
   }
 
   .banner__content {
-    padding: clamp(14px, 4vw, 22px);
+    padding-inline: clamp(14px, 4vw, 22px);
+    padding-block: clamp(18px, 5vw, 28px);
   }
 
   .banner__title {

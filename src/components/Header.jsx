@@ -30,7 +30,7 @@ const Header = () => {
           {/* Ações / CTAs no canto direito */}
           <div className="header__actions">
             <a
-              href="#faca-parte"
+              href="#checkout"
               className="header__btn header__btn--primary"
               aria-label="Faça parte"
             >

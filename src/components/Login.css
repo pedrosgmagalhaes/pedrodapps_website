@@ -1,0 +1,199 @@
+.login {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  padding: 72px 0;
+  min-height: 100vh; /* preenche 100% da altura da viewport */
+  display: grid;
+  place-items: center; /* centraliza vertical e horizontalmente */
+  position: relative;
+  overflow: hidden;
+}
+
+.login__container {
+  display: grid;
+  place-items: center;
+}
+
+.login__brand-logo {
+  width: 72px;
+  height: auto;
+  filter: brightness(1.05) contrast(1.05);
+  animation: floatY 6s ease-in-out infinite;
+}
+
+@keyframes floatY {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-2px); }
+  100% { transform: translateY(0); }
+}
+
+.login__card {
+  width: 100%;
+  max-width: 420px;
+  background: rgba(34, 36, 58, 0.82); /* #24263b com transparência */
+  border: 1px solid transparent; /* permite gradiente na borda */
+  border-radius: var(--border-radius-lg);
+  box-shadow: 0 12px 28px rgb(0 0 0 / 35%);
+  padding: 24px;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  background-image:
+    linear-gradient(rgba(34, 36, 58, 0.82), rgba(34, 36, 58, 0.82)),
+    linear-gradient(135deg, rgba(123, 227, 61, 0.35), rgba(119, 71, 255, 0.28));
+  background-origin: border-box;
+  background-clip: padding-box, border-box; /* cria borda em gradiente */
+  animation: loginPopIn 600ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  transition: transform 220ms ease, box-shadow 220ms ease, border-color 220ms ease;
+}
+
+@keyframes loginPopIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.login__card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 18px 36px rgb(0 0 0 / 40%);
+}
+
+.login__header {
+  margin-bottom: 16px;
+}
+
+.login__alert {
+  margin-bottom: 12px;
+  padding: 10px 12px;
+  border-radius: var(--border-radius-md);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.login__alert--success {
+  background: rgb(123 227 61 / 12%);
+  color: #c7ffc0;
+  border: 1px solid rgb(123 227 61 / 35%);
+}
+
+.login__alert--error {
+  background: rgb(255 86 86 / 12%);
+  color: #ffd6d6;
+  border: 1px solid rgb(255 86 86 / 35%);
+}
+
+.login__brand {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+
+.login__brand-logo {
+  width: 72px;
+  height: auto;
+  filter: brightness(1.05) contrast(1.05);
+}
+
+.login__title {
+  font-size: 24px;
+  font-weight: 800;
+  margin: 0 0 6px 0;
+  color: var(--neutral-white);
+}
+
+.login__subtitle {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.8);
+  margin: 0;
+}
+
+.login__form {
+  display: grid;
+  gap: 14px;
+  margin-top: 16px;
+}
+
+.login__field {
+  display: grid;
+  gap: 6px;
+}
+
+.login__label {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.login__input {
+  background: #1c1e2f; /* mais escuro que o card */
+  color: var(--neutral-white);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: var(--border-radius-md);
+  padding: 12px;
+  outline: none;
+  transition: border-color 160ms ease, box-shadow 160ms ease, transform 120ms ease;
+}
+
+.login__input::placeholder {
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.login__input:focus {
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 0 3px rgba(123, 227, 61, 0.25), 0 10px 24px rgb(0 0 0 / 25%);
+  transform: translateY(-1px);
+}
+
+.login__input--invalid {
+  border-color: rgb(255 86 86 / 75%);
+  box-shadow: 0 0 0 3px rgb(255 86 86 / 25%);
+}
+
+.login__actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 8px;
+}
+
+.login__btn {
+  min-width: 120px;
+  position: relative;
+  background: var(--accent-primary);
+  color: #000;
+  box-shadow: 0 8px 20px rgba(123, 227, 61, 0.20);
+  transition: transform 160ms ease, box-shadow 160ms ease;
+}
+
+.login__btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px rgba(123, 227, 61, 0.28);
+}
+
+.login__btn:disabled {
+  opacity: 0.8;
+  cursor: not-allowed;
+  transform: none;
+}
+
+
+.login__link {
+  color: var(--text-secondary);
+  text-decoration: none;
+  transition: color 160ms ease, text-decoration-color 160ms ease;
+}
+
+.login__link:hover {
+  color: var(--accent-primary);
+  text-decoration: underline;
+}
+
+@media (max-width: 480px) {
+  .login__card {
+    padding: 18px;
+  }
+}

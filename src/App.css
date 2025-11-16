@@ -7,3 +7,9 @@ main {
   position: relative;
   z-index: 1;
 }
+
+/* Layout específico para páginas de políticas: sem padding adicional no main */
+.main--policy {
+  padding: 0;
+  min-height: 100vh; /* garante 100% da altura da viewport */
+}
