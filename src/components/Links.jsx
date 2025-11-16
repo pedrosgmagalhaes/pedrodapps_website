@@ -76,22 +76,6 @@ export default function Links() {
                   <span className="links__label-sub">Scripts, automaçÕes, hacks e tutoriais avançados de operacoses fi</span>
                 </div>
               </a>
-
-              {/* Programa Builders de Elite */}
-              <a
-                className="links__item"
-                href="#vip"
-                rel="noopener noreferrer"
-                aria-label="Abrir Programa Builders de Elite"
-              >
-                <img src={buildersEliteImg} alt="Builders de Elite" className="links__icon" loading="lazy" decoding="async" />
-                <div className="links__label">
-                  <span className="links__label-super">PROGRAMA BUILDERS DE ELITE</span>
-                  <span className="links__label-title">Seja um builder avançado e independente</span>
-                  <span className="links__label-sub">Scripts prontos, tutoriais e comunidade para acelerar seu crescimento</span>
-                </div>
-              </a>
-
               <a
                 className="links__item"
                 href="https://chat.whatsapp.com/Io83KeSGCqyByd0jP5l3RX"
