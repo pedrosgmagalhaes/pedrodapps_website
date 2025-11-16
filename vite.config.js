@@ -7,6 +7,6 @@ export default defineConfig({
   server: {
     port: 8085,
     host: "0.0.0.0", // Permite acesso externo
-    strictPort: true, // Falha se a porta não estiver disponível
+    strictPort: false, // Usa próxima porta disponível se a atual estiver ocupada
   },
 });
