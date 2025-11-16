@@ -1,24 +1,25 @@
-import React, { useEffect, useState } from "react";
-import Hero from "./components/Hero";
-import NewsTicker from "./components/NewsTicker";
-import Courses from "./components/Courses";
-import Banner from "./components/Banner";
-import Access30Days from "./components/Access30Days";
-import Audience from "./components/Audience";
-import VipArea from "./components/VipArea";
-import FAQ from "./components/FAQ";
-import FounderQuote from "./components/FounderQuote";
-import ContactCTA from "./components/ContactCTA";
-import Footer from "./components/Footer";
-import Login from "./components/Login";
-import ForgotPassword from "./components/ForgotPassword";
-import Checkout from "./components/Checkout";
+import React, { useEffect, useState, Suspense } from "react";
+const Hero = React.lazy(() => import("./components/Hero"));
+const NewsTicker = React.lazy(() => import("./components/NewsTicker"));
+const Courses = React.lazy(() => import("./components/Courses"));
+const Banner = React.lazy(() => import("./components/Banner"));
+const Access30Days = React.lazy(() => import("./components/Access30Days"));
+const Audience = React.lazy(() => import("./components/Audience"));
+const VipArea = React.lazy(() => import("./components/VipArea"));
+const FAQ = React.lazy(() => import("./components/FAQ"));
+const FounderQuote = React.lazy(() => import("./components/FounderQuote"));
+const ContactCTA = React.lazy(() => import("./components/ContactCTA"));
+const Footer = React.lazy(() => import("./components/Footer"));
+const Login = React.lazy(() => import("./components/Login"));
+const ForgotPassword = React.lazy(() => import("./components/ForgotPassword"));
+const Checkout = React.lazy(() => import("./components/Checkout"));
 // Carregar sob demanda para evitar preload bloqueado por extensões
 const PrivacyPolicy = React.lazy(() => import("./components/DataProtection"));
-import ServicesPolicy from "./components/ServicesPolicy";
+const ServicesPolicy = React.lazy(() => import("./components/ServicesPolicy"));
 const CookiesPolicy = React.lazy(() => import("./components/ConsentNotice"));
-import DataDeletionPolicy from "./components/DataDeletionPolicy";
+const DataDeletionPolicy = React.lazy(() => import("./components/DataDeletionPolicy"));
 import "./App.css";
+import ViewportSection from "./components/ViewportSection";
 
 function App() {
   const [hash, setHash] = useState(typeof window !== "undefined" ? window.location.hash : "");
@@ -74,51 +75,121 @@ function App() {
       >
         {isLoginView ? (
           <>
-            <Login />
-            <Footer />
+            <Suspense fallback={<div className="lazy-fallback" aria-hidden="true" />}> 
+              <Login />
+            </Suspense>
+            <Suspense fallback={<div className="lazy-fallback" aria-hidden="true" />}> 
+              <Footer />
+            </Suspense>
           </>
         ) : isForgotView ? (
           <>
-            <ForgotPassword />
-            <Footer />
+            <Suspense fallback={<div className="lazy-fallback" aria-hidden="true" />}> 
+              <ForgotPassword />
+            </Suspense>
+            <Suspense fallback={<div className="lazy-fallback" aria-hidden="true" />}> 
+              <Footer />
+            </Suspense>
           </>
         ) : isCheckoutView ? (
           <>
-            <Checkout />
+            <Suspense fallback={<div className="lazy-fallback" aria-hidden="true" />}> 
+              <Checkout />
+            </Suspense>
           </>
         ) : isPrivacyView ? (
           <>
-            <PrivacyPolicy />
-            <Footer />
+            <Suspense fallback={<div className="lazy-fallback" aria-hidden="true" />}> 
+              <PrivacyPolicy />
+            </Suspense>
+            <Suspense fallback={<div className="lazy-fallback" aria-hidden="true" />}> 
+              <Footer />
+            </Suspense>
           </>
         ) : isServicesView ? (
           <>
-            <ServicesPolicy />
-            <Footer />
+            <Suspense fallback={<div className="lazy-fallback" aria-hidden="true" />}> 
+              <ServicesPolicy />
+            </Suspense>
+            <Suspense fallback={<div className="lazy-fallback" aria-hidden="true" />}> 
+              <Footer />
+            </Suspense>
           </>
         ) : isCookiesView ? (
           <>
-            <CookiesPolicy />
-            <Footer />
+            <Suspense fallback={<div className="lazy-fallback" aria-hidden="true" />}> 
+              <CookiesPolicy />
+            </Suspense>
+            <Suspense fallback={<div className="lazy-fallback" aria-hidden="true" />}> 
+              <Footer />
+            </Suspense>
           </>
         ) : isDeletionView ? (
           <>
-            <DataDeletionPolicy />
-            <Footer />
+            <Suspense fallback={<div className="lazy-fallback" aria-hidden="true" />}> 
+              <DataDeletionPolicy />
+            </Suspense>
+            <Suspense fallback={<div className="lazy-fallback" aria-hidden="true" />}> 
+              <Footer />
+            </Suspense>
           </>
         ) : (
           <>
-            <Hero />
-            <NewsTicker />
-            <Courses />
-            <Banner />
-            <Access30Days />
-            <Audience />
-            <VipArea />
-            <FAQ />
-            <FounderQuote />
-            <ContactCTA />
-            <Footer />
+            <ViewportSection>
+              <Suspense fallback={<div className="lazy-fallback" aria-hidden="true" />}> 
+                <Hero />
+              </Suspense>
+            </ViewportSection>
+            <ViewportSection>
+              <Suspense fallback={<div className="lazy-fallback" aria-hidden="true" />}> 
+                <NewsTicker />
+              </Suspense>
+            </ViewportSection>
+            <ViewportSection>
+              <Suspense fallback={<div className="lazy-fallback" aria-hidden="true" />}> 
+                <Courses />
+              </Suspense>
+            </ViewportSection>
+            <ViewportSection>
+              <Suspense fallback={<div className="lazy-fallback" aria-hidden="true" />}> 
+                <Banner />
+              </Suspense>
+            </ViewportSection>
+            <ViewportSection>
+              <Suspense fallback={<div className="lazy-fallback" aria-hidden="true" />}> 
+                <Access30Days />
+              </Suspense>
+            </ViewportSection>
+            <ViewportSection>
+              <Suspense fallback={<div className="lazy-fallback" aria-hidden="true" />}> 
+                <Audience />
+              </Suspense>
+            </ViewportSection>
+            <ViewportSection>
+              <Suspense fallback={<div className="lazy-fallback" aria-hidden="true" />}> 
+                <VipArea />
+              </Suspense>
+            </ViewportSection>
+            <ViewportSection>
+              <Suspense fallback={<div className="lazy-fallback" aria-hidden="true" />}> 
+                <FAQ />
+              </Suspense>
+            </ViewportSection>
+            <ViewportSection>
+              <Suspense fallback={<div className="lazy-fallback" aria-hidden="true" />}> 
+                <FounderQuote />
+              </Suspense>
+            </ViewportSection>
+            <ViewportSection>
+              <Suspense fallback={<div className="lazy-fallback" aria-hidden="true" />}> 
+                <ContactCTA />
+              </Suspense>
+            </ViewportSection>
+            <ViewportSection>
+              <Suspense fallback={<div className="lazy-fallback" aria-hidden="true" />}> 
+                <Footer />
+              </Suspense>
+            </ViewportSection>
           </>
         )}
       </main>
