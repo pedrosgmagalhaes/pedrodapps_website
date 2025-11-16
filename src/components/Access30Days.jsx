@@ -5,15 +5,15 @@ import checkPurple from "../assets/check_purple.svg";
 const BENEFITS = [
   "Execução de Flash Loans em DeFi para arbitragem e liquidez",
   "Estruturas DeFi com stablecoins: yield, lending e colateral",
-  "APIs completas para offshore: abertura, compliance e operações",
+  "APIs completas para offshore.",
   "APIs de remessas internacionais com taxas competitivas e rastreio",
   "On/Off-ramp com moedas fiduciárias (USD, EUR, BRL)",
-  "Tokenização de ativos e aplicações jurídicas e financeiras",
+  "Tokenização de ativos e aplicações financeiras descentralizadas",
   "Arquitetura segura, autônoma e descentralizada para operações",
   "Auditoria e hardening de contratos inteligentes",
-  "Exchanges e corretoras: liquidez, KYC/AML e rotas eficientes",
+  "Liquidez, KYC/AML e rotas eficientes",
   "Dolarização e proteção patrimonial com estratégias de receita passiva",
-  "Compliance e legalização de empresa cripto no exterior",
+  "Legalização de empresa cripto em paraísos fiscais.",
 ];
 
 export default function Access30Days() {

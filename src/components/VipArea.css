@@ -4,6 +4,114 @@
   padding: 64px 16px;
 }
 
+/* ==========================
+   Card Pixley Premium (extra)
+   ========================== */
+.vip__pixley-card {
+  position: relative;
+  overflow: hidden;
+  background: #1e2033;
+  border: 1px solid rgb(255 255 255 / 10%);
+  border-radius: 14px;
+  padding: 14px 14px 16px;
+  margin-top: 10px;
+  box-shadow: 0 18px 40px rgb(0 0 0 / 35%);
+  isolation: isolate; /* garante blend correto do pseudo */
+  transition: transform 220ms ease, box-shadow 220ms ease, border-color 220ms ease;
+  cursor: pointer; /* indicar interatividade visual ao usuário */
+}
+
+.vip__pixley-card::before {
+  content: "";
+  position: absolute;
+  inset: -40% -35% -35% -40%;
+  background: radial-gradient(120px 120px at 15% 20%, rgb(138 69 215 / 45%), transparent 55%),
+    radial-gradient(120px 120px at 85% 25%, rgb(44 208 95 / 45%), transparent 55%);
+  filter: blur(30px);
+  opacity: 0.65;
+  z-index: -1;
+  animation: pixleyHalo 4.5s ease-in-out infinite;
+}
+
+@keyframes pixleyHalo {
+  0% { transform: scale(1) translate3d(0, 0, 0); opacity: 0.55; }
+  50% { transform: scale(1.04) translate3d(2px, -2px, 0); opacity: 0.75; }
+  100% { transform: scale(1) translate3d(0, 0, 0); opacity: 0.55; }
+}
+
+.vip__pixley-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 26px 60px rgb(84 197 120 / 25%), 0 14px 30px rgb(138 69 215 / 20%);
+  border-color: rgb(123 227 61 / 28%);
+}
+
+.vip__pixley-logo {
+  display: block;
+  width: 100px;
+  height: auto;
+  object-fit: contain;
+  margin-bottom: 6px;
+  filter: drop-shadow(0 4px 10px rgb(0 0 0 / 35%));
+  animation: pixleyFloat 5s ease-in-out infinite;
+}
+
+@keyframes pixleyFloat {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-2px); }
+  100% { transform: translateY(0); }
+}
+
+.vip__pixley-content {
+  display: grid;
+  gap: 8px;
+}
+
+.vip__pixley-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.vip__pixley-text {
+  font-size: 12px;
+  color: #eaeaea;
+}
+
+.vip__pixley-benefits {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 6px;
+}
+
+.vip__pixley-benefit {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.vip__pixley-benefit-text {
+  font-size: 12px;
+  color: #f2f2f2;
+}
+
+.vip__pixley-card .vip__item-icon {
+  width: 24px;
+  height: 24px;
+}
+
+.vip__pixley-footnote {
+  font-size: 10px;
+  color: #c7c7c7;
+  opacity: 0.9;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vip__pixley-card::before { animation: none; }
+  .vip__pixley-logo { animation: none; }
+}
+
 .vip .container {
   max-width: 1100px;
   margin: 0 auto;
@@ -103,7 +211,7 @@
   border-radius: 16px;
   padding: 24px;
   width: 100%;
-  max-width: 420px;
+  max-width: none; /* ocupar toda a largura da coluna direita */
   box-shadow: 0 20px 40px rgb(0 0 0 / 35%);
   position: relative;
 }
@@ -150,11 +258,11 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  min-width: 40px;
+  min-width: 48px; /* um pouco maior para caber melhor */
 }
 
 .countdown-number {
-  font-size: 20px;
+  font-size: 24px; /* aumentar números para nova largura */
   font-weight: 800;
   color: #fff;
   line-height: 1;
@@ -171,7 +279,7 @@
 }
 
 .countdown-separator {
-  font-size: 18px;
+  font-size: 20px; /* separar visualmente melhor */
   font-weight: 700;
   color: #fff;
   margin: 0 4px;
@@ -242,6 +350,7 @@
   transition:
     transform 0.2s ease,
     box-shadow 0.2s ease;
+  cursor: pointer; /* garantir ponteiro no CTA */
 }
 
 .vip-card__cta:hover {

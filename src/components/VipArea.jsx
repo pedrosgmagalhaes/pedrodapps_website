@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./VipArea.css";
 import checkNavy from "../assets/check_navy.svg";
 import cardsImg from "../assets/cards.svg";
+import pixleyLogo from "../assets/pixley_logo_white.png";
 
 const benefits = [
   "Acesso completo à plataforma exclusiva com scripts, treinamentos, insights, dicas e atualizações",
@@ -77,6 +78,40 @@ export default function VipArea() {
                 </li>
               ))}
             </ul>
+
+            {/* Card adicional: Pixley Premium incluída, colocado logo após o item de scripts */}
+            <div className="vip__pixley-card" role="region" aria-label="Pixley Premium incluída">
+              <img src={pixleyLogo} alt="Pixley" className="vip__pixley-logo" />
+              <div className="vip__pixley-content">
+                <p className="vip__pixley-text">
+                  Ao entrar, você ganha uma conta <strong>Premium</strong> na Pixley Wallet com benefícios
+                  exclusivos:
+                </p>
+                <ul className="vip__pixley-benefits">
+                  <li className="vip__pixley-benefit">
+                    <span className="vip__item-icon" aria-hidden="true">
+                      <img src={checkNavy} alt="" />
+                    </span>
+                    <span className="vip__pixley-benefit-text">Descontos nas tarifas e operações</span>
+                  </li>
+                  <li className="vip__pixley-benefit">
+                    <span className="vip__item-icon" aria-hidden="true">
+                      <img src={checkNavy} alt="" />
+                    </span>
+                    <span className="vip__pixley-benefit-text">Cashbacks em <strong>USDT</strong> em serviços selecionados</span>
+                  </li>
+                  <li className="vip__pixley-benefit">
+                    <span className="vip__item-icon" aria-hidden="true">
+                      <img src={checkNavy} alt="" />
+                    </span>
+                    <span className="vip__pixley-benefit-text">Atendimento exclusivo e prioritário</span>
+                  </li>
+                </ul>
+                <div className="vip__pixley-footnote">
+                  *Sujeito às regras de elegibilidade da Pixley.
+                </div>
+              </div>
+            </div>
           </div>
 
           {/* Coluna direita: cartão de preço */}

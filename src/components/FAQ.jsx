@@ -1,6 +1,7 @@
 import React from "react";
 import "./FAQ.css";
 import pixleyMobile from "../assets/pixley_app.png"; 
+import { FaChevronDown } from "react-icons/fa";
 
 const faqs = [
   {
@@ -61,8 +62,16 @@ export default function FAQ() {
                     aria-controls={`faq-panel-${idx}`}
                     id={`faq-header-${idx}`}
                     onClick={() => setOpenIndex(openIndex === idx ? -1 : idx)}
+                    title={openIndex === idx ? "Clique para recolher" : "Clique para ver mais"}
                   >
                     <h3 className="faq__question">{item.q}</h3>
+                    <span className="faq__toggle-hint">
+                      <FaChevronDown
+                        className={`faq__chevron ${openIndex === idx ? "is-open" : ""}`}
+                        aria-hidden="true"
+                        size={14}
+                      />
+                    </span>
                   </button>
                   <div
                     className="faq__panel"
