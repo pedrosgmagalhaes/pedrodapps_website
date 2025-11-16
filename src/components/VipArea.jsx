@@ -102,7 +102,7 @@ export default function VipArea() {
                     <span className="vip__pixley-benefit-text">
                       Cashbacks em <strong>USDT</strong>
                       <img src={usdtIcon} alt="USDT" className="vip__inline-icon" />
-                      em serviços selecionados
+                      {" "}em serviços selecionados
                     </span>
                   </li>
                   <li className="vip__pixley-benefit">
