@@ -18,13 +18,31 @@ const Footer = () => {
 
         <div className="footer__right">
           <div className="footer__social" aria-label="Redes sociais">
-            <a className="social" href="#" aria-label="YouTube">
+            <a
+              className="social"
+              href="https://www.youtube.com/@pedro_dapps"
+              aria-label="YouTube"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               <FaYoutube className="social__icon" size={18} aria-hidden="true" />
             </a>
-            <a className="social" href="#" aria-label="Instagram">
+            <a
+              className="social"
+              href="https://www.instagram.com/pedro_dapps/"
+              aria-label="Instagram"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               <FaInstagram className="social__icon" size={18} aria-hidden="true" />
             </a>
-            <a className="social" href="#" aria-label="LinkedIn">
+            <a
+              className="social"
+              href="https://www.linkedin.com/in/pemagalhaes"
+              aria-label="LinkedIn"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               <FaLinkedinIn className="social__icon" size={18} aria-hidden="true" />
             </a>
           </div>

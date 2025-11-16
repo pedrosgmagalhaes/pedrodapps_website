@@ -13,6 +13,7 @@ const Footer = React.lazy(() => import("./components/Footer"));
 const Login = React.lazy(() => import("./components/Login"));
 const ForgotPassword = React.lazy(() => import("./components/ForgotPassword"));
 const Checkout = React.lazy(() => import("./components/Checkout"));
+const Links = React.lazy(() => import("./components/Links"));
 // Carregar sob demanda para evitar preload bloqueado por extensões
 const PrivacyPolicy = React.lazy(() => import("./components/DataProtection"));
 const ServicesPolicy = React.lazy(() => import("./components/ServicesPolicy"));
@@ -30,6 +31,7 @@ function App() {
   const isServicesView = hash === "#servicos";
   const isCookiesView = hash === "#cookies";
   const isDeletionView = hash === "#exclusao-dados";
+  const isLinksView = hash === "#links";
   const isPolicyView = isPrivacyView || isServicesView || isCookiesView || isDeletionView;
   const isAuthView = isLoginView || isForgotView || isCheckoutView;
 
@@ -73,7 +75,13 @@ function App() {
       <main
         className={isAuthView ? "main main--login" : isPolicyView ? "main main--policy" : "main"}
       >
-        {isLoginView ? (
+        {isLinksView ? (
+          <>
+            <Suspense fallback={<div className="lazy-fallback" aria-hidden="true" />}> 
+              <Links />
+            </Suspense>
+          </>
+        ) : isLoginView ? (
           <>
             <Suspense fallback={<div className="lazy-fallback" aria-hidden="true" />}> 
               <Login />
