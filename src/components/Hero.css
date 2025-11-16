@@ -1,10 +1,32 @@
 /* Seção Hero */
 .hero {
-  background: var(--concrete-lightest);
-  padding: 160px 0 0px; /* mais altura e espaçamento inferior */
-  color: var(--black);
+  background-color: #100E04;
+  padding: 160px 0 0; /* mais altura e espaçamento inferior */
+  color: var(--text-primary);
   text-shadow: none; /* remove quaisquer sombras no bloco */
   position: relative; /* permite sobreposição decorativa à direita */
+  overflow: hidden; /* garante que o overlay ocupe toda a seção sem gerar scroll */
+  /* Imagem contida; cor sólida #100E04 preenche o restante */
+  background-image: url("../assets/builderselite.png");
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+/* Overlay Matrix fica abaixo do conteúdo, acima do background da seção */
+.hero__matrix {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  width: 100%;
+  height: 100%;
+}
+
+.hero__matrix canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
 }
 
 .hero__layout {
@@ -14,11 +36,22 @@
   gap: 40px;
   position: relative; /* garante conteúdo acima do pseudo-elemento de fundo */
   z-index: 1;
+  min-height: clamp(360px, 60vh, 720px);
 }
 
 .hero__content {
   max-width: 720px;
   text-align: left; /* alinha como na referência */
+}
+
+/* Imagem no conteúdo do Hero */
+.hero__content-image {
+  display: block;
+  width: 100%;
+  height: 100%; /* ocupa 100% da altura do conteúdo */
+  margin: 0; /* sem margem para preencher totalmente */
+  object-fit: cover; /* cobre toda a área, pode recortar bordas */
+  image-rendering: auto;
 }
 
 /* Badge de destaque */
@@ -31,32 +64,31 @@
   font-size: 14px;
   font-weight: 600;
   margin-bottom: 16px;
-  box-shadow: 0 4px 12px rgba(255, 107, 53, 0.3);
+  box-shadow: 0 4px 12px rgb(255 107 53 / 30%);
 }
 
 .hero__title {
   font-family:
-    "Bungee",
+    Bungee,
     cursive,
     -apple-system,
     blinkmacsystemfont,
     "Segoe UI",
-    "Roboto",
-    "Saira",
+    Roboto,
+    Saira,
     sans-serif;
   font-weight: 900;
   font-size: clamp(2rem, 3.8vw, 3.25rem);
   line-height: 1.2;
-  color: #24263b;
+  color: var(--text-primary);
   margin-bottom: 28px; /* mais espaço entre título e subtítulo */
   letter-spacing: normal; /* sem efeitos de espaçamento */
   text-shadow: none; /* letra pura */
 }
 
 .hero__desc {
-  font-family:
-    "Montserrat", "Inter", "Segoe UI", "Roboto", sans-serif; /* Montserrat na descrição */
-  color: var(--black-light);
+  font-family: Montserrat, Inter, "Segoe UI", Roboto, sans-serif; /* Montserrat na descrição */
+  color: var(--text-secondary);
   font-size: var(--font-size-base);
   max-width: 640px;
   margin-bottom: 24px; /* ligeiramente mais espaço abaixo da descrição */
@@ -69,7 +101,7 @@
 }
 
 .hero__btn--video {
-  background: rgba(255, 0, 0, 0.1);
+  background: rgb(255 0 0 / 10%);
   color: var(--black);
   padding: 12px 24px;
   border: none;
@@ -81,13 +113,13 @@
 }
 
 .hero__btn--video:hover {
-  background: rgba(255, 0, 0, 0.2);
+  background: rgb(255 0 0 / 20%);
   transform: translateY(-2px);
 }
 
 /* Informações da live */
 .hero__live-info {
-  background: rgba(129, 223, 77, 0.1);
+  background: rgb(129 223 77 / 10%);
   border: 2px solid var(--accent-primary);
   border-radius: 12px;
   padding: 20px;
@@ -100,7 +132,7 @@
   gap: 12px;
   margin-bottom: 16px;
   padding-bottom: 16px;
-  border-bottom: 1px solid rgba(129, 223, 77, 0.3);
+  border-bottom: 1px solid rgb(129 223 77 / 30%);
 }
 
 .hero__countdown-icon {
@@ -110,7 +142,7 @@
 
 .hero__countdown-text {
   font-size: var(--font-size-base);
-  color: var(--black);
+  color: var(--text-primary);
 }
 
 .hero__countdown-timer {
@@ -142,7 +174,7 @@
   gap: 8px;
   margin-bottom: 8px;
   font-size: var(--font-size-base);
-  color: var(--black-light);
+  color: var(--text-primary);
 }
 
 .hero__benefits-list li svg {
@@ -155,7 +187,12 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  margin-top: 24px;
+  position: absolute; /* sobrepõe a imagem */
+  left: 0;
+  right: 0;
+  bottom: 16px; /* ancorado ao fundo do conteúdo */
+  justify-content: flex-end; /* alinha o botão à direita */
+  padding-right: 24px; /* afastamento da borda direita */
 }
 
 .hero__btn {
@@ -173,19 +210,21 @@
 }
 
 .hero__btn--primary {
-  background: var(--accent-primary);
-  color: #000;
-  padding: 14px 28px; /* mais padding para aumentar o botão */
-  font-size: var(--font-size-xl); /* torna o texto um pouco maior */
+  background: transparent; /* sem background */
+  color: #fff; /* texto claro sobre imagem */
+  border: 2px solid var(--accent-primary); /* borda verde para reforçar tom */
+  padding: 14px 28px; /* manter tamanho do botão */
+  font-size: var(--font-size-xl);
   font-weight: 400;
   font-family:
-    "Bungee",
+    Bungee,
     cursive,
     -apple-system,
     blinkmacsyst;
 }
+
 .hero__btn--primary:hover {
-  filter: brightness(0.97);
+  border-color: rgb(123 227 61 / 100%);
 }
 
 .hero__btn--icon {
@@ -195,15 +234,18 @@
   background: var(--bg-primary);
   color: #fff;
 }
+
 .hero__btn-icon {
   width: 32px; /* maior */
   height: 32px;
   color: #24263b; /* mesma cor do texto */
 }
+
 /* Expande o botão inteiro 2x no hover */
 .hero__btn:hover {
   transform: scale(1.12); /* expansão leve */
 }
+
 /* Pausa a animação de atenção enquanto hover para evitar conflito de transform */
 .hero__btn--attention:hover {
   animation: none;
@@ -216,45 +258,52 @@
   animation: attentionPulse 1.8s ease-in-out infinite;
   will-change: transform, box-shadow;
 }
+
 .hero__btn-label {
   display: inline-block;
 }
-@keyframes attentionPulse {
+
+/* @keyframes attentionPulse {
   0% {
     transform: scale(1);
-    box-shadow: 0 0 0 0 rgba(129, 223, 77, 0.25);
+    box-shadow: 0 0 0 0 rgb(129 223 77 / 25%);
   }
+
   50% {
     transform: scale(1.035);
-    box-shadow: 0 0 24px 6px rgba(129, 223, 77, 0.35);
+    box-shadow: 0 0 24px 6px rgb(129 223 77 / 35%);
   }
+
   100% {
     transform: scale(1);
-    box-shadow: 0 0 0 0 rgba(129, 223, 77, 0.25);
+    box-shadow: 0 0 0 0 rgb(129 223 77 / 25%);
   }
-}
+} */
 
 /* Modal de vídeo fullscreen */
 .video-modal {
   position: fixed;
   inset: 0;
   z-index: 9999; /* garante que fique acima de qualquer header */
-  background: rgba(0, 0, 0, 0.9);
+  background: rgb(0 0 0 / 90%);
   display: grid;
   place-items: center;
   padding: 20px;
 }
+
 .video-modal__content {
   width: min(1200px, 92vw);
 }
+
 .video-modal__frame {
   width: 100%;
   aspect-ratio: 16 / 9;
   border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 12px 40px rgb(0 0 0 / 50%);
   position: relative;
 }
+
 .video-modal__iframe {
   width: 100%;
   height: 100%;
@@ -292,10 +341,10 @@
 .video-modal__loading-dot {
   width: 12px;
   height: 12px;
-  background: #ffffff;
+  background: #fff;
   border-radius: 50%;
   animation: video-loading-bounce 1.4s ease-in-out infinite both;
-  box-shadow: 0 2px 8px rgba(255, 255, 255, 0.3);
+  box-shadow: 0 2px 8px rgb(255 255 255 / 30%);
 }
 
 .video-modal__loading-dot:nth-child(1) {
@@ -307,19 +356,22 @@
 }
 
 .video-modal__loading-text {
-  color: #ffffff;
+  color: #fff;
   font-size: 16px;
   font-weight: 500;
   margin: 0;
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+  text-shadow: 0 1px 3px rgb(0 0 0 / 50%);
   letter-spacing: 0.5px;
 }
 
 @keyframes video-loading-bounce {
-  0%, 80%, 100% {
+  0%,
+  80%,
+  100% {
     transform: scale(0.8);
     opacity: 0.6;
   }
+
   40% {
     transform: scale(1.2);
     opacity: 1;
@@ -327,10 +379,12 @@
 }
 
 @keyframes video-logo-pulse {
-  0%, 100% {
+  0%,
+  100% {
     transform: scale(1);
     opacity: 0.9;
   }
+
   50% {
     transform: scale(1.05);
     opacity: 1;
@@ -338,48 +392,56 @@
 }
 
 @keyframes video-btn-pulse {
-  0%, 100% {
-    box-shadow: 
-      0 4px 16px rgba(129, 223, 77, 0.4),
-      0 0 0 0 rgba(129, 223, 77, 0.6),
-      inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  0%,
+  100% {
+    box-shadow:
+      0 4px 16px rgb(129 223 77 / 40%),
+      0 0 0 0 rgb(129 223 77 / 60%),
+      inset 0 1px 0 rgb(255 255 255 / 20%);
   }
+
   50% {
-    box-shadow: 
-      0 4px 16px rgba(129, 223, 77, 0.6),
-      0 0 15px rgba(129, 223, 77, 0.4),
-      inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    box-shadow:
+      0 4px 16px rgb(129 223 77 / 60%),
+      0 0 15px rgb(129 223 77 / 40%),
+      inset 0 1px 0 rgb(255 255 255 / 30%);
   }
 }
 
 @keyframes video-btn-glow {
-  0%, 100% {
-    box-shadow: 
-      0 8px 25px rgba(129, 223, 77, 0.5),
-      0 0 20px rgba(129, 223, 77, 0.3),
-      inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  0%,
+  100% {
+    box-shadow:
+      0 8px 25px rgb(129 223 77 / 50%),
+      0 0 20px rgb(129 223 77 / 30%),
+      inset 0 1px 0 rgb(255 255 255 / 30%);
   }
+
   50% {
-    box-shadow: 
-      0 8px 30px rgba(129, 223, 77, 0.7),
-      0 0 30px rgba(129, 223, 77, 0.5),
-      inset 0 1px 0 rgba(255, 255, 255, 0.4);
+    box-shadow:
+      0 8px 30px rgb(129 223 77 / 70%),
+      0 0 30px rgb(129 223 77 / 50%),
+      inset 0 1px 0 rgb(255 255 255 / 40%);
   }
 }
 
 @keyframes video-btn-sparkle {
-  0%, 100% {
+  0%,
+  100% {
     transform: rotate(0deg) scale(1);
     opacity: 0.8;
   }
+
   25% {
     transform: rotate(90deg) scale(1.1);
     opacity: 1;
   }
+
   50% {
     transform: rotate(180deg) scale(0.9);
     opacity: 0.9;
   }
+
   75% {
     transform: rotate(270deg) scale(1.05);
     opacity: 1;
@@ -387,15 +449,18 @@
 }
 
 @keyframes video-btn-logo-pulse {
-  0%, 100% {
+  0%,
+  100% {
     transform: scale(1);
     opacity: 1;
   }
+
   50% {
     transform: scale(1.1);
     opacity: 0.9;
   }
 }
+
 .video-modal__close {
   position: absolute;
   top: 150px; /* posicionado ~50px abaixo do topo */
@@ -406,14 +471,15 @@
   align-items: center;
   justify-content: center;
   border-radius: 9999px;
-  background: rgba(255, 255, 255, 0.1);
+  background: rgb(255 255 255 / 10%);
   color: #fff;
-  border: 1px solid rgba(255, 255, 255, 0.24);
+  border: 1px solid rgb(255 255 255 / 24%);
   z-index: 10000; /* garante que o botão esteja acima do conteúdo do modal */
   cursor: pointer;
 }
+
 .video-modal__close:hover {
-  background: rgba(255, 255, 255, 0.2);
+  background: rgb(255 255 255 / 20%);
 }
 
 /* Ações do modal de vídeo */
@@ -442,11 +508,11 @@
 .video-modal__btn--primary {
   background: linear-gradient(135deg, #81df4d 0%, #6bc93a 50%, #81df4d 100%);
   background-size: 200% 200%;
-  color: #24263B;
-  box-shadow: 
-    0 4px 16px rgba(129, 223, 77, 0.4),
-    0 0 0 0 rgba(129, 223, 77, 0.6),
-    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  color: #24263b;
+  box-shadow:
+    0 4px 16px rgb(129 223 77 / 40%),
+    0 0 0 0 rgb(129 223 77 / 60%),
+    inset 0 1px 0 rgb(255 255 255 / 20%);
   position: relative;
   overflow: hidden;
   animation: video-btn-pulse 2s ease-in-out infinite;
@@ -456,13 +522,13 @@
 }
 
 .video-modal__btn--primary::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: -100%;
   width: 100%;
   height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  background: linear-gradient(90deg, transparent, rgb(255 255 255 / 30%), transparent);
   transition: left 0.6s ease;
 }
 
@@ -472,19 +538,19 @@
 
 .video-modal__btn--primary:hover {
   transform: translateY(-3px) scale(1.02);
-  box-shadow: 
-    0 8px 25px rgba(129, 223, 77, 0.5),
-    0 0 20px rgba(129, 223, 77, 0.3),
-    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  box-shadow:
+    0 8px 25px rgb(129 223 77 / 50%),
+    0 0 20px rgb(129 223 77 / 30%),
+    inset 0 1px 0 rgb(255 255 255 / 30%);
   background: linear-gradient(135deg, #8ee555 0%, #73d142 50%, #8ee555 100%);
   animation: video-btn-glow 1.5s ease-in-out infinite;
 }
 
 .video-modal__btn--primary:active {
   transform: translateY(-1px) scale(0.98);
-  box-shadow: 
-    0 4px 12px rgba(129, 223, 77, 0.4),
-    0 0 15px rgba(129, 223, 77, 0.2);
+  box-shadow:
+    0 4px 12px rgb(129 223 77 / 40%),
+    0 0 15px rgb(129 223 77 / 20%);
 }
 
 .video-modal__btn-label {
@@ -502,8 +568,8 @@
 
 .video-modal__btn-icon {
   animation: video-btn-sparkle 1.5s ease-in-out infinite;
-  filter: drop-shadow(0 0 4px rgba(36, 38, 59, 0.5));
-  color: #24263B;
+  filter: drop-shadow(0 0 4px rgb(36 38 59 / 50%));
+  color: #24263b;
 }
 
 .video-modal__btn-icon:first-child {
@@ -514,11 +580,12 @@
   animation-delay: 0.75s;
 }
 
-@media (max-width: 960px) {
+@media (width <= 960px) {
   .hero__btn--primary.hero__btn--attention {
     padding: 12px 22px;
     font-size: var(--font-size-base);
   }
+
   .video-modal {
     padding: 12px;
   }
@@ -568,9 +635,11 @@
   .hero__btn {
     transition: none;
   }
+
   .hero__btn:hover {
     transform: none;
   }
+
   .hero__btn--attention {
     animation: none;
   }
@@ -584,6 +653,7 @@
   align-self: end; /* posiciona a figura mais próxima da base do Hero */
   position: relative; /* permite posicionar as moedas sobre a imagem */
 }
+
 .hero__image {
   width: clamp(320px, 48vw, 680px); /* mais altura/largura para o Pedro */
   height: auto;
@@ -595,10 +665,7 @@
 .hero::before {
   content: "";
   position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 52%; /* concentra no lado direito */
+  inset: 0 0 0 52%; /* concentra no lado direito */
   pointer-events: none;
   z-index: 0;
   will-change: opacity, filter;
@@ -606,51 +673,51 @@
   background-image:
     radial-gradient(
       36px 36px at 84% 18%,
-      rgba(129, 223, 77, 0.3) 0,
-      rgba(129, 223, 77, 0.14) 35%,
-      rgba(129, 223, 77, 0) 60%
+      rgb(129 223 77 / 30%) 0,
+      rgb(129 223 77 / 14%) 35%,
+      rgb(129 223 77 / 0%) 60%
     ),
     radial-gradient(
       24px 24px at 72% 32%,
-      rgba(129, 223, 77, 0.28) 0,
-      rgba(129, 223, 77, 0.12) 38%,
-      rgba(129, 223, 77, 0) 60%
+      rgb(129 223 77 / 28%) 0,
+      rgb(129 223 77 / 12%) 38%,
+      rgb(129 223 77 / 0%) 60%
     ),
     radial-gradient(
       48px 48px at 90% 48%,
-      rgba(129, 223, 77, 0.22) 0,
-      rgba(129, 223, 77, 0.1) 40%,
-      rgba(129, 223, 77, 0) 70%
+      rgb(129 223 77 / 22%) 0,
+      rgb(129 223 77 / 10%) 40%,
+      rgb(129 223 77 / 0%) 70%
     ),
     radial-gradient(
       28px 28px at 66% 56%,
-      rgba(129, 223, 77, 0.28) 0,
-      rgba(129, 223, 77, 0.12) 36%,
-      rgba(129, 223, 77, 0) 62%
+      rgb(129 223 77 / 28%) 0,
+      rgb(129 223 77 / 12%) 36%,
+      rgb(129 223 77 / 0%) 62%
     ),
     radial-gradient(
       16px 16px at 80% 70%,
-      rgba(129, 223, 77, 0.32) 0,
-      rgba(129, 223, 77, 0.16) 40%,
-      rgba(129, 223, 77, 0) 68%
+      rgb(129 223 77 / 32%) 0,
+      rgb(129 223 77 / 16%) 40%,
+      rgb(129 223 77 / 0%) 68%
     ),
     radial-gradient(
       40px 40px at 94% 72%,
-      rgba(129, 223, 77, 0.24) 0,
-      rgba(129, 223, 77, 0.1) 40%,
-      rgba(129, 223, 77, 0) 70%
+      rgb(129 223 77 / 24%) 0,
+      rgb(129 223 77 / 10%) 40%,
+      rgb(129 223 77 / 0%) 70%
     ),
     radial-gradient(
       22px 22px at 70% 84%,
-      rgba(129, 223, 77, 0.3) 0,
-      rgba(129, 223, 77, 0.14) 40%,
-      rgba(129, 223, 77, 0) 68%
+      rgb(129 223 77 / 30%) 0,
+      rgb(129 223 77 / 14%) 40%,
+      rgb(129 223 77 / 0%) 68%
     ),
     radial-gradient(
       12px 12px at 88% 86%,
-      rgba(129, 223, 77, 0.35) 0,
-      rgba(129, 223, 77, 0.18) 40%,
-      rgba(129, 223, 77, 0) 68%
+      rgb(129 223 77 / 35%) 0,
+      rgb(129 223 77 / 18%) 40%,
+      rgb(129 223 77 / 0%) 68%
     );
 }
 
@@ -658,10 +725,7 @@
 .hero::after {
   content: "";
   position: absolute;
-  top: 0;
-  right: 55%;
-  bottom: 0;
-  left: 0; /* lado esquerdo */
+  inset: 0 55% 0 0; /* lado esquerdo */
   pointer-events: none;
   z-index: 0;
   will-change: opacity, filter;
@@ -669,27 +733,27 @@
   background-image:
     radial-gradient(
       20px 20px at 18% 22%,
-      rgba(129, 223, 77, 0.28) 0,
-      rgba(129, 223, 77, 0.12) 40%,
-      rgba(129, 223, 77, 0) 68%
+      rgb(129 223 77 / 28%) 0,
+      rgb(129 223 77 / 12%) 40%,
+      rgb(129 223 77 / 0%) 68%
     ),
     radial-gradient(
       16px 16px at 30% 36%,
-      rgba(129, 223, 77, 0.26) 0,
-      rgba(129, 223, 77, 0.12) 38%,
-      rgba(129, 223, 77, 0) 60%
+      rgb(129 223 77 / 26%) 0,
+      rgb(129 223 77 / 12%) 38%,
+      rgb(129 223 77 / 0%) 60%
     ),
     radial-gradient(
       24px 24px at 12% 54%,
-      rgba(129, 223, 77, 0.22) 0,
-      rgba(129, 223, 77, 0.1) 40%,
-      rgba(129, 223, 77, 0) 70%
+      rgb(129 223 77 / 22%) 0,
+      rgb(129 223 77 / 10%) 40%,
+      rgb(129 223 77 / 0%) 70%
     ),
     radial-gradient(
       14px 14px at 26% 72%,
-      rgba(129, 223, 77, 0.3) 0,
-      rgba(129, 223, 77, 0.14) 42%,
-      rgba(129, 223, 77, 0) 68%
+      rgb(129 223 77 / 30%) 0,
+      rgb(129 223 77 / 14%) 42%,
+      rgb(129 223 77 / 0%) 68%
     );
 }
 
@@ -723,9 +787,11 @@
   0% {
     transform: translateY(0) rotate(0deg);
   }
+
   50% {
     transform: translateY(-16px) rotate(8deg);
   }
+
   100% {
     transform: translateY(0) rotate(0deg);
   }
@@ -737,10 +803,12 @@
     opacity: 0.55;
     filter: brightness(1);
   }
+
   50% {
     opacity: 1;
     filter: brightness(1.15);
   }
+
   100% {
     opacity: 0.6;
     filter: brightness(1);
@@ -752,10 +820,12 @@
     opacity: 0.45;
     filter: brightness(1);
   }
+
   50% {
     opacity: 0.95;
     filter: brightness(1.12);
   }
+
   100% {
     opacity: 0.5;
     filter: brightness(1);
@@ -770,58 +840,64 @@
 
 @media (width <= 768px) {
   .hero {
-    padding: 100px 0 0;
+    padding: 0;
+    height: 30vh;
     flex: content;
     justify-content: center;
   }
+
   .hero__layout {
     grid-template-columns: 1fr;
     gap: 24px;
+    min-height: clamp(240px, 30vh, 520px);
   }
+
   .hero__figure {
     justify-content: center;
   }
+
   .hero::before {
     left: 0; /* espalha pelo fundo no mobile */
     opacity: 0.5; /* menos intenso no mobile */
     animation-duration: 6.5s; /* suaviza no mobile */
   }
+
   .hero::after {
     right: 0;
     opacity: 0.5;
     animation-duration: 7.5s;
   }
-  
+
   /* Responsivo para novos elementos */
   .hero__badge {
     font-size: 12px;
     padding: 6px 12px;
   }
-  
+
   .hero__live-info {
     padding: 16px;
     margin: 20px 0;
   }
-  
+
   .hero__countdown {
     flex-direction: column;
     align-items: flex-start;
     gap: 8px;
   }
-  
+
   .hero__countdown-timer {
     margin-left: 0;
     align-self: flex-start;
   }
-  
+
   .hero__benefits-title {
     font-size: var(--font-size-base);
   }
-  
+
   .hero__benefits-list li {
     font-size: 14px;
   }
-  
+
   .hero__btn--primary .hero__btn-label {
     font-size: 18px;
   }

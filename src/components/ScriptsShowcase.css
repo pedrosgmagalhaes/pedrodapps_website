@@ -35,7 +35,9 @@
 }
 
 @media (width < 768px) {
-  .scripts__grid { grid-template-columns: 1fr; }
+  .scripts__grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 .scripts__item {

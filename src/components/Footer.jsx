@@ -11,9 +11,7 @@ const Footer = () => {
           <a href="/" className="footer__logo" aria-label="Ir para a página principal">
             <img src={logoPedrodApps} alt="Pedro dApps" />
           </a>
-          <p className="footer__copy">
-            Pedro dApps © 2025
-          </p>
+          <p className="footer__copy">Pedro dApps © 2025</p>
         </div>
 
         <span className="footer__divider" aria-hidden="true" />
@@ -36,9 +34,18 @@ const Footer = () => {
         <p className="footer__bottom-text">
           Conteúdo educacional; não oferecemos aconselhamento financeiro. {""}
           Ao acessar nossa plataforma, você automaticamente aceita nossos {""}
-          <a href="#servicos" aria-label="Abrir Termos de Serviço">Termos de Serviço</a>, nossa {""}
-          <a href="#privacidade" aria-label="Abrir Política de Privacidade">Política de Privacidade</a>, bem como nossa {""}
-          <a href="#cookies" aria-label="Abrir Política de Cookies">Política de Cookies</a>.
+          <a href="#servicos" aria-label="Abrir Termos de Serviço">
+            Termos de Serviço
+          </a>
+          , nossa {""}
+          <a href="#privacidade" aria-label="Abrir Política de Privacidade">
+            Política de Privacidade
+          </a>
+          , bem como nossa {""}
+          <a href="#cookies" aria-label="Abrir Política de Cookies">
+            Política de Cookies
+          </a>
+          .
         </p>
       </div>
     </footer>

@@ -6,7 +6,7 @@
   z-index: 1000;
 
   /* Fundo sólido solicitado */
-  background: #24263B;
+  background: #24263b;
   backdrop-filter: none;
 
   /* Sem borda inferior */
@@ -15,7 +15,7 @@
 }
 
 .header--scrolled {
-  background: #24263B;
+  background: #24263b;
   box-shadow: 0 10px 28px rgb(0 0 0 / 32%);
 }
 
@@ -30,6 +30,7 @@
 .header__logo {
   flex-shrink: 0;
 }
+
 /* Badge educativo ao lado do logo */
 .header__badge {
   margin-left: 10px;
@@ -67,8 +68,10 @@
   image-rendering: pixelated; /* preserva o visual 16 bits quando escalado */
 }
 
-@media (max-width: 768px) {
-  .logo__image { height: 62px; }
+@media (width <= 768px) {
+  .logo__image {
+    height: 62px;
+  }
 }
 
 .logo__text {
@@ -77,6 +80,7 @@
   color: var(--text-primary);
   text-transform: uppercase;
   letter-spacing: 0.02em;
+
   /* leve efeito "pixel" com sombras em passos */
   text-shadow: none;
 }
@@ -90,6 +94,7 @@
   grid-template-rows: repeat(3, 10px);
   gap: 2px;
 }
+
 .logo-sq {
   width: 10px;
   height: 10px;
@@ -97,11 +102,26 @@
   background: var(--gradient-primary);
   box-shadow: 0 2px 8px rgb(0 0 0 / 35%);
 }
-.logo-sq--1 { grid-area: 1 / 1; }
-.logo-sq--2 { grid-area: 1 / 2; }
-.logo-sq--3 { grid-area: 2 / 1; }
-.logo-sq--4 { grid-area: 2 / 2; }
-.logo-sq--5 { grid-area: 3 / 3; } /* deslocado para dar efeito dinâmico */
+
+.logo-sq--1 {
+  grid-area: 1 / 1;
+}
+
+.logo-sq--2 {
+  grid-area: 1 / 2;
+}
+
+.logo-sq--3 {
+  grid-area: 2 / 1;
+}
+
+.logo-sq--4 {
+  grid-area: 2 / 2;
+}
+
+.logo-sq--5 {
+  grid-area: 3 / 3;
+} /* deslocado para dar efeito dinâmico */
 
 /* Navegação principal */
 .header__nav {
@@ -110,18 +130,23 @@
   gap: var(--spacing-lg);
   margin-left: var(--spacing-xl);
 }
+
 .header__nav-link {
   color: var(--neutral-lighter);
   text-decoration: none;
   font-size: var(--font-size-base);
   font-weight: 600;
-  font-family: 'Bungee', cursive;
+  font-family: Bungee, cursive;
   padding: 8px 12px;
   border-radius: 12px;
   border: 1px solid rgb(126 226 65 / 35%);
   background: transparent;
-  transition: color 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+  transition:
+    color 0.2s ease,
+    background 0.2s ease,
+    border-color 0.2s ease;
 }
+
 .header__nav-link:hover {
   color: #000;
   background: var(--bg-secondary);
@@ -134,23 +159,31 @@
   align-items: center;
   gap: var(--spacing-md);
 }
+
 .header__btn--primary {
   border-color: transparent;
-  background-color: #7BE33D;
+  background-color: #7be33d;
   color: #000; /* texto preto sobre verde, conforme referência */
 }
+
 .header__btn--outline {
   background: transparent;
   border: 1px solid rgb(255 255 255 / 30%);
 }
+
 .header__btn--outline:hover {
   background: transparent; /* sem efeito no hover */
 }
 
 /* Mostrar navegação em telas médias/grandes */
 @media (width >= 768px) {
-  .header__nav { display: flex; }
-  .header__menu-btn { display: none; }
+  .header__nav {
+    display: flex;
+  }
+
+  .header__menu-btn {
+    display: none;
+  }
 }
 
 /* Overlay simples de menu */
@@ -163,7 +196,7 @@
 .menu-overlay__backdrop {
   position: absolute;
   inset: 0;
-  background: rgb(var(--bg-primary-rgb) / 0.6);
+  background: rgb(var(--bg-primary-rgb) / 60%);
   backdrop-filter: blur(4px);
 }
 
@@ -173,14 +206,14 @@
   right: 0;
   width: min(84vw, 420px);
   height: 100%;
-  background: var(--bg-tertiary);
-  border-left: 1px solid rgb(255 255 255 / 12%);
+  background: var(--bg-primary);
+  border-left: 1px solid rgb(0 0 0 / 30%);
   box-shadow: -12px 0 28px rgb(0 0 0 / 32%);
   padding: var(--spacing-xl);
   display: flex;
   flex-direction: column;
   gap: var(--spacing-lg);
-  color: #000; /* melhora legibilidade em fundo claro */
+  color: var(--text-primary);
 }
 
 .menu-overlay__close {
@@ -208,7 +241,7 @@
 .menu-overlay__group-title {
   font-size: var(--font-size-lg);
   margin-bottom: var(--spacing-sm);
-  color: #111;
+  color: var(--text-primary);
 }
 
 .menu-overlay__list {
@@ -221,16 +254,16 @@
   display: block;
   padding: 10px 12px;
   border-radius: 12px;
-  color: #111;
+  color: var(--text-primary);
   text-decoration: none;
-  font-family: 'Bungee', cursive;
-  border: 1px solid rgb(0 0 0 / 10%);
-  background: rgb(0 0 0 / 03%);
+  font-family: Bungee, cursive;
+  border: 1px solid rgb(255 255 255 / 12%);
+  background: rgb(255 255 255 / 04%);
 }
 
 .menu-overlay__link:hover {
-  border-color: rgb(0 0 0 / 18%);
-  background: rgb(0 0 0 / 06%);
+  border-color: rgb(255 255 255 / 20%);
+  background: rgb(255 255 255 / 08%);
 }
 
 /* Link CTA "Entrar" no overlay */
@@ -240,16 +273,12 @@
   color: #000;
   font-weight: 700;
 }
+
 .menu-overlay__link--cta:hover {
   filter: brightness(0.95);
 }
 
 /* Header Actions */
-.header__actions {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-md);
-}
 
 .header__btn {
   padding: 14px 24px;
@@ -261,11 +290,15 @@
   background: transparent; /* sem vidro, sem brilho */
   border: 1px solid rgb(255 255 255 / 20%);
   color: white;
-  font-family: 'Bungee', cursive; /* fonte do menu */
+  font-family: Bungee, cursive; /* fonte do menu */
   text-decoration: none; /* remove sublinhado dos links */
   position: relative;
   overflow: hidden;
-  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease,
+    border-color 0.2s ease;
 }
 
 .header__btn::before {
@@ -275,7 +308,12 @@
   left: -120%;
   width: 40%;
   height: 100%;
-  background: linear-gradient(90deg, rgba(255,255,255,0), rgba(255,255,255,0.15), rgba(255,255,255,0));
+  background: linear-gradient(
+    90deg,
+    rgb(255 255 255 / 0%),
+    rgb(255 255 255 / 15%),
+    rgb(255 255 255 / 0%)
+  );
   transform: skewX(-20deg);
   transition: left 0.6s ease;
   pointer-events: none;
@@ -291,9 +329,10 @@
 }
 
 .header__btn:focus-visible {
-  outline: 2px solid #7BE33D; /* foco acessível sem sombra */
+  outline: 2px solid #7be33d; /* foco acessível sem sombra */
   box-shadow: none;
 }
+
 .header__btn-icon {
   width: 18px;
   height: 18px;
@@ -309,29 +348,32 @@
 /* Hover específico para o botão primário verde */
 .header__btn--primary:hover {
   filter: none;
-  background: #7BE33D; /* mantém verde no hover */
+  background: #7be33d; /* mantém verde no hover */
   border-color: transparent;
 }
 
 /* Reforço de especificidade para variantes (evita que a base .header__btn sobrescreva) */
 .header__btn.header__btn--primary {
-  background: #7BE33D;
+  background: #7be33d;
   border-color: transparent;
-  color: #24263B;
+  color: #24263b;
 }
+
 .header__btn.header__btn--primary:hover {
   transform: translateY(-1px) scale(1.02);
-  box-shadow: 0 8px 20px rgba(123, 227, 61, 0.25);
+  box-shadow: 0 8px 20px rgb(123 227 61 / 25%);
 }
+
 .header__btn.header__btn--outline {
   background: transparent;
   border-color: rgb(255 255 255 / 40%);
   color: #fff;
 }
+
 .header__btn.header__btn--outline:hover {
   border-color: rgb(255 255 255 / 60%);
   transform: translateY(-1px) scale(1.02);
-  box-shadow: 0 6px 16px rgba(0,0,0,0.25);
+  box-shadow: 0 6px 16px rgb(0 0 0 / 25%);
 }
 
 /* Atenção extra para o CTA “Faça parte!” */
@@ -339,41 +381,76 @@
   will-change: box-shadow, transform;
   animation: header-btn-pulse 2.2s ease-in-out infinite;
 }
+
 .header__btn--attention::before {
   /* brilho em passagem automática, além do hover */
   animation: header-btn-shine 3s ease-in-out infinite;
 }
+
 .header__btn--attention::after {
   content: "";
   position: absolute;
   inset: -4px;
   border-radius: inherit;
   pointer-events: none;
-  border: 2px solid rgba(123, 227, 61, 0.28);
+  border: 2px solid rgb(123 227 61 / 28%);
   animation: header-btn-ring 2.2s ease-in-out infinite;
 }
 
 @keyframes header-btn-pulse {
-  0%, 100% { box-shadow: 0 8px 20px rgba(123, 227, 61, 0.20); }
-  50% { box-shadow: 0 10px 26px rgba(123, 227, 61, 0.35); }
+  0%,
+  100% {
+    box-shadow: 0 8px 20px rgb(123 227 61 / 20%);
+  }
+
+  50% {
+    box-shadow: 0 10px 26px rgb(123 227 61 / 35%);
+  }
 }
 
 @keyframes header-btn-ring {
-  0% { opacity: 0.55; transform: scale(1); }
-  50% { opacity: 0.12; transform: scale(1.06); }
-  100% { opacity: 0.55; transform: scale(1); }
+  0% {
+    opacity: 0.55;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 0.12;
+    transform: scale(1.06);
+  }
+
+  100% {
+    opacity: 0.55;
+    transform: scale(1);
+  }
 }
 
 @keyframes header-btn-shine {
-  0% { left: -120%; }
-  50% { left: 120%; }
-  100% { left: 120%; }
+  0% {
+    left: -120%;
+  }
+
+  50% {
+    left: 120%;
+  }
+
+  100% {
+    left: 120%;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .header__btn--attention { animation: none; }
-  .header__btn--attention::before { animation: none; }
-  .header__btn--attention::after { animation: none; }
+  .header__btn--attention {
+    animation: none;
+  }
+
+  .header__btn--attention::before {
+    animation: none;
+  }
+
+  .header__btn--attention::after {
+    animation: none;
+  }
 }
 
 /* Mobile Styles */
@@ -399,14 +476,19 @@
     z-index: 1001; /* acima do conteúdo, sem competir com o overlay */
     touch-action: manipulation;
   }
+
   .header__menu-btn .header__btn-icon {
     width: 24px;
     height: 24px;
   }
+
   .header__btn:focus-visible {
     outline: none;
-    box-shadow: 0 0 0 2px rgb(119 71 255 / 45%), 0 10px 24px rgb(0 0 0 / 35%);
+    box-shadow:
+      0 0 0 2px rgb(119 71 255 / 45%),
+      0 10px 24px rgb(0 0 0 / 35%);
   }
+
   .header__btn-icon {
     width: 18px;
     height: 18px;
@@ -419,7 +501,7 @@
     transform: scale(1.1);
   }
 
-  @media (max-width: 768px) {
+  @media (width <= 768px) {
     .header__menu-btn {
       box-sizing: border-box;
       width: 46px;
@@ -448,14 +530,12 @@
 
 /* Efeito espelhado removido. Aplicamos efeito vidro (glassmorphism) nas classes base do header. */
 
-
-
 /* CTA “Agende uma call” com ícone-only no mobile */
 .header__cta-call .header__btn-label {
   margin-right: 8px; /* espaçamento entre texto e ícone no desktop */
 }
 
-@media (max-width: 768px) {
+@media (width <= 768px) {
   .header__cta-call {
     box-sizing: border-box;
     width: 46px;
@@ -467,14 +547,17 @@
     align-items: center;
     justify-content: center;
   }
+
   .header__cta-call .header__btn-label {
     display: none; /* esconder texto no mobile, mantendo aria-label acessível */
   }
+
   .header__cta-call .header__btn-icon {
     width: 20px;
     height: 20px;
   }
 }
+
 /* Tamanhos consistentes para os dois ícones (CTA e Menu) */
 .header__cta-call .header__btn-icon,
 .header__menu-btn .header__btn-icon {
@@ -482,13 +565,14 @@
   height: 18px;
 }
 
-@media (max-width: 768px) {
+@media (width <= 768px) {
   .header__cta-call .header__btn-icon,
   .header__menu-btn .header__btn-icon {
     width: 24px;
     height: 24px;
   }
 }
+
 /* Logo Pixel‑Art 16 bits (5x5) */
 .pixel-logo {
   width: 34px;
@@ -499,6 +583,7 @@
   gap: 2px;
   margin-right: var(--spacing-sm);
 }
+
 .pixel {
   width: 6px;
   height: 6px;
@@ -506,10 +591,23 @@
   background: var(--accent-primary);
   box-shadow: 0 1px 0 rgb(0 0 0 / 35%);
 }
-.pixel--hi { background: #ffffff; }
-.pixel--base { background: #ffffff; }
-.pixel--sh { background: #ffffff; }
-.pixel--empty { opacity: 0; }
+
+.pixel--hi {
+  background: #fff;
+}
+
+.pixel--base {
+  background: #fff;
+}
+
+.pixel--sh {
+  background: #fff;
+}
+
+.pixel--empty {
+  opacity: 0;
+}
+
 .logo__text-group {
   display: inline-flex;
   align-items: baseline;
@@ -518,17 +616,17 @@
 
 .logo__text--pedro {
   font-weight: 800;
-  color: #ffffff;
+  color: #fff;
   text-shadow: none;
 }
 
 /* Título "dApps" com estética 16‑bits */
 .logo__text--dapps {
-  font-family: 'Press Start 2P', monospace;
+  font-family: "Press Start 2P", monospace;
   font-size: var(--font-size-xl); /* altura igual ao PEDRO */
   line-height: 1;
   text-transform: none;
-  color: #ffffff; /* tudo branco */
+  color: #fff; /* tudo branco */
   -webkit-text-fill-color: initial;
   -webkit-text-stroke: 0;
   text-shadow: none;

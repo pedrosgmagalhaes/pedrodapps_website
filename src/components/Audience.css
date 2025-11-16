@@ -1,6 +1,5 @@
 .audience {
-  background: #ffffff;
-  color: #24263b;
+  background: var(--bg-primary);
   padding: 56px 16px;
 }
 
@@ -15,23 +14,23 @@
 
 .audience__title {
   font-family:
-    "Bungee",
+    Bungee,
     cursive,
     -apple-system,
     blinkmacsystemfont,
     "Segoe UI",
-    "Roboto",
-    "Saira",
+    Roboto,
+    Saira,
     sans-serif;
   font-size: 28px;
   font-weight: 700;
-  color: #24263b;
-  margin: 0 0 8px 0;
+  color: var(--text-primary);
+  margin: 0 0 8px;
 }
 
 .audience__subtitle {
   font-size: 13px;
-  color: #24263b;
+  color: var(--text-secondary);
   opacity: 0.9;
   margin: 0;
 }
@@ -51,7 +50,7 @@
   color: var(--neutral-white, #f2f2f2);
   border-radius: 10px;
   padding: 32px 24px;
-  font-family: "Bungee", cursive;
+  font-family: Bungee, cursive;
 }
 
 .audience__pill-icon {
@@ -60,25 +59,26 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background: rgba(255, 255, 255, 0.08);
+  background: rgb(255 255 255 / 8%);
   border-radius: 999px;
-  border: 1px solid rgba(255, 255, 255, 0.18);
+  border: 1px solid rgb(255 255 255 / 18%);
   box-shadow:
-    0 0 0 4px rgba(255, 255, 255, 0.04),
-    0 0 16px rgba(123, 227, 61, 0.35),
-    0 0 32px rgba(123, 227, 61, 0.25);
+    0 0 0 4px rgb(255 255 255 / 4%),
+    0 0 16px rgb(123 227 61 / 35%),
+    0 0 32px rgb(123 227 61 / 25%);
   animation: glowPulse 2.4s ease-in-out infinite;
 }
+
 .audience__pill-icon img {
   width: 44px;
   height: 44px;
-  filter: drop-shadow(0 0 6px rgba(123, 227, 61, 0.45));
+  filter: drop-shadow(0 0 6px rgb(123 227 61 / 45%));
 }
 
 .audience__pill-text {
   font-size: 14px;
   line-height: 1.45;
-  font-family: "Bungee", cursive;
+  font-family: Bungee, cursive;
 }
 
 .audience__footer {
@@ -92,7 +92,6 @@
 .audience__note {
   margin: 0;
   font-size: 13px;
-  color: #24263b;
   max-width: 450px;
 }
 
@@ -114,10 +113,10 @@
 
 .audience__cta:hover {
   transform: translateY(-1px);
-  box-shadow: 0 8px 20px rgba(123, 227, 61, 0.35);
+  box-shadow: 0 8px 20px rgb(123 227 61 / 35%);
 }
 
-@media (max-width: 860px) {
+@media (width <= 860px) {
   .audience__grid {
     grid-template-columns: 1fr;
   }
@@ -126,20 +125,22 @@
 @keyframes glowPulse {
   0% {
     box-shadow:
-      0 0 0 2px rgba(255, 255, 255, 0.03),
-      0 0 10px rgba(123, 227, 61, 0.25),
-      0 0 20px rgba(123, 227, 61, 0.15);
+      0 0 0 2px rgb(255 255 255 / 3%),
+      0 0 10px rgb(123 227 61 / 25%),
+      0 0 20px rgb(123 227 61 / 15%);
   }
+
   50% {
     box-shadow:
-      0 0 0 4px rgba(255, 255, 255, 0.06),
-      0 0 18px rgba(123, 227, 61, 0.45),
-      0 0 36px rgba(123, 227, 61, 0.35);
+      0 0 0 4px rgb(255 255 255 / 6%),
+      0 0 18px rgb(123 227 61 / 45%),
+      0 0 36px rgb(123 227 61 / 35%);
   }
+
   100% {
     box-shadow:
-      0 0 0 2px rgba(255, 255, 255, 0.03),
-      0 0 10px rgba(123, 227, 61, 0.25),
-      0 0 20px rgba(123, 227, 61, 0.15);
+      0 0 0 2px rgb(255 255 255 / 3%),
+      0 0 10px rgb(123 227 61 / 25%),
+      0 0 20px rgb(123 227 61 / 15%);
   }
 }

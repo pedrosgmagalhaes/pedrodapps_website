@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import Header from "./components/Header";
 import Hero from "./components/Hero";
 import NewsTicker from "./components/NewsTicker";
 import Courses from "./components/Courses";
@@ -14,9 +13,10 @@ import Footer from "./components/Footer";
 import Login from "./components/Login";
 import ForgotPassword from "./components/ForgotPassword";
 import Checkout from "./components/Checkout";
-import PrivacyPolicy from "./components/PrivacyPolicy";
+// Carregar sob demanda para evitar preload bloqueado por extensões
+const PrivacyPolicy = React.lazy(() => import("./components/DataProtection"));
 import ServicesPolicy from "./components/ServicesPolicy";
-import CookiesPolicy from "./components/CookiesPolicy";
+const CookiesPolicy = React.lazy(() => import("./components/ConsentNotice"));
 import DataDeletionPolicy from "./components/DataDeletionPolicy";
 import "./App.css";
 
@@ -40,12 +40,38 @@ function App() {
     return () => window.removeEventListener("hashchange", handleHashChange);
   }, []);
 
+  // Inicializa animações de reveal ao rolar a página
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const elements = document.querySelectorAll(".reveal-on-scroll");
+    if (!elements.length) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("is-visible");
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.15, rootMargin: "0px 0px -10% 0px" }
+    );
+
+    elements.forEach((el, idx) => {
+      // ajuda a criar delays sutis em grupos
+      el.style.setProperty("--animate-index", String(idx));
+      observer.observe(el);
+    });
+
+    return () => observer.disconnect();
+  }, [hash]);
+
   return (
     <div className="App">
-      {!isAuthView && !isPolicyView && <Header />}
-      <main className={
-        isAuthView ? "main main--login" : isPolicyView ? "main main--policy" : "main"
-      }>
+      <main
+        className={isAuthView ? "main main--login" : isPolicyView ? "main main--policy" : "main"}
+      >
         {isLoginView ? (
           <>
             <Login />
@@ -59,7 +85,6 @@ function App() {
         ) : isCheckoutView ? (
           <>
             <Checkout />
-            <Footer />
           </>
         ) : isPrivacyView ? (
           <>

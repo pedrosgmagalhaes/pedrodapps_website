@@ -1,98 +1,98 @@
 _format_version: "3.0"
 
 certificates:
-- cert: |
-    -----BEGIN CERTIFICATE-----
-    MIIDXTCCAkWgAwIBAgIJAKoK/heBjcOuMA0GCSqGSIb3DQEBBQUAMEUxCzAJBgNV
-    BAYTAkFVMRMwEQYDVQQIDApTb21lLVN0YXRlMSEwHwYDVQQKDBhJbnRlcm5ldCBX
-    aWRnaXRzIFB0eSBMdGQwHhcNMTMwODI3MjM1NDA3WhcNMTQwODI3MjM1NDA3WjBF
-    MQswCQYDVQQGEwJBVTETMBEGA1UECAwKU29tZS1TdGF0ZTEhMB8GA1UECgwYSW50
-    ZXJuZXQgV2lkZ2l0cyBQdHkgTHRkMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIB
-    CgKCAQEAwfWEayanD1j0cDhIYzy4CkDo2jB8D5t0a6zZWzlr98dAQFNh8uKJkIHd
-    LShy+nUyeZxc5bNeMp1Lu0gSzE4McqfmNMvIpeiwWSYO9w82Ob8otvXcO2JUYi3s
-    vHIWRm3+707DUbL51XMcY2iZdlCq4Wa9nbuk3WTU4gr6LY8MzVAaDQG2+4U3eJ6q
-    UF10bBnR1uuVyDYs9RhrwucRVnfuDj29CMLTsplM5f5wSV5hUpmUwp/vV7M4w4aG
-    unt74koX71n4EdagCsL/Yk5+mAQU0+tue0JOfAV/R6t1k+Xk9s2HMQFeoxppfzAV
-    C04FdG9M+AC2JWxmFSt6BCuh3CEey3fE52Qrj9YM75rtvIjsm/1Hl+u//Wqxnu1Z
-    Q4jpa+VpuZiGOlWrqSP9eogdOhCGisnyewWJwRQOqK16wiGyZeRxs/Bekw65vwSI
-    aVkBruPiTfMOo0Zh4gVa8/qJgMbJbyrwwG97z/PRgmLKCDl8z3dtA0Z7qq7fta0G
-    l24uyuB05dqI5J1LvAzKuWdIjT1tP8qCoxSE/xpix8hX2dt3h+/jujUgFPFZ0EVZ
-    0xSyBNRF3MboGZnYXFUxpNjTWPKpagDHJQmqrAcDmWJnMsFY3jSu1igv3OefnWjS
-    Q==
-    -----END CERTIFICATE-----
-  key: |
-    -----BEGIN PRIVATE KEY-----
-    MIGHAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBG0wawIBAQQgm9pgkVijy4IhRCx2
-    IInAu2kiIsc9q9MLtRTawT1ZIjyhRANCAATyqxlxAR9CEXiVN+YGMn3oi2vEsetZ
-    35sHxSxEFwDOnujGtftfpa84budWB/S71BCp2LYXkumMbGwlfu8zxO5Y
-    -----END PRIVATE KEY-----
-  snis:
-  - name: crypto.pixley.app
+  - cert: |
+      -----BEGIN CERTIFICATE-----
+      MIIDXTCCAkWgAwIBAgIJAKoK/heBjcOuMA0GCSqGSIb3DQEBBQUAMEUxCzAJBgNV
+      BAYTAkFVMRMwEQYDVQQIDApTb21lLVN0YXRlMSEwHwYDVQQKDBhJbnRlcm5ldCBX
+      aWRnaXRzIFB0eSBMdGQwHhcNMTMwODI3MjM1NDA3WhcNMTQwODI3MjM1NDA3WjBF
+      MQswCQYDVQQGEwJBVTETMBEGA1UECAwKU29tZS1TdGF0ZTEhMB8GA1UECgwYSW50
+      ZXJuZXQgV2lkZ2l0cyBQdHkgTHRkMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIB
+      CgKCAQEAwfWEayanD1j0cDhIYzy4CkDo2jB8D5t0a6zZWzlr98dAQFNh8uKJkIHd
+      LShy+nUyeZxc5bNeMp1Lu0gSzE4McqfmNMvIpeiwWSYO9w82Ob8otvXcO2JUYi3s
+      vHIWRm3+707DUbL51XMcY2iZdlCq4Wa9nbuk3WTU4gr6LY8MzVAaDQG2+4U3eJ6q
+      UF10bBnR1uuVyDYs9RhrwucRVnfuDj29CMLTsplM5f5wSV5hUpmUwp/vV7M4w4aG
+      unt74koX71n4EdagCsL/Yk5+mAQU0+tue0JOfAV/R6t1k+Xk9s2HMQFeoxppfzAV
+      C04FdG9M+AC2JWxmFSt6BCuh3CEey3fE52Qrj9YM75rtvIjsm/1Hl+u//Wqxnu1Z
+      Q4jpa+VpuZiGOlWrqSP9eogdOhCGisnyewWJwRQOqK16wiGyZeRxs/Bekw65vwSI
+      aVkBruPiTfMOo0Zh4gVa8/qJgMbJbyrwwG97z/PRgmLKCDl8z3dtA0Z7qq7fta0G
+      l24uyuB05dqI5J1LvAzKuWdIjT1tP8qCoxSE/xpix8hX2dt3h+/jujUgFPFZ0EVZ
+      0xSyBNRF3MboGZnYXFUxpNjTWPKpagDHJQmqrAcDmWJnMsFY3jSu1igv3OefnWjS
+      Q==
+      -----END CERTIFICATE-----
+    key: |
+      -----BEGIN PRIVATE KEY-----
+      MIGHAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBG0wawIBAQQgm9pgkVijy4IhRCx2
+      IInAu2kiIsc9q9MLtRTawT1ZIjyhRANCAATyqxlxAR9CEXiVN+YGMn3oi2vEsetZ
+      35sHxSxEFwDOnujGtftfpa84budWB/S71BCp2LYXkumMbGwlfu8zxO5Y
+      -----END PRIVATE KEY-----
+    snis:
+      - name: crypto.pixley.app
 
 services:
-- name: pixley-app
-  url: http://172.17.0.1:3007
-- name: pedrodapps-website
-  url: http://localhost:8084
+  - name: pixley-app
+    url: http://172.17.0.1:3007
+  - name: pedrodapps-website
+    url: http://localhost:8084
 
 routes:
-- name: pixley-route
-  service: pixley-app
-  hosts:
-  - crypto.pixley.app
-- name: pedrodapps-route
-  service: pedrodapps-website
-  hosts:
-  - pedrodapps.com
-  - www.pedrodapps.com
-  - localhost
-  paths:
-  - /
+  - name: pixley-route
+    service: pixley-app
+    hosts:
+      - crypto.pixley.app
+  - name: pedrodapps-route
+    service: pedrodapps-website
+    hosts:
+      - pedrodapps.com
+      - www.pedrodapps.com
+      - localhost
+    paths:
+      - /
 
 plugins:
-- name: rate-limiting
-  config:
-    minute: 100
-    hour: 1000
-    policy: local
-- name: cors
-  config:
-    origins:
-    - "https://web.pixley.app"
-    - "https://pixley-transactions-client-sdhs7djtoa-uc.a.run.app"
-    - "https://admin.pixley.app"
-    - "https://pedrodapps.com"
-    - "https://www.pedrodapps.com"
-    - "http://localhost:8000"
-    methods:
-    - GET
-    - POST
-    - PUT
-    - DELETE
-    - OPTIONS
-    - PATCH
-    headers:
-    - Accept
-    - Accept-Version
-    - Content-Length
-    - Content-MD5
-    - Content-Type
-    - Date
-    - Authorization
-    - x-api-key
-    - x-secret-key
-    - Origin
-    - X-Requested-With
-    - Cache-Control
-    - X-Auth-Token
-    - X-Tenant-ID
-    exposed_headers:
-    - X-Auth-Token
-    - X-Request-ID
-    credentials: true
-    max_age: 3600
-- name: bot-detection
-  config: {}
-- name: request-size-limiting
-  config:
-    allowed_payload_size: 20
+  - name: rate-limiting
+    config:
+      minute: 100
+      hour: 1000
+      policy: local
+  - name: cors
+    config:
+      origins:
+        - "https://web.pixley.app"
+        - "https://pixley-transactions-client-sdhs7djtoa-uc.a.run.app"
+        - "https://admin.pixley.app"
+        - "https://pedrodapps.com"
+        - "https://www.pedrodapps.com"
+        - "http://localhost:8000"
+      methods:
+        - GET
+        - POST
+        - PUT
+        - DELETE
+        - OPTIONS
+        - PATCH
+      headers:
+        - Accept
+        - Accept-Version
+        - Content-Length
+        - Content-MD5
+        - Content-Type
+        - Date
+        - Authorization
+        - x-api-key
+        - x-secret-key
+        - Origin
+        - X-Requested-With
+        - Cache-Control
+        - X-Auth-Token
+        - X-Tenant-ID
+      exposed_headers:
+        - X-Auth-Token
+        - X-Request-ID
+      credentials: true
+      max_age: 3600
+  - name: bot-detection
+    config: {}
+  - name: request-size-limiting
+    config:
+      allowed_payload_size: 20

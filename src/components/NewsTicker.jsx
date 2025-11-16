@@ -32,11 +32,7 @@ function formatCurrency(value, currency = "BRL") {
   }
 }
 
-export default function NewsTicker({
-  ids = DEFAULT_IDS,
-  vsCurrency = "BRL",
-  refreshMs = 60000,
-}) {
+export default function NewsTicker({ ids = DEFAULT_IDS, vsCurrency = "BRL", refreshMs = 60000 }) {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -181,8 +177,12 @@ export default function NewsTicker({
                           />
                         )}
                         <span className="news-ticker__symbol">{item.symbol}</span>
-                        <span className="news-ticker__price">{formatCurrency(item.price, vsCurrency.toUpperCase())}</span>
-                        <span className={`news-ticker__change ${isUp ? "up" : "down"}`}>{changeStr}</span>
+                        <span className="news-ticker__price">
+                          {formatCurrency(item.price, vsCurrency.toUpperCase())}
+                        </span>
+                        <span className={`news-ticker__change ${isUp ? "up" : "down"}`}>
+                          {changeStr}
+                        </span>
                       </a>
                     </li>
                   );

@@ -30,7 +30,7 @@ export const LoadingProvider = ({ children }) => {
 
     // Quando todos os recursos são carregados
     window.addEventListener("load", handleLoad);
-    
+
     // Fallback: garantir que o loading pare após o tempo mínimo, mesmo se a página não carregar completamente
     const fallbackTimeout = setTimeout(() => {
       if (!isPageLoaded) {
@@ -40,7 +40,7 @@ export const LoadingProvider = ({ children }) => {
     }, minLoadingTime + 1000); // 3 segundos total como fallback
 
     // Se a página já estiver carregada quando o componente monta
-    if (document.readyState === 'complete') {
+    if (document.readyState === "complete") {
       handleLoad();
     }
 

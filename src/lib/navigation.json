@@ -5,9 +5,7 @@
     {
       "key": "menu",
       "title": "Menu",
-      "items": [
-        { "label": "Entrar", "href": "#login" }
-      ]
+      "items": [{ "label": "Entrar", "href": "#login" }]
     }
   ]
 }

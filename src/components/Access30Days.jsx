@@ -3,22 +3,26 @@ import "./Access30Days.css";
 import checkPurple from "../assets/check_purple.svg";
 
 const BENEFITS = [
-  "Scripts de Flash Loan para operações avançadas",
-  "Operação Estruturada em DeFi envolvendo stablecoin",
-  "Plataformas de tokenização e suas aplicações",
-  "Hacks de cripto para estudos e análise de segurança",
-  "Ferramentas para operar no mercado de forma segura",
-  "Como funciona o mercado de exchanges e corretoras",
-  "Como montar uma estrutura segura, autônoma e descentralizada",
-  "Como enviar e receber valores globalmente com criptomoedas",
-  "Estratégias de proteção patrimonial e receita passiva",
-  "Como dolarizar patrimônio com cripto",
-  "Legalização e operação de uma empresa de cripto no exterior",
+  "Execução de Flash Loans em DeFi para arbitragem e liquidez",
+  "Estruturas DeFi com stablecoins: yield, lending e colateral",
+  "APIs completas para offshore: abertura, compliance e operações",
+  "APIs de remessas internacionais com taxas competitivas e rastreio",
+  "On/Off-ramp com moedas fiduciárias (USD, EUR, BRL)",
+  "Tokenização de ativos e aplicações jurídicas e financeiras",
+  "Arquitetura segura, autônoma e descentralizada para operações",
+  "Auditoria e hardening de contratos inteligentes",
+  "Exchanges e corretoras: liquidez, KYC/AML e rotas eficientes",
+  "Dolarização e proteção patrimonial com estratégias de receita passiva",
+  "Compliance e legalização de empresa cripto no exterior",
 ];
 
 export default function Access30Days() {
   return (
-    <section className="access30" id="acessos" aria-label="O que você vai acessar no GRUPO BUILDERS de ELITE">
+    <section
+      className="access30"
+      id="acessos"
+      aria-label="O que você vai acessar no GRUPO BUILDERS de ELITE"
+    >
       <div className="container">
         <div className="access30__grid">
           {/* Coluna esquerda: título, descrição e CTA */}
@@ -34,7 +38,7 @@ export default function Access30Days() {
             </p>
 
             <div className="access30__actions">
-              <a href="#cursos" className="access30__cta btn btn-primary">
+              <a href="#checkout" className="access30__cta btn btn-primary">
                 Quero fazer parte do Builders de Elite
               </a>
             </div>

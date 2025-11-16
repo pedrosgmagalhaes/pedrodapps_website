@@ -6,7 +6,7 @@ export default defineConfig({
   plugins: [react()],
   server: {
     port: 8085,
-    host: '0.0.0.0', // Permite acesso externo
+    host: "0.0.0.0", // Permite acesso externo
     strictPort: true, // Falha se a porta não estiver disponível
   },
 });

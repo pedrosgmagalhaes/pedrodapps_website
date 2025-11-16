@@ -1,21 +1,14 @@
 .contact {
   position: relative;
   overflow: hidden;
-  padding: 80px 0;
-  /* Gradiente claro usando tokens da marca */
-  background: linear-gradient(
-    180deg,
-    var(--concrete-lightest, #fdfdfd) 0%,
-    rgba(255, 255, 255, 0.96) 35%,
-    rgba(119, 71, 255, 0.08) 70%,
-    rgba(119, 71, 255, 0.18) 100%
-  );
-  height: 40vh;
+  padding: 80px 0 120px; /* mais espaço no fundo */
+  /* Fundo claro único */
+  background: var(--neutral-white);
+  height: 45vh;
 }
 
 .contact__container {
   display: grid;
-  grid-template-columns: 1fr 1fr; /* metade para texto, metade para background */
   gap: 24px;
   align-items: center;
 }
@@ -25,6 +18,7 @@
   position: relative;
   z-index: 1; /* conteúdo acima da arte decorativa */
   max-width: min(50%, 680px); /* texto ocupa metade do widget */
+  /* painel sem fundo, usa o fundo claro da seção */
 }
 
 .contact__eyebrow {
@@ -38,13 +32,13 @@
 
 .contact__title {
   font-family:
-    "Bungee",
+    Bungee,
     cursive,
     -apple-system,
     blinkmacsystemfont,
     "Segoe UI",
-    "Roboto",
-    "Saira",
+    Roboto,
+    Saira,
     sans-serif;
   font-size: clamp(22px, 3vw, 32px);
   line-height: 1.25;
@@ -56,7 +50,7 @@
   font-size: 16px;
   line-height: 1.7;
   max-width: 60ch;
-  color: rgba(34, 36, 58, 0.88);
+  color: rgb(34 36 58 / 88%);
   margin: 0 0 20px;
 }
 
@@ -84,7 +78,7 @@
   font-size: var(--font-size-lg);
   font-weight: 400;
   font-family:
-    "Bungee",
+    Bungee,
     cursive,
     -apple-system,
     blinkmacsyst;
@@ -105,7 +99,7 @@
   bottom: 0;
   width: clamp(220px, 38vw, 520px);
   height: auto;
-  filter: drop-shadow(0 12px 24px rgba(0, 0, 0, 0.25));
+  filter: drop-shadow(0 12px 24px rgb(0 0 0 / 25%));
 }
 
 .contact__icon-btn {
@@ -115,9 +109,9 @@
   align-items: center;
   justify-content: center;
   border-radius: 999px;
-  background: rgba(34, 36, 58, 0.08);
+  background: rgb(34 36 58 / 8%);
   color: var(--accent-primary, #7be33d);
-  border: 1px solid rgba(34, 36, 58, 0.12);
+  border: 1px solid rgb(34 36 58 / 12%);
   transition:
     transform 0.2s ease,
     box-shadow 0.2s ease,
@@ -127,8 +121,8 @@
 
 .contact__icon-btn:hover {
   transform: translateY(-1px);
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
-  background: rgba(34, 36, 58, 0.12);
+  box-shadow: 0 6px 16px rgb(0 0 0 / 12%);
+  background: rgb(34 36 58 / 12%);
 }
 
 .contact__art {
@@ -142,7 +136,7 @@
   bottom: 0;
   width: clamp(180px, 42vw, 420px);
   height: auto;
-  filter: drop-shadow(0 12px 24px rgba(0, 0, 0, 0.25));
+  filter: drop-shadow(0 12px 24px rgb(0 0 0 / 25%));
 }
 
 .contact__art-btc {
@@ -151,7 +145,7 @@
   bottom: 40px;
   width: clamp(60px, 12vw, 120px);
   height: auto;
-  filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.2));
+  filter: drop-shadow(0 10px 20px rgb(0 0 0 / 20%));
 }
 
 .contact__art-eth {
@@ -160,53 +154,91 @@
   bottom: 120px;
   width: clamp(60px, 12vw, 120px);
   height: auto;
-  filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.2));
+  filter: drop-shadow(0 10px 20px rgb(0 0 0 / 20%));
 }
 
-@media (max-width: 960px) {
+@media (width <= 960px) {
   .contact {
-    height: 50vh;
-    padding: 0;
+    height: 32vh; /* reduzir altura em mobile */
+    padding: 0 0 48px; /* manter respiro inferior no mobile */
   }
 
   .contact__container {
     grid-template-columns: 1fr;
+    gap: 16px; /* gap menor no mobile */
+    padding: 16px; /* respiro interno para o conteúdo */
   }
+
   .contact__content {
     max-width: 100%; /* em mobile, texto ocupa largura total */
+    text-align: left; /* manter alinhamento consistente */
   }
+
   .contact__coins-wrap {
     min-height: 0;
   }
+
   .contact__coins {
     right: 0;
     bottom: 0;
-    width: clamp(180px, 60vw, 420px);
+    width: clamp(160px, 48vw, 360px); /* reduz ligeiramente para evitar sobreposição */
   }
+
   /* Botão mais responsivo em telas menores */
   .contact .hero__btn {
     min-height: 40px;
     white-space: nowrap;
   }
+
   .contact .hero__btn--primary {
     padding: 10px 16px;
     font-size: clamp(13px, 3.8vw, 15px);
   }
+
   .contact__actions {
     flex-wrap: wrap;
     gap: 8px;
   }
+
   .contact__art {
     min-height: 120px;
   }
+
   .contact__art-base {
     position: relative;
     right: auto;
     bottom: auto;
     width: clamp(220px, 80vw, 420px);
   }
+
   .contact__art-btc,
   .contact__art-eth {
     display: none;
+  }
+}
+
+/* Ajustes adicionais para telas muito pequenas */
+@media (width <= 480px) {
+  .contact {
+    height: 34vh; /* ligeiro ajuste para acomodar texto em telas muito pequenas */
+    padding-bottom: 56px; /* um pouco mais de respiro nas menores telas */
+  }
+
+  .contact__title {
+    font-size: clamp(18px, 5.2vw, 24px);
+  }
+
+  .contact__subtitle {
+    font-size: clamp(13px, 3.8vw, 15px);
+    line-height: 1.6;
+  }
+
+  .contact .hero__btn--primary {
+    padding: 8px 14px;
+    font-size: clamp(12px, 3.6vw, 14px);
+  }
+
+  .contact__coins-wrap {
+    display: none; /* esconde moedas para evitar sobreposição em telas muito pequenas */
   }
 }

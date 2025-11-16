@@ -9,6 +9,7 @@ O sistema automatiza todo o processo de deploy, desde o commit das alterações 
 ## 🛠️ Arquivos do Sistema
 
 ### 1. `scripts/deploy-all.cjs`
+
 Script principal em Node.js que executa todas as etapas do deploy:
 
 - **Git Operations**: `git add .`, `git commit`, `git push`
@@ -18,6 +19,7 @@ Script principal em Node.js que executa todas as etapas do deploy:
 - **Colored Output**: Saída colorida no terminal para melhor visualização
 
 ### 2. `deploy.bat`
+
 Script batch para Windows que facilita a execução:
 
 - Verifica se Node.js está instalado
@@ -25,6 +27,7 @@ Script batch para Windows que facilita a execução:
 - Pausa no final para visualizar resultados
 
 ### 3. `package.json`
+
 Contém o script npm para execução:
 
 ```json
@@ -38,6 +41,7 @@ Contém o script npm para execução:
 ## 🎯 Como Usar
 
 ### Opção 1: Via Yarn/NPM
+
 ```bash
 # Com mensagem personalizada
 yarn deploy:all -m "sua mensagem de commit"
@@ -47,12 +51,14 @@ yarn deploy:all
 ```
 
 ### Opção 2: Via Script Batch (Windows)
+
 ```bash
 # Duplo clique no arquivo ou via terminal
 ./deploy.bat -m "sua mensagem de commit"
 ```
 
 ### Opção 3: Execução Direta
+
 ```bash
 node scripts/deploy-all.cjs -m "sua mensagem de commit"
 ```
@@ -60,9 +66,11 @@ node scripts/deploy-all.cjs -m "sua mensagem de commit"
 ## ⚙️ Parâmetros
 
 ### `-m, --message`
+
 Define a mensagem do commit Git.
 
 **Exemplos:**
+
 ```bash
 yarn deploy:all -m "feat: nova funcionalidade"
 yarn deploy:all -m "fix: correção de bug"
@@ -70,6 +78,7 @@ yarn deploy:all -m "docs: atualização da documentação"
 ```
 
 **Padrão:** Se não especificado, usa timestamp automático:
+
 ```
 Deploy automático - 2024-01-15 14:30:25
 ```
@@ -129,6 +138,7 @@ O script para a execução se alguma etapa falhar:
 ## 🌐 URLs de Produção
 
 Após deploy bem-sucedido, o site estará disponível em:
+
 - **Firebase Hosting**: https://pedrodapps-website.web.app
 - **Console Firebase**: https://console.firebase.google.com/project/pedrodapps-website
 
@@ -141,12 +151,15 @@ Após deploy bem-sucedido, o site estará disponível em:
 ## 🐛 Troubleshooting
 
 ### Erro: "require is not defined"
+
 **Solução**: O arquivo deve ter extensão `.cjs` para usar CommonJS em projetos ES modules.
 
 ### Erro: "Firebase not authenticated"
+
 **Solução**: Execute `firebase login` para autenticar.
 
 ### Erro: "Git repository not found"
+
 **Solução**: Certifique-se de estar na pasta raiz do projeto.
 
 ## 📝 Convenções de Commit

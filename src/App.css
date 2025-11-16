@@ -1,6 +1,6 @@
 .App {
   min-height: 100vh;
-  background: var(--text-primary);
+  background: var(--bg-primary);
 }
 
 main {

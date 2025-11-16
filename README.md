@@ -12,10 +12,12 @@ Site institucional da Pedro dApps desenvolvido em React com Vite.
 ## 🛠️ Desenvolvimento
 
 ### Pré-requisitos
+
 - Node.js 18+
 - Yarn
 
 ### Instalação
+
 ```bash
 # Instalar dependências
 yarn
@@ -25,6 +27,7 @@ yarn dev
 ```
 
 ### Scripts
+
 - `yarn dev` - Servidor de desenvolvimento
 - `yarn build` - Build de produção
 - `yarn preview` - Preview do build
@@ -50,6 +53,7 @@ src/
 ## 🚀 Deploy
 
 ### Firebase Hosting
+
 ```bash
 # Deploy staging
 yarn deploy:staging
@@ -59,11 +63,13 @@ yarn deploy:firebase
 ```
 
 ### Configuração
+
 - Projeto: `pedrodapps-website`
 - Site produção: `pedrodapps-website`
 - Multi-site configurado via `.firebaserc`
 
 ### Acesso em Produção
+
 - **URL Firebase**: `https://pedrodapps-website.web.app`
 - **URL Kong (servidor)**: `https://pedrodapps.com` (via Kong proxy)
 - **URL Alternativa**: `https://www.pedrodapps.com`

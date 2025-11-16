@@ -18,8 +18,7 @@ const courses = [
   {
     id: "estruturacao-tecnica",
     title: "Estrutura técnica com mãos na massa",
-    description:
-      "Monte operação segura e autônoma, com foco em receita previsível e crescimento.",
+    description: "Monte operação segura e autônoma, com foco em receita previsível e crescimento.",
   },
   {
     id: "personalizacao",
@@ -30,8 +29,7 @@ const courses = [
   {
     id: "scripts-defi",
     title: "Scripts DeFi Prontos",
-    description:
-      "Coleção curada de automações e bots para operar com segurança e eficiência.",
+    description: "Coleção curada de automações e bots para operar com segurança e eficiência.",
   },
   {
     id: "beneficios-pixley",
@@ -58,19 +56,21 @@ export default function Courses() {
               key={item.id}
               style={{ transitionDelay: `${index * 0.2}s` }}
             >
-
-
               <div className="course-card__header">
                 <div className="course-card__icon-wrapper">
                   <img src={checkIcon} alt="" className="course-card__icon" />
                 </div>
                 <h3 className="course-card__title reveal-on-scroll is-visible">{item.title}</h3>
               </div>
-              <p className="course-card__description reveal-on-scroll is-visible">{item.description}</p>
+              <p className="course-card__description reveal-on-scroll is-visible">
+                {item.description}
+              </p>
               {Array.isArray(item.features) && item.features.length > 0 && (
                 <ul className="course-card__features" aria-label={`Recursos do ${item.title}`}>
                   {item.features.map((feat, i) => (
-                    <li key={i} className="course-card__feature-item">{feat}</li>
+                    <li key={i} className="course-card__feature-item">
+                      {feat}
+                    </li>
                   ))}
                 </ul>
               )}

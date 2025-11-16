@@ -18,21 +18,23 @@
 
 .vip__title {
   font-family:
-    "Bungee",
+    Bungee,
     cursive,
     -apple-system,
     blinkmacsystemfont,
     "Segoe UI",
-    "Roboto",
-    "Saira",
+    Roboto,
+    Saira,
     sans-serif;
   font-size: 28px;
   font-weight: 700;
   margin: 0 0 8px;
 }
+
 .vip__title-highlight {
   color: var(--neutral-white, #fff);
 }
+
 .vip__subtitle {
   font-size: 13px;
   opacity: 0.9;
@@ -46,6 +48,7 @@
   padding: 0;
   margin: 0 0 16px;
 }
+
 .vip__item {
   display: flex;
   align-items: center;
@@ -55,19 +58,22 @@
   border-radius: 10px;
   padding: 12px 14px;
 }
+
 .vip__item-icon {
   width: 28px;
   height: 28px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background: rgba(255, 255, 255, 0.08);
+  background: rgb(255 255 255 / 8%);
   border-radius: 999px;
 }
+
 .vip__item-icon img {
   width: 18px;
   height: 18px;
 }
+
 .vip__item-text {
   font-size: 13px;
   line-height: 1.45;
@@ -78,6 +84,7 @@
   color: #d8d8d8;
   max-width: 480px;
 }
+
 .vip__guarantee-detail {
   display: block;
   opacity: 0.85;
@@ -89,6 +96,7 @@
   display: flex;
   justify-content: center;
 }
+
 .vip-card {
   background: #22243a;
   color: #f2f2f2;
@@ -96,20 +104,22 @@
   padding: 24px;
   width: 100%;
   max-width: 420px;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.35);
+  box-shadow: 0 20px 40px rgb(0 0 0 / 35%);
   position: relative;
 }
+
 .vip-card__badge {
   position: absolute;
   top: 18px;
   right: 18px;
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgb(255 255 255 / 10%);
+  border: 1px solid rgb(255 255 255 / 18%);
   border-radius: 8px;
   padding: 6px 10px;
   font-size: 11px;
   letter-spacing: 0.2px;
 }
+
 /* Cronômetro */
 .vip-card__countdown {
   background: linear-gradient(135deg, #2d5016 0%, #72e230 100%);
@@ -117,13 +127,13 @@
   padding: 16px;
   margin-bottom: 20px;
   text-align: center;
-  box-shadow: 0 4px 15px rgba(45, 80, 22, 0.3);
+  box-shadow: 0 4px 15px rgb(45 80 22 / 30%);
 }
 
 .countdown-title {
   font-size: 12px;
   font-weight: 600;
-  color: #ffffff;
+  color: #fff;
   margin-bottom: 12px;
   text-transform: uppercase;
   letter-spacing: 0.5px;
@@ -146,14 +156,14 @@
 .countdown-number {
   font-size: 20px;
   font-weight: 800;
-  color: #ffffff;
+  color: #fff;
   line-height: 1;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  text-shadow: 0 1px 2px rgb(0 0 0 / 30%);
 }
 
 .countdown-label {
   font-size: 10px;
-  color: #ffffff;
+  color: #fff;
   margin-top: 2px;
   text-transform: uppercase;
   letter-spacing: 0.3px;
@@ -163,7 +173,7 @@
 .countdown-separator {
   font-size: 18px;
   font-weight: 700;
-  color: #ffffff;
+  color: #fff;
   margin: 0 4px;
   opacity: 0.8;
 }
@@ -174,42 +184,48 @@
   justify-content: space-between;
   margin-bottom: 10px;
 }
+
 .vip-card__old-price {
   font-size: 12px;
   color: #c2c2c2;
   text-decoration: line-through;
   opacity: 0.7;
 }
+
 .vip-card__price {
   display: flex;
   align-items: baseline;
   gap: 8px;
   margin: 14px 0 18px;
 }
+
 .vip-card__currency {
   font-size: 20px;
   font-weight: 700;
   opacity: 0.9;
 }
+
 .vip-card__amount {
   font-size: 40px;
   font-weight: 800;
   letter-spacing: -0.02em;
 }
+
 .vip-card__period {
   font-size: 12px;
   opacity: 0.85;
   margin-left: auto;
 }
+
 .vip-card__cta {
   font-family:
-    "Bungee",
+    Bungee,
     cursive,
     -apple-system,
     blinkmacsystemfont,
     "Segoe UI",
-    "Roboto",
-    "Saira",
+    Roboto,
+    Saira,
     sans-serif;
   display: inline-flex;
   align-items: center;
@@ -227,45 +243,49 @@
     transform 0.2s ease,
     box-shadow 0.2s ease;
 }
+
 .vip-card__cta:hover {
   transform: translateY(-1px);
-  box-shadow: 0 8px 20px rgba(123, 227, 61, 0.35);
+  box-shadow: 0 8px 20px rgb(123 227 61 / 35%);
 }
+
 .vip-card__footnote {
   margin-top: 12px;
   font-size: 11px;
   color: #c2c2c2;
   text-align: center;
 }
+
 .vip-card__cards {
   display: block;
   margin: 8px auto 0;
   width: 160px;
   height: auto;
   opacity: 0.95;
-  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.25));
+  filter: drop-shadow(0 2px 6px rgb(0 0 0 / 25%));
 }
 
-@media (max-width: 920px) {
+@media (width <= 920px) {
   .vip__grid {
     grid-template-columns: 1fr;
   }
+
   .vip__right {
     order: -1;
   }
-  
+
   .countdown-timer {
     gap: 6px;
   }
-  
+
   .countdown-item {
     min-width: 35px;
   }
-  
+
   .countdown-number {
     font-size: 18px;
   }
-  
+
   .countdown-separator {
     font-size: 16px;
     margin: 0 2px;

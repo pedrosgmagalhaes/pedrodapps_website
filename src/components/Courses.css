@@ -1,7 +1,8 @@
 .courses {
   padding: var(--spacing-4xl) 0;
-  background: #ffffff;
-  font-family: "Montserrat", sans-serif;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: Montserrat, sans-serif;
 }
 
 .courses__header {
@@ -11,7 +12,7 @@
 }
 
 /* Responsividade do cabeçalho */
-@media (max-width: 768px) {
+@media (width <= 768px) {
   .courses__header {
     padding: 0 var(--spacing-md);
     margin: 0 auto var(--spacing-2xl) auto;
@@ -24,17 +25,17 @@
 }
 
 .courses__title {
-  font-family: "Montserrat", sans-serif;
+  font-family: Montserrat, sans-serif;
   font-size: clamp(24px, 4vw, 32px);
   font-weight: 500;
-  color: #010001;
+  color: var(--text-primary);
   text-align: left;
   margin: 0;
   line-height: 1.2;
 }
 
 .courses__title-highlight {
-  color: #010001;
+  color: var(--text-primary);
   font-weight: 700;
 }
 
@@ -47,7 +48,7 @@
 }
 
 /* Responsividade dos cards */
-@media (max-width: 480px) {
+@media (width <= 480px) {
   .courses__grid {
     grid-template-columns: 1fr;
     gap: var(--spacing-lg);
@@ -55,7 +56,7 @@
   }
 }
 
-@media (min-width: 481px) and (max-width: 768px) {
+@media (width >= 481px) and (width <= 768px) {
   .courses__grid {
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: var(--spacing-xl);
@@ -63,21 +64,21 @@
   }
 }
 
-@media (min-width: 769px) and (max-width: 1023px) {
+@media (width >= 769px) and (width <= 1023px) {
   .courses__grid {
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: var(--spacing-xl);
   }
 }
 
-@media (min-width: 1024px) {
+@media (width >= 1024px) {
   .courses__grid {
     grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
     max-width: 1200px;
   }
 }
 
-@media (min-width: 1400px) {
+@media (width >= 1400px) {
   .courses__grid {
     grid-template-columns: repeat(3, 1fr);
     max-width: 1200px;
@@ -86,7 +87,7 @@
 
 .course-card {
   position: relative;
-  background: #22243A; /* solicitado: fundo dos cards #22243A */
+  background: #22243a; /* solicitado: fundo dos cards #22243A */
   border: 1px solid rgb(255 255 255 / 12%);
   border-radius: var(--border-radius-xl);
   padding: var(--spacing-xl);
@@ -128,9 +129,9 @@
   height: 100%;
   background: linear-gradient(
     90deg,
-    rgba(255, 255, 255, 0),
-    rgba(255, 255, 255, 0.15),
-    rgba(255, 255, 255, 0)
+    rgb(255 255 255 / 0%),
+    rgb(255 255 255 / 15%),
+    rgb(255 255 255 / 0%)
   );
   transform: skewX(-20deg);
   transition: left 0.6s ease;
@@ -176,27 +177,27 @@
 
 .course-card__title {
   font-family:
-    "Bungee",
+    Bungee,
     cursive,
     -apple-system,
     blinkmacsystemfont,
     "Segoe UI",
-    "Roboto",
-    "Saira",
+    Roboto,
+    Saira,
     sans-serif;
   font-size: clamp(var(--font-size-lg), 2.5vw, var(--font-size-xl));
   font-weight: 400; /* título em negrito */
-  color: #F2F2F2; /* solicitado: texto dos títulos #F2F2F2 */
+  color: #f2f2f2; /* solicitado: texto dos títulos #F2F2F2 */
   margin: 0;
   position: relative;
   z-index: 2;
 }
 
 .course-card__description {
-  font-family: "Montserrat", sans-serif;
+  font-family: Montserrat, sans-serif;
   font-size: clamp(var(--font-size-xs), 2vw, var(--font-size-sm));
   font-weight: 400; /* descrição com peso normal */
-  color: #F2F2F2; /* solicitado: texto das descrições #F2F2F2 */
+  color: #f2f2f2; /* solicitado: texto das descrições #F2F2F2 */
   line-height: 1.6;
   margin-bottom: var(--spacing-md);
   flex: 1;
@@ -224,7 +225,7 @@
   content: "-"; /* hífen como solicitado */
   position: absolute;
   left: 0;
-  color: currentColor;
+  color: currentcolor;
 }
 
 .course-card__action {
@@ -266,9 +267,9 @@
   height: 100%;
   background: linear-gradient(
     90deg,
-    rgba(255, 255, 255, 0),
-    rgba(255, 255, 255, 0.15),
-    rgba(255, 255, 255, 0)
+    rgb(255 255 255 / 0%),
+    rgb(255 255 255 / 15%),
+    rgb(255 255 255 / 0%)
   );
   transform: skewX(-20deg);
   transition: left 0.6s ease;
@@ -328,9 +329,8 @@
 .courses__partner {
   display: grid;
   grid-template-columns: repeat(3, max-content);
-  align-items: center;
+  place-items: center center;
   justify-content: center;
-  justify-items: center;
   gap: 12px;
 }
 
@@ -375,7 +375,7 @@
 }
 
 /* Responsividade específica para elementos dos cards */
-@media (max-width: 480px) {
+@media (width <= 480px) {
   .course-card {
     padding: var(--spacing-lg);
     min-height: auto;
@@ -396,7 +396,7 @@
   }
 }
 
-@media (min-width: 481px) and (max-width: 768px) {
+@media (width >= 481px) and (width <= 768px) {
   .course-card {
     padding: var(--spacing-xl);
   }

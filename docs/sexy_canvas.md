@@ -6,13 +6,13 @@ A Pixley Wallet é um ecossistema integrado que conecta usuários brasileiros ao
 
 Este documento consolida:
 
-* Estrutura de planos (Free, Standard, Premium)
-* Política de tarifas e limites
-* Modelo de assinaturas (Pixley Builder Club – R$657/mês)
-* Oferta de scripts e automações DeFi
-* Serviços de alto ticket (R$2.000 a R$5.000)
-* Estratégia de retenção e monetização
-* Funil completo e posicionamento
+- Estrutura de planos (Free, Standard, Premium)
+- Política de tarifas e limites
+- Modelo de assinaturas (Pixley Builder Club – R$657/mês)
+- Oferta de scripts e automações DeFi
+- Serviços de alto ticket (R$2.000 a R$5.000)
+- Estratégia de retenção e monetização
+- Funil completo e posicionamento
 
 ---
 
@@ -24,21 +24,21 @@ Este documento consolida:
 
 **Limites:**
 
-* Depósito via PIX: até R$500/dia
-* Saque via PIX: até R$3,00/dia
-* Volume mensal total: até R$2.500
+- Depósito via PIX: até R$500/dia
+- Saque via PIX: até R$3,00/dia
+- Volume mensal total: até R$2.500
 
 **Tarifas:**
 
-* 2% de taxa de conversão (depósitos e saques)
-* Tarifa fixa de saque: R$3,00 por operação
+- 2% de taxa de conversão (depósitos e saques)
+- Tarifa fixa de saque: R$3,00 por operação
 
 **Recursos:**
 
-* Acesso básico à wallet
-* Funções limitadas
-* Scripts bloqueados (preview apenas)
-* Sem grupo VIP
+- Acesso básico à wallet
+- Funções limitadas
+- Scripts bloqueados (preview apenas)
+- Sem grupo VIP
 
 **Posicionamento:** Plano para teste rápido, sem volume.
 
@@ -50,21 +50,21 @@ Este documento consolida:
 
 **Limites:**
 
-* Depósito via PIX: até R$2.000/dia
-* Saque via PIX: até R$1.000/dia
-* Volume mensal total: até R$10.000
+- Depósito via PIX: até R$2.000/dia
+- Saque via PIX: até R$1.000/dia
+- Volume mensal total: até R$10.000
 
 **Tarifas:**
 
-* 1.11% de conversão
-* Tarifa de saque: R$2,00
+- 1.11% de conversão
+- Tarifa de saque: R$2,00
 
 **Recursos:**
 
-* Wallet com limites ampliados
-* Sem scripts premium
-* Sem lives fechadas
-* Sem comunidade VIP
+- Wallet com limites ampliados
+- Sem scripts premium
+- Sem lives fechadas
+- Sem comunidade VIP
 
 **Posicionamento:** plano deliberadamente pouco vantajoso para ancoragem.
 
@@ -76,26 +76,26 @@ Este documento consolida:
 
 **Limites:**
 
-* Depósito via PIX: R$5.000 a R$100.000/dia (limite estendido até R$10 milhões mediante análise)
-* Saque via PIX: R$3.000 a R$15.000/dia
+- Depósito via PIX: R$5.000 a R$100.000/dia (limite estendido até R$10 milhões mediante análise)
+- Saque via PIX: R$3.000 a R$15.000/dia
 
 **Tarifas:**
 
-* 0,55% a 0,5% por operação
-* Tarifa de saque: R$1,00
-* Processamento prioritário
+- 0,55% a 0,5% por operação
+- Tarifa de saque: R$1,00
+- Processamento prioritário
 
 **Recursos Premium Inclusos:**
 
-* acervo completo de scripts profissionais
-* Lives fechadas semanais
-* Grupo VIP de Builders
-* Biblioteca completa de scripts anteriores
-* Templates avançados de ERC20, ERC721 e automações
-* Snipers e ferramentas DeFi prontas
-* Ferramentas exclusivas dentro do app
-* Badge Premium
-* Suporte dedicado (Gerente de Conta)
+- acervo completo de scripts profissionais
+- Lives fechadas semanais
+- Grupo VIP de Builders
+- Biblioteca completa de scripts anteriores
+- Templates avançados de ERC20, ERC721 e automações
+- Snipers e ferramentas DeFi prontas
+- Ferramentas exclusivas dentro do app
+- Badge Premium
+- Suporte dedicado (Gerente de Conta)
 
 **Posicionamento:** produto principal de assinatura.
 
@@ -105,16 +105,16 @@ Este documento consolida:
 
 ### **Scripts semanais do Pixley Builder Club**
 
-* Sniper Bot seguro (sem frontrunning ilegal)
-* Liquidity Sniper (detecta LP Add + auto buy)
-* Auto-Compound DeFi (claim → swap → reinvest)
-* Monitor de Pools (APR, TVL, novas farms)
-* Whale Tracker (alertas de baleias)
-* Bot de Rebalanceamento
-* Ferramentas anti-rug e anti-honeypot
-* Templates ERC20 avançados (taxas, anti-bot, anti-whale)
-* Scripts para pré-vendas (PinkSale, DXSale)
-* Automações Telegram
+- Sniper Bot seguro (sem frontrunning ilegal)
+- Liquidity Sniper (detecta LP Add + auto buy)
+- Auto-Compound DeFi (claim → swap → reinvest)
+- Monitor de Pools (APR, TVL, novas farms)
+- Whale Tracker (alertas de baleias)
+- Bot de Rebalanceamento
+- Ferramentas anti-rug e anti-honeypot
+- Templates ERC20 avançados (taxas, anti-bot, anti-whale)
+- Scripts para pré-vendas (PinkSale, DXSale)
+- Automações Telegram
 
 Cada mês entrega 4 scripts novos + biblioteca cumulativa.
 
@@ -123,31 +123,26 @@ Cada mês entrega 4 scripts novos + biblioteca cumulativa.
 ## 4. Funil de Conversão Completo
 
 1. **Lives gratuitas**
-
-   * Demonstração de scripts
-   * Construção de autoridade
+   - Demonstração de scripts
+   - Construção de autoridade
 
 2. **Download da Pixley Wallet**
-
-   * Entrada via PIX
+   - Entrada via PIX
 
 3. **Grupo gratuito de testes (24h)**
-
-   * Experiência inicial
-   * Aquecimento
+   - Experiência inicial
+   - Aquecimento
 
 4. **Upgrade para Builder Club (R$657/mês)**
-
-   * Scripts semanais
-   * Premium no app
-   * Live fechada
+   - Scripts semanais
+   - Premium no app
+   - Live fechada
 
 5. **Serviços premium R$2.000 a R$5.000**
-
-   * Scripts sob medida
-   * Deploy assistido
-   * Mentoria 1:1
-   * Dashboards personalizados
+   - Scripts sob medida
+   - Deploy assistido
+   - Mentoria 1:1
+   - Dashboards personalizados
 
 ---
 
@@ -177,12 +172,12 @@ Pacote com 5 scripts para necessidades específicas.
 
 ## 6. Estratégia de Retenção (LTV)
 
-* Scripts semanais com valor real
-* Wallet com PIX integrada (usuário fica preso ao ecossistema)
-* Limites grandes + taxas pequenas no Premium
-* Badge e status dentro do app
-* Biblioteca crescente
-* Descontos progressivos conforme uso (via Pixley Credits)
+- Scripts semanais com valor real
+- Wallet com PIX integrada (usuário fica preso ao ecossistema)
+- Limites grandes + taxas pequenas no Premium
+- Badge e status dentro do app
+- Biblioteca crescente
+- Descontos progressivos conforme uso (via Pixley Credits)
 
 ---
 
@@ -205,11 +200,11 @@ A Pixley Wallet não é apenas uma carteira.
 
 A assinatura premium de R$657 exige entrega prática, semanal e real — e é sustentada por:
 
-* scripts exclusivos
-* suporte
-* vantagens operacionais
-* ferramentas únicas do app
-* forte ancoragem psicológica
+- scripts exclusivos
+- suporte
+- vantagens operacionais
+- ferramentas únicas do app
+- forte ancoragem psicológica
 
 ---
 

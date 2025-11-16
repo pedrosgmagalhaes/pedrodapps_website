@@ -37,17 +37,12 @@ const Header = () => {
               <span className="header__btn-label">Faça parte!</span>
             </a>
 
-            <a
-              href="#login"
-              className="header__btn header__btn--outline"
-              aria-label="Entrar"
-            >
+            <a href="#login" className="header__btn header__btn--outline" aria-label="Entrar">
               <span className="header__btn-label">Entrar</span>
             </a>
           </div>
         </div>
       </div>
-
     </header>
   );
 };

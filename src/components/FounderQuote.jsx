@@ -8,15 +8,17 @@ export default function FounderQuote() {
     <section className="founder" id="fundador">
       <div className="container founder__container">
         <div className="founder__left">
-          <div className="founder__quote-mark" aria-hidden="true">“</div>
+          <div className="founder__quote-mark" aria-hidden="true">
+            “
+          </div>
           <h2 className="founder__title">
-            Consultoria e treinamento para sua {" "}
+            Consultoria e treinamento para sua{" "}
             <span className="founder__title--accent">liberdade financeira</span>
           </h2>
           <p className="founder__subtitle">
-            Ajudo pessoas e negócios a dominar DeFi com segurança e estratégia, conectando você à economia global.
-            Atendo de pequenos negócios a grandes corporações — tokenização para agronegócio e indústrias,
-            operações em stablecoins e soluções cripto integradas.
+            Ajudo pessoas e negócios a dominar DeFi com segurança e estratégia, conectando você à
+            economia global. Atendo de pequenos negócios a grandes corporações — tokenização para
+            agronegócio e indústrias, operações em stablecoins e soluções cripto integradas.
           </p>
 
           <div className="founder__signature">
@@ -25,13 +27,31 @@ export default function FounderQuote() {
           </div>
 
           <nav className="founder__social" aria-label="Redes sociais">
-            <a className="founder__social-item" href="https://www.instagram.com/pedro_dapps" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+            <a
+              className="founder__social-item"
+              href="https://www.instagram.com/pedro_dapps"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Instagram"
+            >
               <FaInstagram aria-hidden="true" />
             </a>
-            <a className="founder__social-item" href="https://www.linkedin.com/in/pemagalhaes/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+            <a
+              className="founder__social-item"
+              href="https://www.linkedin.com/in/pemagalhaes/"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="LinkedIn"
+            >
               <FaLinkedin aria-hidden="true" />
             </a>
-            <a className="founder__social-item" href="https://www.youtube.com/@pedro_dapps" target="_blank" rel="noopener noreferrer" aria-label="YouTube">
+            <a
+              className="founder__social-item"
+              href="https://www.youtube.com/@pedro_dapps"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="YouTube"
+            >
               <FaYoutube aria-hidden="true" />
             </a>
           </nav>

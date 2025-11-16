@@ -42,7 +42,7 @@ export default function Login() {
         <div className="login__brand">
           <img src={pedrodappsIcon} alt="Pedro dApps" className="login__brand-logo" />
         </div>
-        <div className="login__card" role="form" aria-describedby="login-desc">
+        <div className="login__card reveal-on-scroll" role="form" aria-describedby="login-desc">
           <header className="login__header">
             <h2 id="login-title" className="login__title">
               Entrar

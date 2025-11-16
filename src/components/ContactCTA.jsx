@@ -7,15 +7,16 @@ export default function ContactCTA() {
     <section className="contact" id="duvidas">
       <div className="container contact__container">
         <div className="contact__content">
-          <span className="contact__eyebrow">DÚVIDAS</span>
-          <h2 className="contact__title">Ainda tem dúvidas? Fale com nossos especialistas</h2>
+          <span className="contact__eyebrow">BUILDERS DE ELITE</span>
+          <h2 className="contact__title">Pronto para começar? Faça parte do Builders de Elite</h2>
           <p className="contact__subtitle">
-            Nossa equipe de especialistas está pronta para orientar você e o seu negócio. Entre em contato e
-            vamos ajudar com o que você precisa.
+            Garanta seu acesso e junte-se ao Builders de Elite para começar agora.
           </p>
 
           <div className="contact__actions">
-            <a href="#contato" className="hero__btn hero__btn--primary">Quero tirar dúvidas</a>
+            <a href="#checkout" className="hero__btn hero__btn--primary">
+              Quero fazer parte
+            </a>
           </div>
         </div>
 

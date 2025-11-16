@@ -4,7 +4,12 @@ import pedroDappsLogo from "../assets/pedro_dapps_logo.png";
 
 // Component props TS-like comment for clarity
 // isLoading: boolean; logoPath?: string; logoAlt?: string; fallbackText?: string
-const LoadingScreen = ({ isLoading, logoPath, logoAlt = "Pedro dApps", fallbackText = "Pedro dApps" }) => {
+const LoadingScreen = ({
+  isLoading,
+  logoPath,
+  logoAlt = "Pedro dApps",
+  fallbackText = "Pedro dApps",
+}) => {
   const [imageError, setImageError] = useState(false);
 
   const handleImageError = useCallback(() => {
@@ -33,7 +38,7 @@ const LoadingScreen = ({ isLoading, logoPath, logoAlt = "Pedro dApps", fallbackT
             style={{
               maxWidth: "200px",
               height: "auto",
-              display: "block"
+              display: "block",
             }}
           />
         ) : (

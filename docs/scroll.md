@@ -3,6 +3,7 @@
 Este documento descreve o estilo de rolagem (scroll) que adotamos no site, incluindo comportamento visual, acessibilidade, performance e como aplicar o efeito de reveal ao entrar na viewport.
 
 ## Objetivos
+
 - Melhorar percepção e leitura com entradas suaves de conteúdo ao rolar.
 - Respeitar preferências de acessibilidade (redução de movimento).
 - Manter boa performance, evitando cálculos pesados em eventos de scroll.
@@ -29,6 +30,7 @@ Arquivo: `src/components/ScrollReveal.jsx`
 - Para usuários com preferência de movimento reduzido, revelamos imediatamente e desativamos transições.
 
 Trecho simplificado do comportamento:
+
 ```jsx
 // Em main.jsx
 <ScrollReveal>
@@ -90,6 +92,7 @@ html {
 ## Como aplicar o efeito em novos elementos
 
 1. Adicione `className="reveal-on-scroll"` ao elemento:
+
 ```jsx
 <section className="reveal-on-scroll">
   <h2>Título</h2>
@@ -98,6 +101,7 @@ html {
 ```
 
 2. Opcionalmente, defina atrasos para escalonar entradas:
+
 ```jsx
 <div className="reveal-on-scroll" style={{ transitionDelay: "0.2s" }}>
   Primeiro bloco
@@ -108,6 +112,7 @@ html {
 ```
 
 3. Elementos lazy-loaded também são revelados:
+
 - O `MutationObserver` detecta nós adicionados depois e aplica observação/reveal automaticamente.
 
 ## Boas práticas de acessibilidade
@@ -150,8 +155,9 @@ html {
 - Desativar rolagem suave para casos específicos: aplique CSS contextual com media query de `prefers-reduced-motion`.
 
 ## Referências
+
 - MDN — IntersectionObserver: https://developer.mozilla.org/docs/Web/API/Intersection_Observer_API
 - MDN — scroll-behavior: https://developer.mozilla.org/docs/Web/CSS/scroll-behavior
 - MDN — prefers-reduced-motion: https://developer.mozilla.org/docs/Web/CSS/@media/prefers-reduced-motion
 - MDN — scroll-margin / scroll-padding: https://developer.mozilla.org/docs/Web/CSS/scroll-margin / https://developer.mozilla.org/docs/Web/CSS/scroll-padding
-``
+  ``

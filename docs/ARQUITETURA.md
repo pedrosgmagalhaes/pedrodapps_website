@@ -11,12 +11,14 @@ Este documento explica a arquitetura completa do sistema PedroDapps, incluindo K
 **Kong** é um API Gateway de código aberto que atua como proxy reverso entre os clientes e nossos serviços backend.
 
 #### Configuração Atual:
+
 - **Modo**: Database (PostgreSQL) - migrado de DB-less
 - **Porta Admin**: 8001
 - **Porta Proxy**: 8000, 8443 (HTTPS)
 - **Banco de Dados**: PostgreSQL (container `compose-db-1`)
 
 #### Serviços Configurados:
+
 ```yaml
 # Serviço Pixley (existente)
 - Nome: pixley-app
@@ -30,6 +32,7 @@ Este documento explica a arquitetura completa do sistema PedroDapps, incluindo K
 ```
 
 #### Plugins Ativos:
+
 - **Rate Limiting**: Controle de taxa de requisições
 - **CORS**: Cross-Origin Resource Sharing
 - **Bot Detection**: Detecção de bots maliciosos
@@ -38,6 +41,7 @@ Este documento explica a arquitetura completa do sistema PedroDapps, incluindo K
 ### 2. Docker e Containers
 
 #### Containers Ativos:
+
 ```bash
 # Kong API Gateway
 compose-kong-1
@@ -54,6 +58,7 @@ compose-db-1
 ```
 
 #### Configuração Docker Compose:
+
 ```yaml
 # Localização: /home/ubuntu/docker-kong/compose/docker-compose.yml
 services:
@@ -76,35 +81,37 @@ services:
 ### 3. Jenkins CI/CD
 
 #### Configuração:
+
 - **URL**: http://187.108.196.14:8080
 - **Usuário**: jenkins
 - **Workspace**: `/var/www/pedrodapps_website`
 
 #### Pipeline (Jenkinsfile):
+
 ```groovy
 pipeline {
     agent any
-    
+
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'main', 
+                git branch: 'main',
                     url: 'https://github.com/usuario/pedrodapps_website.git'
             }
         }
-        
+
         stage('Install Dependencies') {
             steps {
                 sh 'yarn install'
             }
         }
-        
+
         stage('Build') {
             steps {
                 sh 'yarn build'
             }
         }
-        
+
         stage('Deploy') {
             steps {
                 sh '''
@@ -121,6 +128,7 @@ pipeline {
 ### 4. Servidor Web de Produção
 
 #### Nginx (Recomendado para Produção):
+
 ```nginx
 # /etc/nginx/sites-available/pedrodapps-8085
 server {
@@ -128,12 +136,12 @@ server {
     server_name localhost;
     root /var/www/pedrodapps_website/dist;
     index index.html;
-    
+
     # SPA Support
     location / {
         try_files $uri $uri/ /index.html;
     }
-    
+
     # Cache para assets estáticos
     location ~* \.(js|css|png|jpg|jpeg|gif|ico|svg)$ {
         expires 1y;
@@ -145,6 +153,7 @@ server {
 ## 🔄 Fluxo de Deploy
 
 ### 1. Desenvolvimento Local
+
 ```bash
 # Desenvolvimento
 yarn dev  # Porta 8085 (configurada no vite.config.js)
@@ -154,6 +163,7 @@ yarn build  # Gera pasta dist/
 ```
 
 ### 2. CI/CD com Jenkins
+
 ```mermaid
 graph LR
     A[Git Push] --> B[Jenkins Webhook]
@@ -165,6 +175,7 @@ graph LR
 ```
 
 ### 3. Acesso via Kong
+
 ```
 Cliente → Kong (porta 8000) → Nginx (porta 8085) → Aplicação React
 ```
@@ -172,11 +183,13 @@ Cliente → Kong (porta 8000) → Nginx (porta 8085) → Aplicação React
 ## 🌐 Acesso Remoto
 
 ### SSH para o Servidor:
+
 ```bash
 ssh -p22 ubuntu@187.108.196.14
 ```
 
 ### Estrutura de Diretórios:
+
 ```
 /home/ubuntu/
 ├── docker-kong/
@@ -195,6 +208,7 @@ ssh -p22 ubuntu@187.108.196.14
 ## 🔧 Comandos Úteis
 
 ### Kong:
+
 ```bash
 # Listar serviços
 curl -s http://localhost:8001/services | jq .
@@ -207,6 +221,7 @@ curl -H "Host: pedrodapps.com" http://localhost:8000/
 ```
 
 ### Docker:
+
 ```bash
 # Status dos containers
 docker ps
@@ -222,6 +237,7 @@ docker-compose restart kong
 ```
 
 ### Jenkins:
+
 ```bash
 # Status do serviço
 sudo systemctl status jenkins
@@ -236,6 +252,7 @@ sudo systemctl restart jenkins
 ## 🔒 Segurança
 
 ### Firewall (UFW):
+
 ```bash
 # Portas abertas
 22/tcp    # SSH
@@ -246,6 +263,7 @@ sudo systemctl restart jenkins
 ```
 
 ### Permissões:
+
 ```bash
 # Diretório da aplicação
 chown -R jenkins:www-data /var/www/pedrodapps_website/
@@ -263,6 +281,7 @@ chmod -R 755 /var/www/pedrodapps_website/
 ## 📞 Troubleshooting
 
 ### Kong não responde:
+
 ```bash
 # Verificar status
 docker ps | grep kong
@@ -276,6 +295,7 @@ docker-compose restart kong
 ```
 
 ### Jenkins build falha:
+
 ```bash
 # Verificar permissões
 ls -la /var/www/pedrodapps_website/
@@ -285,6 +305,7 @@ sudo journalctl -u jenkins -f
 ```
 
 ### Aplicação não carrega:
+
 ```bash
 # Verificar Nginx
 sudo nginx -t
