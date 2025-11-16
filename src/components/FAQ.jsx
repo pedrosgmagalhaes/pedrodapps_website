@@ -34,7 +34,7 @@ const faqs = [
   },
   {
     q: "A Pixley Wallet opera no Brasil com reais?",
-    a: "As operações ocorrem em offshore, fora do Brasil. A Pixley Wallet não opera diretamente com reais; saldos e operações são em cripto. Entrada e saída em BRL podem ocorrer via parceiros (incluindo PIX), quando disponível.",
+    a: "As operações ocorrem em offshore, fora do Brasil. A Pixley Wallet não opera diretamente com reais; saldos e operações são em cripto. Pixley somente trabalha com USD, e recebemos apenas via Remessas Internacionais.",
   },
 ];
 
