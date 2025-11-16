@@ -123,6 +123,12 @@ html {
 
   /* Firefox scrollbar colors: thumb track */
   scrollbar-color: #22243a #010001;
+  /* Evita auto-zoom e ajustes inesperados de texto no iOS */
+  -webkit-text-size-adjust: 100%;
+  /* Garante que a largura inicial nunca exceda a viewport */
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: hidden;
 }
 
 body {
@@ -132,6 +138,38 @@ body {
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  /* Evita que qualquer conteúdo force largura além da viewport */
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
+/* Root container nunca deve exceder a largura da viewport */
+#root {
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
+/* Mídias responsivas por padrão */
+img,
+svg,
+video,
+canvas,
+iframe {
+  max-width: 100%;
+  height: auto;
+}
+
+picture {
+  display: block;
+}
+
+/* Quebra links e textos longos que poderiam estourar a largura */
+a,
+.break-anywhere {
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 /* Bloqueia scroll quando o menu estiver aberto */
