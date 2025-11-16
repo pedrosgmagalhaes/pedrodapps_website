@@ -19,6 +19,7 @@
     "deploy:firebase": "node scripts/deploy-firebase.js",
     "deploy:staging": "node scripts/deploy-firebase.js --channel staging",
     "deploy:all": "node scripts/deploy-all.cjs",
+    "generate:qr:links": "node scripts/generate-qr-with-logo.js --url=https://pedrodapps.com/#links --logo=src/assets/pedrodapps_icon.png --out=public/qr-links.png --size=512 --margin=2 --logoScale=0.22 --logoRadius=12",
     "optimize:svg:card-machine": "svgo src/assets/card-machine.svg -o src/assets/card-machine.svg",
     "optimize:svg:card-machine:multipass": "svgo --multipass src/assets/card-machine.svg -o src/assets/card-machine.svg"
   },

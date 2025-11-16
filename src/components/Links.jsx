@@ -2,7 +2,6 @@ import React from "react";
 import ViewportSection from "./ViewportSection";
 import "./Links.css";
 import pedrodappsIcon from "../assets/pedrodapps_icon.png";
-import buildersEliteImg from "../assets/builderselite.png";
 import buildersImg from "../assets/builders.png";
 import pedroLogo from "../assets/pedro_dapps_logo.png";
 import pixleyLogoViolet from "../assets/pixley_logo_icon_violet.svg";
@@ -47,6 +46,7 @@ export default function Links() {
             </div>
           </div>
         </ViewportSection>
+
         <ViewportSection>
         <div className="links__card" role="navigation" aria-label="Lista de links">
           <div className="links__header">
