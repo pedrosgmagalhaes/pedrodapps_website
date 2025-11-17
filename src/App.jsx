@@ -1,5 +1,5 @@
 import React, { useEffect, useState, Suspense } from "react";
-import Hero from "./components/Hero";
+const Hero = React.lazy(() => import("./components/Hero"));
 const NewsTicker = React.lazy(() => import("./components/NewsTicker"));
 const Courses = React.lazy(() => import("./components/Courses"));
 const Banner = React.lazy(() => import("./components/Banner"));
@@ -21,6 +21,7 @@ const CookiesPolicy = React.lazy(() => import("./components/ConsentNotice"));
 const DataDeletionPolicy = React.lazy(() => import("./components/DataDeletionPolicy"));
 import "./App.css";
 import ViewportSection from "./components/ViewportSection";
+import heroBg from "./assets/builderselite.png";
 
 function App() {
   const [hash, setHash] = useState(typeof window !== "undefined" ? window.location.hash : "");
@@ -41,6 +42,12 @@ function App() {
     };
     window.addEventListener("hashchange", handleHashChange);
     return () => window.removeEventListener("hashchange", handleHashChange);
+  }, []);
+
+  // Precarrega a imagem de fundo do Hero para evitar atraso mesmo com lazy
+  useEffect(() => {
+    const img = new Image();
+    img.src = heroBg;
   }, []);
 
   // Inicializa animações de reveal ao rolar a página
