@@ -129,6 +129,26 @@ export async function loginWithPassword(email, password) {
     return user;
   }
 
+  // Bypass controlado por flag de ambiente (build-time)
+  const BYPASS = (import.meta?.env?.VITE_AUTH_BYPASS || "").toString() === "1";
+  if (BYPASS) {
+    const user = {
+      email: normalizedEmail || email,
+      name: null,
+      picture: null,
+      provider: "mock",
+      tiers: ["beta"],
+      loggedAt: Date.now(),
+    };
+    localStorage.setItem(AUTH_KEY, JSON.stringify(user));
+    try {
+      localStorage.setItem(RELEASE_OVERRIDE_KEY, "true");
+    } catch (e) {
+      void e;
+    }
+    return user;
+  }
+
   const res = await API.auth.login(email, password);
   if (res?.error) {
     const code = res.error;
