@@ -3,6 +3,7 @@ import "./Resources.css";
 import { API, withAuth } from "../lib/api";
 
 export default function Lessons() {
+  const [course, setCourse] = useState(null);
   const [lessons, setLessons] = useState([]);
   const [status, setStatus] = useState("idle"); // idle | loading | error
   const [selected, setSelected] = useState(null);
@@ -13,19 +14,23 @@ export default function Lessons() {
 
   useEffect(() => {
     let mounted = true;
-    async function load() {
+    async function loadCourse() {
       setStatus("loading");
-      const res = await API.edu.modules.getLessons("honeypot-rugpull-detector");
+      const res = await API.courses.get("builders-de-elite");
       if (!mounted) return;
       if (res?.error) {
         setStatus("error");
+        setCourse(null);
         setLessons([]);
       } else {
         setStatus("idle");
-        setLessons(res?.lessons || []);
+        setCourse(res);
+        const list = Array.isArray(res?.lessons) ? res.lessons.slice() : [];
+        list.sort((a, b) => Number(a?.order ?? 0) - Number(b?.order ?? 0));
+        setLessons(list);
       }
     }
-    load();
+    loadCourse();
     return () => {
       mounted = false;
     };
@@ -114,8 +119,8 @@ export default function Lessons() {
     <section className="resources" id="lessons" aria-labelledby="lessons-title">
       <div className="resources__container">
         <header className="resources__header">
-          <h2 id="lessons-title" className="resources__title">Honeypot & Rug Pull Detector</h2>
-          <p className="resources__subtitle">Aulas do módulo com acesso controlado por tier.</p>
+          <h2 id="lessons-title" className="resources__title">{course?.title || "Aulas do curso"}</h2>
+          <p className="resources__subtitle">Conteúdo carregado do backend para o curso Builders de Elite.</p>
         </header>
 
         {status === "loading" && (

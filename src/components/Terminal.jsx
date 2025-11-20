@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { FaPlay, FaSpinner } from "react-icons/fa";
+import { FaPlay, FaSpinner, FaCode } from "react-icons/fa";
+import { runPython, installPackages } from "../lib/pythonRunner";
 
 export default function Terminal({
   promptLabel = "builders-de-elite:~$",
@@ -33,36 +34,94 @@ export default function Terminal({
     ]);
     setCommand("");
 
-    setTimeout(() => {
+    (async () => {
       let lines = [];
-      if (typeof onRun === "function") {
-        const res = onRun(effectiveCmd) || [];
-        lines = lines.concat(Array.isArray(res) ? res : [String(res)]);
-      } else {
-        const handler = commands[effectiveCmd];
-        if (typeof handler === "function") {
-          const res = handler(effectiveCmd) || [];
+      try {
+        if (typeof onRun === "function") {
+          const res = onRun(effectiveCmd) || [];
           lines = lines.concat(Array.isArray(res) ? res : [String(res)]);
         } else {
-          switch (effectiveCmd) {
-            case "hello":
-            case 'print("Hello World")':
-              lines.push("Hello World");
-              lines.push("Bem-vindo ao grupo Builders de Elite!");
-              lines.push(
-                "use com moderação; fique atento às lives e à comunidade"
-              );
-              break;
-            default:
-              lines.push(`[erro] comando desconhecido: ${effectiveCmd}`);
-              lines.push("disponível: 'hello' — tente digitar 'hello'");
-              break;
+          const handler = commands[effectiveCmd];
+          if (typeof handler === "function") {
+            const res = handler(effectiveCmd) || [];
+            lines = lines.concat(Array.isArray(res) ? res : [String(res)]);
+          } else {
+            // If the command looks like Python, execute via Pyodide
+            const isPython = /^(print\(|def\s+|#|for\s|while\s|import\s|from\s)/.test(effectiveCmd);
+            if (isPython) {
+              const result = await runPython(effectiveCmd, 5000);
+              if (result.ok) {
+                const out = String(result.stdout || "").trimEnd();
+                lines = lines.concat(out ? out.split(/\n/) : ["(sem saída)"]);
+              } else {
+                lines = lines.concat([`[erro] ${result.error || "Falha ao executar Python"}`]);
+              }
+            } else {
+              // Support "pip install <pkg>" via micropip
+              const pipMatch = /^pip\s+install\s+([A-Za-z0-9_.\-]+)(?:==([^\s]+))?/.exec(effectiveCmd);
+              if (pipMatch) {
+                const pkg = pipMatch[1];
+                const ver = pipMatch[2];
+                const spec = ver ? `${pkg}==${ver}` : pkg;
+                const res = await installPackages([spec], 15000);
+                if (res.ok) {
+                  lines.push(res.message || `Instalado: ${spec}`);
+                } else {
+                  lines.push(`[erro] instalação falhou: ${res.error || "erro desconhecido"}`);
+                }
+              } else {
+              switch (effectiveCmd) {
+                case "hello":
+                case 'print("Hello World")':
+                  lines.push("Hello World");
+                  lines.push("Bem-vindo ao grupo Builders de Elite!");
+                  lines.push(
+                    "use com moderação; fique atento às lives e à comunidade"
+                  );
+                  break;
+                default:
+                  lines.push(`[erro] comando desconhecido: ${effectiveCmd}`);
+                  lines.push(`disponível: 'hello' — tente digitar 'hello' ou 'print("Hello World")'`);
+                  break;
+              }
+              }
+            }
           }
         }
+      } catch (err) {
+        lines = lines.concat([`[erro] ${String(err?.message || err)}`]);
       }
       setOutput((prev) => [...prev, ...lines]);
       setRunning(false);
-    }, 2000);
+    })();
+  };
+
+  const runCodeBlock = () => {
+    if (running) return;
+    const codeText = Array.isArray(codeLines) ? codeLines.join("\n") : String(codeLines || "");
+    const ts = new Date().toLocaleTimeString();
+    setRunning(true);
+    setOutput((prev) => [
+      ...prev,
+      `[${ts}] ${promptLabel} EXECUTAR CÓDIGO ACIMA`,
+      "Aguarde...",
+    ]);
+    (async () => {
+      let lines = [];
+      try {
+        const result = await runPython(codeText, 10000);
+        if (result.ok) {
+          const out = String(result.stdout || "").trimEnd();
+          lines = lines.concat(out ? out.split(/\n/) : ["(sem saída)"]);
+        } else {
+          lines = lines.concat([`[erro] ${result.error || "Falha ao executar código"}`]);
+        }
+      } catch (err) {
+        lines = lines.concat([`[erro] ${String(err?.message || err)}`]);
+      }
+      setOutput((prev) => [...prev, ...lines]);
+      setRunning(false);
+    })();
   };
 
   return (
@@ -83,19 +142,34 @@ export default function Terminal({
             disabled={running}
           />
         </div>
-        <button
-          className={`home__run-btn ${running ? "is-running" : ""}`}
-          onClick={run}
-          aria-label={runLabel}
-          disabled={running}
-          title={runLabel}
-        >
-          {running ? (
-            <FaSpinner className="home__run-icon home__run-spinner" />
-          ) : (
-            <FaPlay className="home__run-icon" />
-          )}
-        </button>
+        <div style={{ display: "flex", gap: 8 }}>
+          <button
+            className={`home__run-btn ${running ? "is-running" : ""}`}
+            onClick={run}
+            aria-label={runLabel}
+            disabled={running}
+            title={runLabel}
+          >
+            {running ? (
+              <FaSpinner className="home__run-icon home__run-spinner" />
+            ) : (
+              <FaPlay className="home__run-icon" />
+            )}
+          </button>
+          <button
+            className={`home__run-btn ${running ? "is-running" : ""}`}
+            onClick={runCodeBlock}
+            aria-label="Executar código acima"
+            disabled={running}
+            title="Executar código acima"
+          >
+            {running ? (
+              <FaSpinner className="home__run-icon home__run-spinner" />
+            ) : (
+              <FaCode className="home__run-icon" />
+            )}
+          </button>
+        </div>
       </div>
 
       <div className="home__terminal-body">

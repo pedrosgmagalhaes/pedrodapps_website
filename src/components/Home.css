@@ -63,13 +63,24 @@
   color: #e7e7e7;
   cursor: pointer;
   font-size: 13px;
+  text-align: left;
 }
 .home__sidebar-item:hover { border-color: var(--accent-primary); color: var(--accent-primary); }
 .home__sidebar-item .icon { color: var(--accent-primary); }
 .home__sidebar-item .action { display: none; }
 
 /* Sublista dentro do colapse do bot — exibe coluna de ação */
-.home__sublist .home__sidebar-item { grid-template-columns: 22px 1fr; text-align: left; }
+.home__sublist {
+  padding-left: 20px;
+}
+.home__sublist .home__sidebar-item {
+  grid-template-columns: 22px 1fr;
+  text-align: left;
+  font-size: 12px;
+  opacity: 0.9;
+  background: rgba(255,255,255,0.02);
+  border-color: rgba(255,255,255,0.05);
+}
 
 /* Título e vídeo do bot dentro da Home */
 .home__bot-title {

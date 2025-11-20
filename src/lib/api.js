@@ -76,6 +76,10 @@ export const API = {
   request: jsonFetch,
   get: (path, opts = {}) => jsonFetch(path, { ...opts, method: "GET" }),
   post: (path, body, opts = {}) => jsonFetch(path, { ...opts, method: "POST", body }),
+  // Courses catalog (public)
+  courses: {
+    get: (slug, opts = {}) => jsonFetch(`/api/courses/${slug}`, { ...opts, method: "GET" }),
+  },
   // Education endpoints (courses, modules, lessons, Q&A)
   edu: {
     courses: {
