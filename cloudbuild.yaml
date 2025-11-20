@@ -1,0 +1,19 @@
+steps:
+  - name: gcr.io/cloud-builders/gcloud
+    entrypoint: bash
+    args:
+      - -c
+      - gcloud auth print-access-token > /workspace/ar_token.txt
+  - name: gcr.io/cloud-builders/docker
+    entrypoint: bash
+    args:
+      - -c
+      - |
+        cat /workspace/ar_token.txt | docker login -u oauth2accesstoken --password-stdin us-central1-docker.pkg.dev && \
+        docker build -t us-central1-docker.pkg.dev/builders-elite/web/website:latest . && \
+        docker push us-central1-docker.pkg.dev/builders-elite/web/website:latest
+
+options:
+  logging: GCS_ONLY
+
+timeout: 1200s
