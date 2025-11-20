@@ -129,9 +129,38 @@ Endpoint: `POST /admin/test-create-builder`
 {
   "email": "pedrosgmagalhaes@gmail.com",
   "name": "Pedro Magalhaes",
-  "note": "Manual test: Builders de Elite granted"
+  "note": "Manual test: Elite Builders granted"
 }
 ```
+
+### Users – verificar e‑mail cadastrado
+
+- Método: `GET`
+- Caminho: `/api/users/exists`
+- Query: `email` (obrigatório)
+- Autenticação: `Authorization: Bearer <JWT_TOKEN>` (obrigatório)
+- Resposta: `{"email":"<email>","exists":true}` ou `false`
+
+Exemplo (frontend):
+
+```js
+import { API } from "./src/lib/api";
+
+const res = await API.users.exists("sandbox.tester+123@example.com");
+if (!res?.error) {
+  console.log(res.exists ? "Email cadastrado" : "Email não cadastrado");
+}
+```
+
+Exemplo (curl):
+
+```bash
+curl -sS -X GET \
+  -H "Authorization: Bearer <JWT_TOKEN>" \
+  "http://localhost:8080/api/users/exists?email=sandbox.tester%2B123@example.com"
+```
+
+> Referência completa: `docs/users-endpoints.md`.
 
 Respostas esperadas:
 

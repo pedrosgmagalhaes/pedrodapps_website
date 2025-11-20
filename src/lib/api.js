@@ -126,23 +126,23 @@ export const API = {
   },
   // Auth endpoints
   auth: {
-    login: (email, password, opts = {}) =>
+    login: (email, password, turnstileToken = null, opts = {}) =>
       jsonFetch("/api/auth/login", {
         ...opts,
         method: "POST",
-        body: { email, password },
+        body: turnstileToken ? { email, password, cf_turnstile_token: turnstileToken } : { email, password },
       }),
-    register: (email, password, name, opts = {}) =>
+    register: (email, password, name, turnstileToken = null, opts = {}) =>
       jsonFetch("/api/auth/register", {
         ...opts,
         method: "POST",
-        body: { email, password, name },
+        body: turnstileToken ? { email, password, name, cf_turnstile_token: turnstileToken } : { email, password, name },
       }),
-    forgotPassword: (email, opts = {}) =>
+    forgotPassword: (email, turnstileToken = null, opts = {}) =>
       jsonFetch("/api/auth/forgot-password", {
         ...opts,
         method: "POST",
-        body: { email },
+        body: turnstileToken ? { email, cf_turnstile_token: turnstileToken } : { email },
       }),
     google: (idToken, opts = {}) =>
       jsonFetch("/api/auth/google", {
@@ -159,6 +159,15 @@ export const API = {
       jsonFetch("/api/auth/logout", {
         ...opts,
         method: "POST",
+      }),
+  },
+  // Users endpoints
+  users: {
+    exists: (email, opts = {}) =>
+      jsonFetch(`/api/users/exists?email=${encodeURIComponent(email)}`, {
+        ...opts,
+        method: "GET",
+        token: getToken(),
       }),
   },
 };

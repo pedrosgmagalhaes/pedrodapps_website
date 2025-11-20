@@ -35,7 +35,7 @@ export default function Audience() {
 
         <div className="audience__footer">
           <p className="audience__note">
-            Você terá <strong>acesso imediato</strong> ao GRUPO BUILDERS de ELITE e todo conteúdo exclusivo para dar o primeiro passo hoje mesmo.
+            Você terá <strong>acesso imediato</strong> ao GRUPO Elite Builders e todo conteúdo exclusivo para dar o primeiro passo hoje mesmo.
           </p>
         </div>
       </div>

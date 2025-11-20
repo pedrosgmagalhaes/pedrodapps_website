@@ -1,24 +1,48 @@
 import React, { useState, useEffect } from "react";
 import "./Login.css";
 import pedrodappsIcon from "../assets/pedrodapps_icon.png";
-import GoogleLogin from "./GoogleLogin";
-import { loginWithPassword } from "../lib/auth";
+// import GoogleLogin from "./GoogleLogin"; // social login desativado por enquanto
+import { loginWithPassword, registerWithPassword } from "../lib/auth";
 import { useNavigate } from "react-router-dom";
+import LanguageSelector from "./LanguageSelector";
+import { useTranslation } from 'react-i18next';
+import TurnstileWidget from "./TurnstileWidget";
+import { API } from "../lib/api";
 
 export default function Login() {
+  const { t } = useTranslation();
+  const ENABLE_SOCIAL_LOGIN = typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.VITE_ENABLE_SOCIAL_LOGIN === 'true';
+  const TURNSTILE_ENABLED = typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.VITE_TURNSTILE_ENABLED === 'true';
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [capsLockOn, setCapsLockOn] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [name, setName] = useState("");
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [isCheckingEmail, setIsCheckingEmail] = useState(false);
+  const [emailExists, setEmailExists] = useState(null);
   const showExtras = email.trim().length > 0;
   const [status, setStatus] = useState("idle"); // idle | loading | success | error
   const [message, setMessage] = useState("");
   const [mobileAdvisoryOpen, setMobileAdvisoryOpen] = useState(false);
   const [mobileProceed, setMobileProceed] = useState(false);
+  const [turnstileToken, setTurnstileToken] = useState("");
   const navigate = useNavigate();
 
   const isValidEmail = (value) => /[^\s@]+@[^\s@]+\.[^\s@]+/.test(value);
+
+  const isValidPassword = (value) => {
+    if (value.length < 8) return false;
+    if (!/[A-Z]/.test(value)) return false;
+    if (!/[a-z]/.test(value)) return false;
+    if (!/[0-9]/.test(value)) return false;
+    if (!/[!@#$%^&*(),.?":{}|<>]/.test(value)) return false;
+    return true;
+  };
+
+  const isValidName = (value) => value.trim().length >= 2;
 
   const isMobileDevice = () => {
     if (typeof navigator === "undefined") return false;
@@ -28,40 +52,72 @@ export default function Login() {
     return isMobileUA || narrowViewport;
   };
 
-  const performLogin = async () => {
+  const checkEmailExists = async (emailValue) => {
+    if (!isValidEmail(emailValue)) return;
+    setIsCheckingEmail(true);
     try {
-      setStatus("loading");
-      setMessage("");
-      await loginWithPassword(email, password);
+      const res = await API.users.exists(emailValue);
+      if (res?.error) {
+        setEmailExists(null);
+      } else {
+        setEmailExists(Boolean(res?.exists));
+      }
+    } catch {
+      setEmailExists(null);
+    } finally {
+      setIsCheckingEmail(false);
+    }
+  };
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      if (email.trim() && isValidEmail(email)) {
+        checkEmailExists(email);
+      } else {
+        setEmailExists(null);
+      }
+    }, 800);
+    return () => clearTimeout(handler);
+  }, [email]);
+
+  const performAuth = async () => {
+    setStatus("loading");
+    setMessage("");
+    try {
+      if (TURNSTILE_ENABLED && !turnstileToken) {
+        throw new Error("Complete a verificação de segurança.");
+      }
+      if (emailExists === false) {
+        if (!isValidName(name)) throw new Error("Nome completo deve ter pelo menos 2 caracteres.");
+        if (!isValidPassword(password)) throw new Error("Senha deve ter: 8+ caracteres, maiúscula, minúscula, número e símbolo.");
+        if (password !== confirmPassword) throw new Error("As senhas não coincidem.");
+        await registerWithPassword(email, password, name, TURNSTILE_ENABLED ? turnstileToken : null);
+        setMessage("Conta criada com sucesso! Redirecionando...");
+      } else {
+        if (password.length < 6) throw new Error("A senha deve ter pelo menos 6 caracteres.");
+        await loginWithPassword(email, password, TURNSTILE_ENABLED ? turnstileToken : null);
+        setMessage("Login realizado com sucesso! Redirecionando...");
+      }
       setStatus("success");
-      setMessage("Login efetuado com sucesso.");
-      navigate("/members/home", { replace: true });
-    } catch (err) {
-      console.error(err);
+      setTimeout(() => navigate("/members"), 1500);
+    } catch (error) {
       setStatus("error");
-      setMessage(err?.message || "Ocorreu um erro ao entrar. Tente novamente.");
+      setMessage(error.message || "Erro ao processar. Tente novamente.");
     }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // validações básicas
     if (!isValidEmail(email)) {
       setStatus("error");
       setMessage("Informe um e-mail válido.");
       return;
     }
-    if (password.length < 6) {
-      setStatus("error");
-      setMessage("A senha deve ter pelo menos 6 caracteres.");
-      return;
-    }
-    // Se for mobile e o usuário ainda não confirmou que quer prosseguir, exibe modal corporativo
     if (isMobileDevice() && !mobileProceed) {
       setMobileAdvisoryOpen(true);
       return;
     }
-    await performLogin();
+    await performAuth();
   };
 
   // Carregar preferências salvas ao montar
@@ -99,6 +155,9 @@ export default function Login() {
     }
   }, [rememberMe, email, password]);
 
+  const showPasswordFields = emailExists !== null;
+  const isSignupMode = emailExists === false;
+
   return (
     <section className="login" id="login" aria-labelledby="login-title">
       <div className="container login__container">
@@ -106,12 +165,15 @@ export default function Login() {
           <img src={pedrodappsIcon} alt="Pedro dApps" className="login__brand-logo" />
         </div>
         <div className="login__card reveal-on-scroll" role="form" aria-describedby="login-desc">
+          <div className="login__language-selector" aria-label="Selecionar idioma">
+            <LanguageSelector />
+          </div>
           <header className="login__header">
             <h2 id="login-title" className="login__title">
-              Entrar
+              {isSignupMode ? t('signup.title') : t('login.title')}
             </h2>
             <p id="login-desc" className="login__subtitle">
-              Acesse sua conta para operar com o Pedro dApps.
+              {isSignupMode ? t('signup.subtitle') : t('login.subtitle')}
             </p>
           </header>
           {status !== "idle" && message && (
@@ -122,7 +184,7 @@ export default function Login() {
 
           <form className="login__form" onSubmit={handleSubmit}>
             <div className="login__field">
-              <label htmlFor="email" className="login__label">E-mail</label>
+              <label htmlFor="email" className="login__label">{t('login.email')}</label>
               <div className={`login__input-wrapper login__input-wrapper--email ${status === "error" && !isValidEmail(email) ? "is-invalid" : ""}`}>
                 <span className="login__input-icon" aria-hidden="true">
                   <svg
@@ -145,122 +207,209 @@ export default function Login() {
                   name="email"
                   type="email"
                   className={`login__input ${status === "error" && !isValidEmail(email) ? "login__input--invalid" : ""}`}
-                  placeholder="seu@email.com"
+                  placeholder={t('login.emailPlaceholder')}
                   required
                   autoComplete="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                 />
               </div>
-            </div>
-            <div className={`login__password ${showExtras ? "is-visible" : ""}`} aria-hidden={!showExtras}>
-            <div className="login__field">
-              <label htmlFor="password" className="login__label">Senha</label>
-              <div className={`login__input-wrapper ${status === "error" && password.length > 0 && password.length < 6 ? "is-invalid" : ""}`}>
-                <input
-                  id="password"
-                  name="password"
-                  type={showPassword ? "text" : "password"}
-                  className={`login__input ${status === "error" && password.length > 0 && password.length < 6 ? "login__input--invalid" : ""}`}
-                  placeholder="••••••••"
-                  required={showExtras}
-                  autoComplete="current-password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  onKeyDown={(e) => setCapsLockOn(e.getModifierState && e.getModifierState("CapsLock"))}
-                  onBlur={() => setCapsLockOn(false)}
-                  aria-describedby="password-reveal"
-                />
-                <button
-                  id="password-reveal"
-                  type="button"
-                  className="login__reveal-btn"
-                  onClick={() => setShowPassword((v) => !v)}
-                  aria-label={showPassword ? "Ocultar senha" : "Mostrar senha"}
-                  aria-pressed={showPassword ? "true" : "false"}
-                >
-                  {showPassword ? (
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      aria-hidden="true"
-                      focusable="false"
-                    >
-                      <path d="M13.875 18.825A10.05 10.05 0 0112 19c-4.477 0-8.268-2.943-9.542-7a10.046 10.046 0 012.04-3.287" />
-                      <path d="M6.18 6.18A10.05 10.05 0 0112 5c4.477 0 8.268 2.943 9.542 7a10.06 10.06 0 01-4.807 5.642" />
-                      <path d="M9.88 9.88a3 3 0 104.24 4.24" />
-                      <path d="M3 3l18 18" />
-                    </svg>
-                  ) : (
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      aria-hidden="true"
-                      focusable="false"
-                    >
-                      <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                      <path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                    </svg>
-                  )}
-                </button>
-              </div>
-              {capsLockOn && (
-                <div className="login__hint" role="status" aria-live="polite">Caps Lock ativado</div>
+              {isCheckingEmail && (
+                <span className="login__checking" role="status" aria-live="polite" aria-label="Carregando">
+                  <span className="login__checking-spinner" aria-hidden="true"></span>
+                </span>
               )}
+              {/* Mensagem de email não encontrado removida conforme solicitação */}
+              {emailExists === true && <div className="login__hint">Email encontrado. Digite sua senha.</div>}
             </div>
-            </div>
-            <div className={`login__remember ${password.trim().length > 0 ? "is-visible" : ""}`} aria-hidden={!(password.trim().length > 0)}>
-              <label className="login__remember-label" htmlFor="remember">
-                <input
-                  id="remember"
-                  type="checkbox"
-                  className="login__remember-input"
-                  checked={rememberMe}
-                  onChange={(e) => setRememberMe(e.target.checked)}
-                />
-                Lembrar senha
-              </label>
-            </div>
+            {showPasswordFields && (
+              <>
+                {isSignupMode && (
+                  <div className="login__field">
+                    <label htmlFor="name" className="login__label">Nome Completo</label>
+                    <input
+                      id="name"
+                      name="name"
+                      type="text"
+                      className={`login__input ${status === "error" && !isValidName(name) ? "login__input--invalid" : ""}`}
+                      placeholder="Seu Nome Completo"
+                      required
+                      autoComplete="name"
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                    />
+                  </div>
+                )}
+
+                <div className="login__field">
+                  <label htmlFor="password" className="login__label">{t('login.password')}</label>
+                  <div className={`login__input-wrapper ${status === "error" && password.length > 0 && (isSignupMode ? !isValidPassword(password) : password.length < 6) ? "is-invalid" : ""}`}>
+                    <input
+                      id="password"
+                      name="password"
+                      type={showPassword ? "text" : "password"}
+                      className={`login__input ${status === "error" && password.length > 0 && (isSignupMode ? !isValidPassword(password) : password.length < 6) ? "login__input--invalid" : ""}`}
+                      placeholder={isSignupMode ? "Mín. 8 caracteres, maiúscula, número e símbolo" : t('login.passwordPlaceholder')}
+                      required={showExtras}
+                      autoComplete={isSignupMode ? "new-password" : "current-password"}
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      onKeyDown={(e) => setCapsLockOn(e.getModifierState && e.getModifierState("CapsLock"))}
+                      onBlur={() => setCapsLockOn(false)}
+                      aria-describedby="password-reveal"
+                    />
+                    <button
+                      id="password-reveal"
+                      type="button"
+                      className="login__reveal-btn"
+                      onClick={() => setShowPassword((v) => !v)}
+                      aria-label={showPassword ? "Ocultar senha" : "Mostrar senha"}
+                      aria-pressed={showPassword ? "true" : "false"}
+                    >
+                      {showPassword ? (
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          aria-hidden="true"
+                          focusable="false"
+                        >
+                          <path d="M13.875 18.825A10.05 10.05 0 0112 19c-4.477 0-8.268-2.943-9.542-7a10.046 10.046 0 012.04-3.287" />
+                          <path d="M6.18 6.18A10.05 10.05 0 0112 5c4.477 0 8.268 2.943 9.542 7a10.06 10.06 0 01-4.807 5.642" />
+                          <path d="M9.88 9.88a3 3 0 104.24 4.24" />
+                          <path d="M3 3l18 18" />
+                        </svg>
+                      ) : (
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          aria-hidden="true"
+                          focusable="false"
+                        >
+                          <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                          <path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                        </svg>
+                      )}
+                    </button>
+                  </div>
+                  {capsLockOn && <div className="login__hint" role="status" aria-live="polite">Caps Lock ativado</div>}
+                  {isSignupMode && password && !isValidPassword(password) && <div className="login__hint">Mín. 8 caracteres, maiúscula, minúscula, número e símbolo.</div>}
+                </div>
+
+                {isSignupMode && (
+                  <div className="login__field">
+                    <label htmlFor="confirmPassword" className="login__label">Confirmar Senha</label>
+                    <div className={`login__input-wrapper ${status === "error" && confirmPassword && password !== confirmPassword ? "is-invalid" : ""}`}>
+                      <input
+                        id="confirmPassword"
+                        name="confirmPassword"
+                        type={showConfirmPassword ? "text" : "password"}
+                        className={`login__input ${status === "error" && confirmPassword && password !== confirmPassword ? "login__input--invalid" : ""}`}
+                        placeholder="Confirme sua senha"
+                        required
+                        autoComplete="new-password"
+                        value={confirmPassword}
+                        onChange={(e) => setConfirmPassword(e.target.value)}
+                      />
+                      <button
+                        type="button"
+                        className="login__reveal-btn"
+                        onClick={() => setShowConfirmPassword((v) => !v)}
+                        aria-label={showConfirmPassword ? "Ocultar confirmação" : "Mostrar confirmação"}
+                        aria-pressed={showConfirmPassword ? "true" : "false"}
+                      >
+                        {showConfirmPassword ? (
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            aria-hidden="true"
+                            focusable="false"
+                          >
+                            <path d="M13.875 18.825A10.05 10.05 0 0112 19c-4.477 0-8.268-2.943-9.542-7a10.046 10.046 0 012.04-3.287" />
+                            <path d="M6.18 6.18A10.05 10.05 0 0112 5c4.477 0 8.268 2.943 9.542 7a10.06 10.06 0 01-4.807 5.642" />
+                            <path d="M9.88 9.88a3 3 0 104.24 4.24" />
+                            <path d="M3 3l18 18" />
+                          </svg>
+                        ) : (
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            aria-hidden="true"
+                            focusable="false"
+                          >
+                            <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                            <path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                          </svg>
+                        )}
+                      </button>
+                    </div>
+                    {confirmPassword && password !== confirmPassword && <div className="login__hint">As senhas não coincidem.</div>}
+                  </div>
+                )}
+
+                {!isSignupMode && (
+                  <div className={`login__remember ${password.trim().length > 0 ? "is-visible" : ""}`} aria-hidden={!(password.trim().length > 0)}>
+                    <label className="login__remember-label" htmlFor="remember">
+                      <input
+                        id="remember"
+                        type="checkbox"
+                        className="login__remember-input"
+                        checked={rememberMe}
+                        onChange={(e) => setRememberMe(e.target.checked)}
+                      />
+                      {t('login.remember')}
+                    </label>
+                  </div>
+                )}
+                {TURNSTILE_ENABLED && (
+                  <div style={{ marginTop: 8 }}>
+                    <TurnstileWidget onToken={(t) => setTurnstileToken(t)} />
+                  </div>
+                )}
+              </>
+            )}
+            {/* bloco duplicado removido: "Lembrar senha" já é exibido acima quando não é signup */}
 
             <div className="login__actions">
-              <button type="submit" className="btn btn-primary login__btn" disabled={status === "loading"}>
-                {status === "loading" ? "Entrando..." : "Entrar"}
+              <button type="submit" className="btn btn-primary login__btn" disabled={status === "loading" || isCheckingEmail}>
+                {status === "loading" ? (isSignupMode ? t('signup.button') + '...' : t('login.button') + '...') : (isSignupMode ? t('signup.button') : t('login.button'))}
               </button>
             </div>
           </form>
 
-          <div className="login__oauth" aria-label="Login com provedores">
-            <GoogleLogin
-              onSuccess={() => {
-                setStatus("success");
-                setMessage("Login efetuado com Google.");
-      navigate("/members/home", { replace: true });
-              }}
-              onError={(err) => {
-                setStatus("error");
-                // Mensagem amigável já mapeada em auth.js; usa fallback genérico
-                setMessage(err?.message || "Não foi possível entrar com Google. Tente novamente.");
-                console.error(err);
-              }}
-            />
+          {/** Social login desativado por enquanto; controlado por env */}
+          {ENABLE_SOCIAL_LOGIN && !isSignupMode && (
+            <div className="login__oauth" aria-label="Login com provedores">
+              {/* <GoogleLogin ... /> */}
+            </div>
+          )}
+        </div>
+        {!isSignupMode && (
+          <div className={`login__forgot-out ${showExtras ? "is-visible" : ""}`} aria-hidden={!showExtras}>
+            <a href="/recuperar-senha" className="login__forgot-link">Esqueceu a senha?</a>
           </div>
-        </div>
-        <div className={`login__forgot-out ${showExtras ? "is-visible" : ""}`} aria-hidden={!showExtras}>
-          <a href="/recuperar-senha" className="login__forgot-link">Esqueceu a senha?</a>
-        </div>
+        )}
         <div className="login__disclaimer" role="note">
-          Para garantir a <strong>melhor experiência</strong> e a <strong>conformidade operacional</strong>, recomenda-se o acesso por
-          <strong>computador (desktop)</strong>. Determinadas <strong>etapas</strong> e <strong>execuções</strong> dependem de um <strong>ambiente de trabalho de desktop</strong>.
+          {t('login.disclaimer')}
         </div>
 
         {mobileAdvisoryOpen && (
@@ -270,10 +419,7 @@ export default function Login() {
                 <h3 id="mobile-advisory-title" className="login__modal-title">Orientação de Acesso</h3>
               </header>
               <div className="login__modal-body">
-                <p className="login__modal-text">
-                  Para garantir a <strong>melhor experiência</strong> e a <strong>conformidade operacional</strong>, recomenda-se o acesso por
-                  <strong> computador (desktop)</strong>. Determinadas <strong>etapas</strong> e <strong>execuções</strong> dependem de um <strong>ambiente de trabalho de desktop</strong>.
-                </p>
+                <p className="login__modal-text">{t('login.disclaimer')}</p>
                 <div className="login__modal-terminal" aria-label="Terminal">
                   <pre className="login__modal-code">{`$ advise --device mobile
 > recomendado: desktop
@@ -288,7 +434,7 @@ export default function Login() {
                   onClick={async () => {
                     setMobileProceed(true);
                     setMobileAdvisoryOpen(false);
-                    await performLogin();
+                    await performAuth();
                   }}
                 >Prosseguir no mobile</button>
               </footer>

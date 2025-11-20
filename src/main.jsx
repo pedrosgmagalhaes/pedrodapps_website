@@ -7,6 +7,9 @@ import { LoadingProvider } from "./contexts/LoadingContext.jsx";
 import LoadingWrapper from "./components/LoadingWrapper.jsx";
 import { BrowserRouter } from "react-router-dom";
 
+import i18n from './i18n';
+import { I18nextProvider } from 'react-i18next';
+
 // Silenciar logs em produção (mantém console.error)
 if (import.meta?.env?.PROD && typeof console !== "undefined") {
   const noop = () => {};
@@ -22,12 +25,14 @@ if (import.meta?.env?.PROD && typeof console !== "undefined") {
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <LoadingProvider>
-      <LoadingWrapper>
-        <BrowserRouter>
-          <App />
-        </BrowserRouter>
-      </LoadingWrapper>
-    </LoadingProvider>
+    <I18nextProvider i18n={i18n}>
+      <LoadingProvider>
+        <LoadingWrapper>
+          <BrowserRouter>
+            <App />
+          </BrowserRouter>
+        </LoadingWrapper>
+      </LoadingProvider>
+    </I18nextProvider>
   </StrictMode>
 );

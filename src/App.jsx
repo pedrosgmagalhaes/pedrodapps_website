@@ -13,7 +13,9 @@ const FounderQuote = React.lazy(() => import("./components/FounderQuote"));
 const ContactCTA = React.lazy(() => import("./components/ContactCTA"));
 const Footer = React.lazy(() => import("./components/Footer"));
 const Login = React.lazy(() => import("./components/Login"));
+// Adicionar import para Signup após ForgotPassword
 const ForgotPassword = React.lazy(() => import("./components/ForgotPassword"));
+const Signup = React.lazy(() => import("./components/Signup"));
 const Checkout = React.lazy(() => import("./components/Checkout"));
 const Links = React.lazy(() => import("./components/Links"));
 const Home = React.lazy(() => import("./components/Home"));
@@ -25,7 +27,6 @@ const PrivacyPolicy = React.lazy(() => import("./components/DataProtection"));
 const ServicesPolicy = React.lazy(() => import("./components/ServicesPolicy"));
 const CookiesPolicy = React.lazy(() => import("./components/ConsentNotice"));
 const DataDeletionPolicy = React.lazy(() => import("./components/DataDeletionPolicy"));
-const Members = React.lazy(() => import("./members/Members"));
 const AdminTools = React.lazy(() => import("./components/AdminTools"));
 import "./App.css";
 import ViewportSection from "./components/ViewportSection";
@@ -37,13 +38,15 @@ function App() {
   const pathname = location.pathname;
   const isLoginView = pathname === "/login";
   const isForgotView = pathname === "/recuperar-senha";
+  // Adicionar isSignupView após isCheckoutView e atualizar isAuthView
   const isCheckoutView = pathname === "/checkout";
+  const isSignupView = pathname === "/signup";
   const isPrivacyView = pathname === "/privacidade";
   const isServicesView = pathname === "/servicos";
   const isCookiesView = pathname === "/cookies";
   const isDeletionView = pathname === "/exclusao-dados";
   const isPolicyView = isPrivacyView || isServicesView || isCookiesView || isDeletionView;
-  const isAuthView = isLoginView || isForgotView || isCheckoutView;
+  const isAuthView = isLoginView || isForgotView || isCheckoutView || isSignupView;
   const isMembersArea =
     pathname.startsWith("/members") ||
     ["/lessons", "/videos", "/files", "/admin/tools"].includes(pathname);
@@ -230,16 +233,8 @@ function App() {
 
           {/* Rota /bots/honeypot removida em favor do colapse local na Home */}
 
-          <Route
-            path="/members"
-            element={
-              <ProtectedRoute>
-                <Suspense fallback={<div className="lazy-fallback" aria-hidden="true" />}> 
-                  <Members />
-                </Suspense>
-              </ProtectedRoute>
-            }
-          />
+          {/* Redireciona /members para /members/home */}
+          <Route path="/members" element={<Navigate to="/members/home" replace />} />
 
           <Route
             path="/admin/tools"
@@ -258,6 +253,17 @@ function App() {
               <>
                 <Suspense fallback={<div className="lazy-fallback" aria-hidden="true" />}> 
                   <Login />
+                </Suspense>
+              </>
+            }
+          />
+
+          <Route
+            path="/signup"
+            element={
+              <>
+                <Suspense fallback={<div className="lazy-fallback" aria-hidden="true" />}> 
+                  <Signup />
                 </Suspense>
               </>
             }

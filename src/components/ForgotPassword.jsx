@@ -2,11 +2,16 @@ import React, { useState } from "react";
 import "./ForgotPassword.css";
 import pedrodappsIcon from "../assets/pedrodapps_icon.png";
 import { API } from "../lib/api";
+import TurnstileWidget from "./TurnstileWidget";
+import { useTranslation } from 'react-i18next';
 
 export default function ForgotPassword() {
+  const { t } = useTranslation();
+  const TURNSTILE_ENABLED = typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.VITE_TURNSTILE_ENABLED === 'true';
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState("idle"); // idle | loading | success | error
   const [message, setMessage] = useState("");
+  const [turnstileToken, setTurnstileToken] = useState("");
 
   const isValidEmail = (value) => /[^\s@]+@[^\s@]+\.[^\s@]+/.test(value);
 
@@ -20,7 +25,12 @@ export default function ForgotPassword() {
     try {
       setStatus("loading");
       setMessage("");
-      const res = await API.auth.forgotPassword(email);
+      if (TURNSTILE_ENABLED && !turnstileToken) {
+        setStatus("error");
+        setMessage("Complete a verificação de segurança.");
+        return;
+      }
+      const res = await API.auth.forgotPassword(email, TURNSTILE_ENABLED ? turnstileToken : null);
       if (res?.error) {
         const status = res?.status;
         const backendMsg = res?.data?.error || res?.data?.message;
@@ -53,8 +63,8 @@ export default function ForgotPassword() {
         </div>
         <div className="forgot__card" role="form" aria-describedby="forgot-desc">
           <header className="forgot__header">
-            <h2 id="forgot-title" className="forgot__title">Recuperar senha</h2>
-            <p id="forgot-desc" className="forgot__subtitle">Informe seu e-mail para receber instruções de recuperação.</p>
+            <h2 id="forgot-title" className="forgot__title">{t('forgot.title')}</h2>
+            <p id="forgot-desc" className="forgot__subtitle">{t('forgot.subtitle')}</p>
           </header>
 
           {status !== "idle" && message && (
@@ -65,13 +75,13 @@ export default function ForgotPassword() {
 
           <form className="forgot__form" onSubmit={handleSubmit}>
             <div className="forgot__field">
-              <label htmlFor="forgot-email" className="forgot__label">E-mail</label>
+              <label htmlFor="forgot-email" className="forgot__label">{t('login.email')}</label>
               <input
                 id="forgot-email"
                 name="email"
                 type="email"
                 className={`forgot__input ${status === "error" && !isValidEmail(email) ? "forgot__input--invalid" : ""}`}
-                placeholder="seu@email.com"
+                placeholder={t('login.emailPlaceholder')}
                 required
                 autoComplete="email"
                 value={email}
@@ -81,10 +91,15 @@ export default function ForgotPassword() {
 
             <div className="forgot__actions">
               <button type="submit" className="btn btn-primary forgot__btn" disabled={status === "loading"}>
-                {status === "loading" ? "Enviando..." : "Enviar instruções"}
+                {status === "loading" ? t('forgot.button') + '...' : t('forgot.button')}
               </button>
-              <a href="/login" className="forgot__link">Voltar ao login</a>
+              <a href="/login" className="forgot__link">{t('forgot.backToLogin')}</a>
             </div>
+            {TURNSTILE_ENABLED && (
+              <div style={{ marginTop: 8 }}>
+                <TurnstileWidget onToken={(t) => setTurnstileToken(t)} />
+              </div>
+            )}
           </form>
         </div>
       </div>

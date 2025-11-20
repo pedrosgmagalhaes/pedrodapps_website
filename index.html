@@ -11,7 +11,7 @@
       name="viewport"
       content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, viewport-fit=cover"
     />
-    <title>Pedro dApps - Builders de Elite</title>
+    <title>Pedro dApps - Elite Builders</title>
     <meta
       name="description"
       content="Pedro dApps oferece cursos especializados, scripts exclusivos, treinamentos práticos e consultoria em criptomoedas, DeFi, stablecoins e tecnologia blockchain para indivíduos e empresas."
@@ -26,7 +26,7 @@
     <meta name="msapplication-TileImage" content="/icons/mstile-144x144.png" />
     <!-- Open Graph -->
     <meta property="og:site_name" content="Pedro dApps" />
-    <meta property="og:title" content="Pedro dApps - Builders de Elite" />
+    <meta property="og:title" content="Pedro dApps - Elite Builders" />
     <meta
       property="og:description"
       content="Pedro dApps oferece cursos especializados, scripts exclusivos, treinamentos práticos e consultoria em criptomoedas, DeFi, stablecoins e tecnologia blockchain para indivíduos e empresas."
@@ -53,7 +53,7 @@
     <meta property="og:image:type" content="image/webp" />
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Pedro dApps - Builders de Elite" />
+    <meta name="twitter:title" content="Pedro dApps - Elite Builders" />
     <meta
       name="twitter:description"
       content="Pedro dApps oferece cursos especializados, scripts exclusivos, treinamentos práticos e consultoria em criptomoedas, DeFi, stablecoins e tecnologia blockchain para indivíduos e empresas."
@@ -66,6 +66,8 @@
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <!-- Cloudflare Turnstile resource hint for performance -->
+    <link rel="preconnect" href="https://challenges.cloudflare.com" />
     <!-- Tipografia profissional: Inter (UI) e Roboto Mono (destaques técnicos) -->
     <link
       href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Roboto+Mono:wght@400;500;700&display=swap"
@@ -104,5 +106,7 @@
     <script type="module" src="/src/main.jsx"></script>
     <!-- Google Identity Services (oficial) -->
     <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <!-- Cloudflare Turnstile (explicit rendering) -->
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit" defer></script>
   </body>
 </html>

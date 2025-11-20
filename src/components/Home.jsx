@@ -1,10 +1,11 @@
 import React, { useEffect, useMemo, useState } from "react";
 import "./Home.css";
-import { FaRobot, FaPlay, FaDownload, FaLifeRing } from "react-icons/fa";
+import { FaRobot, FaPlay, FaDownload, FaLifeRing, FaBook } from "react-icons/fa";
 import WelcomeTerminal from "./WelcomeTerminal";
 import BotDownloadInfo from "./BotDownloadInfo";
 import SupportFeed from "./SupportFeed";
 import { API } from "../lib/api";
+import { useTranslation } from 'react-i18next';
 
 export default function Home() {
   const [progress] = useState(80);
@@ -18,6 +19,23 @@ export default function Home() {
   const [activeLesson, setActiveLesson] = useState(null);
   const [lessonDetail, setLessonDetail] = useState(null);
   const [lessonStatus, setLessonStatus] = useState("idle"); // idle | loading | error
+  const { t } = useTranslation();
+
+  const featureIcons = {
+    video: FaPlay,
+    botDownload: FaDownload,
+    support: FaLifeRing,
+    terminal: FaRobot,
+    textContent: FaBook,
+  };
+
+  const featurePanels = {
+    video: "lesson_video",
+    botDownload: "lesson_download",
+    support: "lesson_support",
+    terminal: "lesson_terminal",
+    textContent: "lesson_text",
+  };
   const releaseOverride = useMemo(() => {
     try {
       return localStorage.getItem("pdapps_release_override") === "true";
@@ -132,7 +150,7 @@ export default function Home() {
         <header className="home__header">
           <div className="home__brand" role="heading" aria-level={1}>
             <h1 id="home-title" className="home__brand-title">
-              <a href="/members/home" aria-label="Voltar para a Home">{course?.title || "Builders de Elite"}</a>
+              <a href="/members/home" aria-label="Voltar para a Home">{course?.title || "Elite Builders"}</a>
             </h1>
           </div>
         </header>
@@ -163,33 +181,21 @@ export default function Home() {
                             className={`home__collapse ${lessonOpenMap[lesson.slug] ? "is-open" : ""}`}
                           >
                             <div className="home__sidebar-list home__sublist">
-                              <button
-                                className="home__sidebar-item"
-                                type="button"
-                                onClick={() => handleGatedAction(() => { setActiveLesson(lesson.slug); setActivePanel("lesson_video"); })}
-                                aria-controls="home-content"
-                              >
-                                <span className="icon"><FaPlay /></span>
-                                <span>Vídeo Aula</span>
-                              </button>
-                              <button
-                                className="home__sidebar-item"
-                                type="button"
-                                onClick={() => handleGatedAction(() => { setActiveLesson(lesson.slug); setActivePanel("lesson_download"); })}
-                                aria-controls="home-content"
-                              >
-                                <span className="icon"><FaDownload /></span>
-                                <span>Download do Bot</span>
-                              </button>
-                              <button
-                                className="home__sidebar-item"
-                                type="button"
-                                onClick={() => handleGatedAction(() => { setActiveLesson(lesson.slug); setActivePanel("lesson_support"); })}
-                                aria-controls="home-content"
-                              >
-                                <span className="icon"><FaLifeRing /></span>
-                                <span>Suporte</span>
-                              </button>
+                              {lesson.availableFeatures?.map((feat) => {
+                                const Icon = featureIcons[feat] || FaPlay; // Default to FaPlay if no icon
+                                return (
+                                  <button
+                                    key={feat}
+                                    className="home__sidebar-item"
+                                    type="button"
+                                    onClick={() => handleGatedAction(() => { setActiveLesson(lesson.slug); setActivePanel(featurePanels[feat]); })}
+                                    aria-controls="home-content"
+                                  >
+                                    <span className="icon"><Icon /></span>
+                                    <span>{t(`features.${feat}`)}</span>
+                                  </button>
+                                );
+                              })}
                             </div>
                           </div>
                         </div>
@@ -262,6 +268,50 @@ export default function Home() {
             )}
 
             {activePanel === "lesson_support" && <SupportFeed />}
+
+            {activePanel === "lesson_terminal" && (
+              <div className="home__bot-video" role="region" aria-label={t('features.terminal')}>
+                <div className="home__bot-video-caption">
+                  {lessonStatus === "loading" && (
+                    <div>{t('loading')}</div>
+                  )}
+                  {lessonStatus === "error" && (
+                    <div>{t('error_loading_lesson')}</div>
+                  )}
+                  {lessonStatus === "idle" && (
+                    <>
+                      {lessonDetail?.terminal_url ? (
+                        <a href={lessonDetail.terminal_url} target="_blank" rel="noopener noreferrer">{t('open_terminal')}</a>
+                      ) : (
+                        t('terminal_coming_soon')
+                      )}
+                    </>
+                  )}
+                </div>
+              </div>
+            )}
+
+            {activePanel === "lesson_text" && (
+              <div className="home__bot-video" role="region" aria-label={t('features.textContent')}>
+                <div className="home__bot-video-caption">
+                  {lessonStatus === "loading" && (
+                    <div>{t('loading')}</div>
+                  )}
+                  {lessonStatus === "error" && (
+                    <div>{t('error_loading_lesson')}</div>
+                  )}
+                  {lessonStatus === "idle" && (
+                    <>
+                      {lessonDetail?.content ? (
+                        <p>{lessonDetail.content}</p>
+                      ) : (
+                        t('text_content_coming_soon')
+                      )}
+                    </>
+                  )}
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </div>

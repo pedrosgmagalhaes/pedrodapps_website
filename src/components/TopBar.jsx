@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import "./TopBar.css";
 import pedrodappsIcon from "../assets/pedrodapps_icon.png";
 import { getUser, logout } from "../lib/auth";
+import LanguageSelector from "./LanguageSelector";
 
 export default function TopBar() {
   const [open, setOpen] = useState(false);
@@ -50,6 +51,9 @@ export default function TopBar() {
         <span className="topbar__title" aria-hidden="true">Pedro dApps</span>
       </div>
       <div className="topbar__right" aria-label="User menu" role="navigation">
+        <div className="topbar__language">
+          <LanguageSelector />
+        </div>
         <button
           ref={btnRef}
           className="topbar__avatar-btn"

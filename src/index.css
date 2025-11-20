@@ -207,6 +207,76 @@ body.menu-open {
   background: var(--bg-card);
 }
 
+/* Padrão global de botões */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-family);
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+  border-radius: var(--border-radius-md);
+  min-height: 44px;
+  padding: 12px 16px;
+  border: 1px solid rgba(255,255,255,0.16);
+  transition: transform 160ms ease, box-shadow 160ms ease, filter 160ms ease, border-color 160ms ease, background 160ms ease, color 160ms ease;
+}
+
+.btn:disabled {
+  opacity: 0.8;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.btn-primary {
+  background: var(--accent-primary);
+  color: #000;
+  border-color: var(--accent-primary);
+  box-shadow: 0 8px 20px rgba(123, 227, 61, 0.20);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.02);
+  box-shadow: 0 12px 28px rgba(123, 227, 61, 0.28);
+}
+
+.btn-secondary {
+  background: rgba(255,255,255,0.06);
+  color: var(--neutral-white);
+  border-color: rgba(255,255,255,0.18);
+}
+
+.btn-secondary:hover {
+  background: rgba(255,255,255,0.08);
+  border-color: var(--accent-primary);
+  color: var(--accent-primary);
+}
+
+/* Turnstile container tweaks */
+.turnstile__container {
+  min-height: 60px;
+  display: flex;
+  align-items: center;
+}
+.turnstile__loading {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2px solid rgba(255,255,255,0.25);
+  border-top-color: var(--accent-primary);
+  animation: globalSpinnerRotate 0.8s linear infinite;
+}
+.turnstile__unavailable {
+  font-size: 12px;
+  color: rgba(255,255,255,0.7);
+}
+@keyframes globalSpinnerRotate {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
 /* Utilitários de gradiente */
 .gradient-text {
   background: var(--gradient-primary);

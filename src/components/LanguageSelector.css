@@ -1,0 +1,98 @@
+.language-selector {
+  background: transparent;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 4px 8px;
+  font-size: 14px;
+  cursor: pointer;
+  color: inherit;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24"><path fill="currentcolor" d="M7 10l5 5 5-5z"/></svg>');
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+  background-size: 12px;
+}
+
+.language-selector:focus {
+  outline: none;
+  border-color: #007bff;
+}
+
+.language-selector-dropdown {
+  position: relative;
+}
+
+.language-flag-circle {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #333; /* bg dark */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border: none;
+  padding: 0;
+  overflow: hidden;
+  color: #fff; /* light text */
+}
+
+.language-flag-circle svg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.language-flag-circle:hover,
+.language-flag-circle:focus-visible {
+  box-shadow: 0 0 0 2px rgba(255,255,255,0.1);
+}
+
+/* Ajustes para o dropdown */
+.react-flags-select .rfs-dropdown {
+  position: absolute;
+  top: calc(100% + 4px);
+  right: 0;
+  background: #333; /* background dark */
+  border: 1px solid #2a2a2a;
+  border-radius: 10px;
+  box-shadow: 0 18px 32px rgba(0,0,0,0.3);
+  padding: 6px;
+  z-index: 1000;
+  width: 260px; /* largura maior */
+}
+
+.react-flags-select .rfs-option {
+  padding: 8px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #fff; /* fonte light clara */
+  background: transparent; /* Removendo bg do ul */
+}
+
+.react-flags-select .rfs-option:hover {
+  background: #444; /* hover mais escuro para contraste */
+}
+
+/* Garantir estilo dark/light também quando a lib usa classes de módulo */
+.language-selector-dropdown ul {
+  background: #333 !important;
+  color: #fff !important;
+  border: 1px solid #2a2a2a;
+  border-radius: 10px;
+  box-shadow: 0 18px 32px rgba(0,0,0,0.3);
+  width: 160px !important; /* aumentar largura do ul */
+}
+
+.language-selector-dropdown li {
+  color: #fff !important;
+}
+
+.language-selector-dropdown li:hover {
+  background: #444 !important;
+}

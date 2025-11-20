@@ -164,10 +164,10 @@ export function requireAuth() {
   return true;
 }
 // Login com e-mail e senha (sessão via cookie)
-export async function loginWithPassword(email, password) {
+export async function loginWithPassword(email, password, turnstileToken = null) {
   const normalizedEmail = String(email || "").trim().toLowerCase();
 
-  const res = await API.auth.login(normalizedEmail, password);
+  const res = await API.auth.login(normalizedEmail, password, turnstileToken);
   if (res?.error) {
     const code = res.error;
     const status = res?.status;
@@ -200,8 +200,8 @@ export async function loginWithPassword(email, password) {
 }
 
 // Cadastro (signup)
-export async function registerWithPassword(email, password, name) {
-  const res = await API.auth.register(email, password, name);
+export async function registerWithPassword(email, password, name, turnstileToken = null) {
+  const res = await API.auth.register(email, password, name, turnstileToken);
   if (res?.error) {
     const status = res?.status;
     const backendMsg = res?.data?.error || res?.data?.message;
