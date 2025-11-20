@@ -96,6 +96,7 @@ export default function Terminal({
     })();
   };
 
+  // Remove runCodeBlock function and related button
   const runCodeBlock = () => {
     if (running) return;
     const codeText = Array.isArray(codeLines) ? codeLines.join("\n") : String(codeLines || "");
@@ -156,19 +157,7 @@ export default function Terminal({
               <FaPlay className="home__run-icon" />
             )}
           </button>
-          <button
-            className={`home__run-btn ${running ? "is-running" : ""}`}
-            onClick={runCodeBlock}
-            aria-label="Executar código acima"
-            disabled={running}
-            title="Executar código acima"
-          >
-            {running ? (
-              <FaSpinner className="home__run-icon home__run-spinner" />
-            ) : (
-              <FaCode className="home__run-icon" />
-            )}
-          </button>
+          {/* Remove the second button */}
         </div>
       </div>
 
