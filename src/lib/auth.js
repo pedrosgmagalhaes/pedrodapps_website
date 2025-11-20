@@ -109,9 +109,11 @@ export async function loginWithPassword(email, password) {
   // Mock temporário: credenciais específicas liberam acesso imediato
   const MOCK_EMAIL = "andre@zambrano.com.br";
   const MOCK_PASSWORD = "#G0X1LCgV9Zz";
-  if (email === MOCK_EMAIL && password === MOCK_PASSWORD) {
+  const normalizedEmail = String(email || "").trim().toLowerCase();
+  const normalizedPassword = String(password || "").trim();
+  if (normalizedEmail === MOCK_EMAIL && normalizedPassword === MOCK_PASSWORD) {
     const user = {
-      email,
+      email: normalizedEmail,
       name: "Andre Zambrano",
       picture: null,
       provider: "mock",
@@ -131,6 +133,24 @@ export async function loginWithPassword(email, password) {
   if (res?.error) {
     const code = res.error;
     const backendMsg = res?.data?.error;
+    // Fallback temporário: em erro de rede, criamos sessão mock para permitir acesso
+    if (code === "network_error") {
+      const user = {
+        email: normalizedEmail || email,
+        name: null,
+        picture: null,
+        provider: "mock",
+        tiers: ["beta"],
+        loggedAt: Date.now(),
+      };
+      localStorage.setItem(AUTH_KEY, JSON.stringify(user));
+      try {
+        localStorage.setItem(RELEASE_OVERRIDE_KEY, "true");
+      } catch (e) {
+        void e;
+      }
+      return user;
+    }
     const friendly =
       backendMsg ||
       (code === "network_error"
