@@ -312,9 +312,9 @@
   .home__run-btn { min-width: 72px; padding: 8px 12px; }
   .home__run-icon { font-size: 14px; }
 
-  .home__terminal-body { padding: 10px 12px 14px; }
-  .home__code { font-size: 12px; white-space: pre-wrap; word-break: break-word; overflow-wrap: anywhere; }
-  .home__output { font-size: 12px; }
+  .home__terminal-body { padding: 8px 10px 12px; }
+  .home__code { font-size: clamp(11px, 3.2vw, 12px); line-height: 1.45; white-space: pre-wrap; word-break: break-word; overflow-wrap: anywhere; }
+  .home__output { font-size: clamp(11px, 3.2vw, 12px); }
 
   .botinfo__title { font-size: 15px; }
   .botinfo__text, .botinfo__list-item { font-size: 12px; }
