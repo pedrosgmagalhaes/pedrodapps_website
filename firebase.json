@@ -5,6 +5,9 @@
     "frameworksBackend": {
       "region": "us-central1"
     },
+    "redirects": [
+      { "source": "/members/login", "destination": "/login", "type": 301 }
+    ],
     "rewrites": [
       { "source": "**", "destination": "/index.html" }
     ]
