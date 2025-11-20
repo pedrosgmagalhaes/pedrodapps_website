@@ -23,17 +23,76 @@ export function login(email) {
   localStorage.setItem(AUTH_KEY, JSON.stringify(payload));
 }
 
-export function logout() {
+export async function logout() {
+  // Tenta encerrar a sessão no backend (cookies httpOnly)
   try {
-    // Solicita ao backend apagar cookie de sessão
-    API.auth.logout();
-  } finally {
+    await API.auth.logout();
+  } catch (e) {
+    void e;
+  }
+
+  // Limpa chaves específicas
+  try {
     localStorage.removeItem(AUTH_KEY);
-    try {
-      localStorage.removeItem(RELEASE_OVERRIDE_KEY);
-    } catch (e) {
-      void e;
+    localStorage.removeItem(RELEASE_OVERRIDE_KEY);
+  } catch (e) {
+    void e;
+  }
+
+  // Limpeza ampla de storages
+  try {
+    if (typeof window !== "undefined") {
+      try { window.localStorage?.clear?.(); } catch {}
+      try { window.sessionStorage?.clear?.(); } catch {}
     }
+  } catch (e) {
+    void e;
+  }
+
+  // Limpa cookies acessíveis pelo JS (não httpOnly)
+  try {
+    if (typeof document !== "undefined" && document.cookie) {
+      const parts = document.cookie.split(";");
+      for (const part of parts) {
+        const eq = part.indexOf("=");
+        const name = (eq > -1 ? part.substr(0, eq) : part).trim();
+        if (name) {
+          document.cookie = `${name}=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/;SameSite=Lax`;
+        }
+      }
+    }
+  } catch (e) {
+    void e;
+  }
+
+  // Limpa Cache Storage
+  try {
+    if (typeof caches !== "undefined" && caches?.keys) {
+      const keys = await caches.keys();
+      await Promise.all(keys.map((k) => caches.delete(k)));
+    }
+  } catch (e) {
+    void e;
+  }
+
+  // Desregistra Service Workers
+  try {
+    if (typeof navigator !== "undefined" && navigator.serviceWorker?.getRegistrations) {
+      const regs = await navigator.serviceWorker.getRegistrations();
+      await Promise.all(regs.map((r) => r.unregister()));
+    }
+  } catch (e) {
+    void e;
+  }
+
+  // Limpa IndexedDB quando possível
+  try {
+    if (typeof indexedDB !== "undefined" && typeof indexedDB.databases === "function") {
+      const dbs = await indexedDB.databases();
+      await Promise.all((dbs || []).map((db) => (db?.name ? indexedDB.deleteDatabase(db.name) : Promise.resolve())));
+    }
+  } catch (e) {
+    void e;
   }
 }
 

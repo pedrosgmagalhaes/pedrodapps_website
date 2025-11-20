@@ -11,9 +11,9 @@ export default function Members() {
     setUser(getUser());
   }, []);
 
-  const handleLogout = () => {
-    logout();
-    window.location.href = "/login";
+  const handleLogout = async () => {
+    await logout();
+    window.location.replace("/login");
   };
 
   return (

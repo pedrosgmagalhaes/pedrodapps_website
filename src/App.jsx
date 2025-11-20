@@ -30,6 +30,7 @@ const AdminTools = React.lazy(() => import("./components/AdminTools"));
 import "./App.css";
 import ViewportSection from "./components/ViewportSection";
 import heroBg from "./assets/builderselite.png";
+import TopBar from "./components/TopBar";
 
 function App() {
   const location = useLocation();
@@ -43,6 +44,9 @@ function App() {
   const isDeletionView = pathname === "/exclusao-dados";
   const isPolicyView = isPrivacyView || isServicesView || isCookiesView || isDeletionView;
   const isAuthView = isLoginView || isForgotView || isCheckoutView;
+  const isMembersArea =
+    pathname.startsWith("/members") ||
+    ["/lessons", "/videos", "/files", "/admin/tools"].includes(pathname);
 
   // Ponte de compatibilidade: se entrar com hash antigo, converte para path
   useEffect(() => {
@@ -99,6 +103,7 @@ function App() {
 
   return (
     <div className="App">
+      {isMembersArea ? <TopBar /> : null}
       <main className={isAuthView ? "main main--login" : isPolicyView ? "main main--policy" : "main"}>
         <Routes>
           <Route
