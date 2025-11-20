@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "./ForgotPassword.css";
 import pedrodappsIcon from "../assets/pedrodapps_icon.png";
+import { API } from "../lib/api";
 
 export default function ForgotPassword() {
   const [email, setEmail] = useState("");
@@ -19,9 +20,25 @@ export default function ForgotPassword() {
     try {
       setStatus("loading");
       setMessage("");
-      await new Promise((resolve) => setTimeout(resolve, 900));
+      const res = await API.auth.forgotPassword(email);
+      if (res?.error) {
+        const status = res?.status;
+        const backendMsg = res?.data?.error || res?.data?.message;
+        const friendly =
+          backendMsg ||
+          (status === 400
+            ? "E-mail não encontrado."
+            : status === 422
+            ? "Dados inválidos. Verifique e tente novamente."
+            : status === 500
+            ? "Erro inesperado no servidor."
+            : status === 0
+            ? "Falha de conexão com o servidor. Verifique sua internet."
+            : "Não foi possível solicitar a recuperação de senha.");
+        throw new Error(friendly);
+      }
       setStatus("success");
-      setMessage("Se existir uma conta com este e-mail, enviaremos instruções de recuperação.");
+      setMessage("Pedido de recuperação enviado. Confira seu e-mail.");
     } catch {
       setStatus("error");
       setMessage("Ocorreu um erro ao enviar. Tente novamente.");

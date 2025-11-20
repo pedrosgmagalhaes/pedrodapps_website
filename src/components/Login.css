@@ -199,6 +199,8 @@
   background: transparent; /* usa fundo do wrapper */
   border: none; /* remove borda do input; wrapper tem a borda */
   box-shadow: none; /* sem sombra própria */
+  width: 100%; /* ocupar toda a largura disponível do wrapper */
+  box-sizing: border-box; /* considerar padding ao calcular a largura */
 }
 
 .login__input-wrapper .login__input:focus {
@@ -567,14 +569,16 @@
   border-radius: var(--border-radius-sm);
 }
 
+/* Remover degradê do botão "Prosseguir no mobile" em todas as larguras */
+.login__modal-actions .btn-primary {
+  background: var(--accent-primary);
+  color: #000;
+  background-image: none;
+}
+
 @media (width <= 480px) {
   .login__modal-actions .btn {
     font-size: 12px; /* reduzir tamanho do texto em mobile */
     padding: 8px 12px;
-  }
-  .login__modal-actions .btn-primary {
-    background: var(--accent-primary); /* tira o degradê em mobile */
-    color: #000;
-    background-image: none;
   }
 }

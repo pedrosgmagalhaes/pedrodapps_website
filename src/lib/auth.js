@@ -165,98 +165,65 @@ export function requireAuth() {
 }
 // Login com e-mail e senha (sessão via cookie)
 export async function loginWithPassword(email, password) {
-  // Mock temporário: credenciais específicas liberam acesso imediato
-  const MOCK_EMAIL = "andre@zambrano.com.br";
-  const MOCK_PASSWORD = "#G0X1LCgV9Zz";
   const normalizedEmail = String(email || "").trim().toLowerCase();
-  const normalizedPassword = String(password || "").trim();
-  if (normalizedEmail === MOCK_EMAIL && normalizedPassword === MOCK_PASSWORD) {
-    const user = {
-      email: normalizedEmail,
-      name: "Andre Zambrano",
-      picture: null,
-      provider: "mock",
-      tiers: ["beta"],
-      loggedAt: Date.now(),
-    };
-    localStorage.setItem(AUTH_KEY, JSON.stringify(user));
-    try {
-      localStorage.setItem(RELEASE_OVERRIDE_KEY, "true");
-    } catch (e) {
-      void e;
-    }
-    return user;
-  }
 
-  // Bypass controlado por flag de ambiente (build-time)
-  const BYPASS = (import.meta?.env?.VITE_AUTH_BYPASS || "").toString() === "1";
-  if (BYPASS) {
-    const user = {
-      email: normalizedEmail || email,
-      name: null,
-      picture: null,
-      provider: "mock",
-      tiers: ["beta"],
-      loggedAt: Date.now(),
-    };
-    localStorage.setItem(AUTH_KEY, JSON.stringify(user));
-    try {
-      localStorage.setItem(RELEASE_OVERRIDE_KEY, "true");
-    } catch (e) {
-      void e;
-    }
-    return user;
-  }
-
-  const res = await API.auth.login(email, password);
+  const res = await API.auth.login(normalizedEmail, password);
   if (res?.error) {
     const code = res.error;
-    const backendMsg = res?.data?.error;
-    // Fallback temporário: em erro de rede, criamos sessão mock para permitir acesso
-    if (code === "network_error") {
-      const user = {
-        email: normalizedEmail || email,
-        name: null,
-        picture: null,
-        provider: "mock",
-        tiers: ["beta"],
-        loggedAt: Date.now(),
-      };
-      localStorage.setItem(AUTH_KEY, JSON.stringify(user));
-      try {
-        localStorage.setItem(RELEASE_OVERRIDE_KEY, "true");
-      } catch (e) {
-        void e;
-      }
-      return user;
-    }
+    const status = res?.status;
+    const backendMsg = res?.data?.error || res?.data?.message;
     const friendly =
       backendMsg ||
-      (code === "network_error"
-        ? "Não foi possível conectar ao servidor. Verifique sua internet e tente novamente."
+      (status === 429
+        ? "Conta temporariamente bloqueada por tentativas falhas. Aguarde e tente novamente."
         : code === "unauthorized"
-        ? "E-mail ou senha inválidos."
+        ? "Credenciais inválidas."
+        : code === "network_error"
+        ? "Falha de conexão com o servidor. Verifique sua internet."
         : "Não foi possível entrar. Tente novamente.");
     throw new Error(friendly);
   }
-  // Confirma sessão via /auth/me
-  const me = await API.auth.me();
-  if (me?.error || me?.ok === false) {
-    const code = me?.error;
-    const backendMsg = me?.data?.error;
+
+  // Esperado: { accessToken, user: { id, email, name } }
+  const accessToken = res?.accessToken;
+  const userInfo = res?.user || {};
+  const user = {
+    email: userInfo?.email || normalizedEmail,
+    name: userInfo?.name || null,
+    id: userInfo?.id || null,
+    provider: "password",
+    jwt: accessToken || null,
+    loggedAt: Date.now(),
+  };
+  localStorage.setItem(AUTH_KEY, JSON.stringify(user));
+  return user;
+}
+
+// Cadastro (signup)
+export async function registerWithPassword(email, password, name) {
+  const res = await API.auth.register(email, password, name);
+  if (res?.error) {
+    const status = res?.status;
+    const backendMsg = res?.data?.error || res?.data?.message;
     const friendly =
       backendMsg ||
-      (code === "network_error"
-        ? "Não foi possível verificar a sessão (rede). Tente novamente."
-        : "Não foi possível verificar a sessão. Tente novamente.");
+      (status === 400
+        ? "E-mail já registrado."
+        : status === 422
+        ? "Dados inválidos. Verifique e tente novamente."
+        : status === 500
+        ? "Erro inesperado no servidor."
+        : "Não foi possível realizar o cadastro.");
     throw new Error(friendly);
   }
+  const accessToken = res?.accessToken;
+  const userInfo = res?.user || {};
   const user = {
-    email: me?.email || email,
-    name: null,
-    picture: null,
+    email: userInfo?.email || email,
+    name: userInfo?.name || name || null,
+    id: userInfo?.id || null,
     provider: "password",
-    tiers: me?.tiers || [],
+    jwt: accessToken || null,
     loggedAt: Date.now(),
   };
   localStorage.setItem(AUTH_KEY, JSON.stringify(user));

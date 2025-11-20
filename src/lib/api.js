@@ -17,7 +17,7 @@ export const getBaseURL = () => {
   // Prefer explicit env var if present
   const explicit = import.meta?.env?.VITE_API_BASE_URL;
   if (explicit) return explicit;
-  return isLocalhost() ? "http://localhost:8080" : "https://api.pedrodapps.com";
+  return isLocalhost() ? "http://localhost:3000" : "https://api.pedrodapps.com";
 };
 
 async function jsonFetch(path, options = {}) {
@@ -123,24 +123,36 @@ export const API = {
   // Auth endpoints
   auth: {
     login: (email, password, opts = {}) =>
-      jsonFetch("/auth/login", {
+      jsonFetch("/api/auth/login", {
         ...opts,
         method: "POST",
         body: { email, password },
       }),
+    register: (email, password, name, opts = {}) =>
+      jsonFetch("/api/auth/register", {
+        ...opts,
+        method: "POST",
+        body: { email, password, name },
+      }),
+    forgotPassword: (email, opts = {}) =>
+      jsonFetch("/api/auth/forgot-password", {
+        ...opts,
+        method: "POST",
+        body: { email },
+      }),
     google: (idToken, opts = {}) =>
-      jsonFetch("/auth/google", {
+      jsonFetch("/api/auth/google", {
         ...opts,
         method: "POST",
         body: { id_token: idToken },
       }),
     me: (opts = {}) =>
-      jsonFetch("/auth/me", {
+      jsonFetch("/api/auth/me", {
         ...opts,
         method: "GET",
       }),
     logout: (opts = {}) =>
-      jsonFetch("/auth/logout", {
+      jsonFetch("/api/auth/logout", {
         ...opts,
         method: "POST",
       }),
