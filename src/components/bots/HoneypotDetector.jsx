@@ -11,7 +11,7 @@ export default function HoneypotDetector() {
   const [moduleInfo, setModuleInfo] = useState(null);
   const [downloadUrl, setDownloadUrl] = useState("");
   const [showGate, setShowGate] = useState(false);
-  const [releaseAt, setReleaseAt] = useState(() => {
+  const [releaseAt] = useState(() => {
     const now = new Date();
     const rel = new Date(now);
     rel.setDate(now.getDate() + 1);

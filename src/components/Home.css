@@ -286,6 +286,41 @@
   .home__layout { grid-template-columns: 1fr; }
 }
 
+/* Ajustes de responsividade para telas pequenas */
+@media (width <= 480px) {
+  .home { padding: 20px 0 48px; }
+  .home__container { width: 95vw; }
+  .home__header { margin-bottom: 16px; }
+  .home__brand-title { font-size: 18px; }
+  .home__brand-subtitle { font-size: 14px; }
+
+  .home__layout { gap: 12px; }
+  .home__sidebar { position: static; padding: 12px; }
+  .home__sidebar-item { font-size: 12px; padding: 8px 8px; gap: 8px; }
+  .home__bot-title { font-size: 12px; }
+
+  .home__progress { margin-top: 8px; }
+  .home__progress-bar { height: 6px; }
+
+  .home__welcome-title { font-size: 22px; }
+  .home__welcome-text { font-size: 13px; }
+
+  .home__terminal-header { padding: 10px 12px; gap: 10px; }
+  .home__prompt { padding: 6px 8px; gap: 6px; }
+  .home__prompt-label { font-size: 12px; }
+  .home__prompt-input { font-size: 13px; }
+  .home__run-btn { min-width: 72px; padding: 8px 12px; }
+  .home__run-icon { font-size: 14px; }
+
+  .home__terminal-body { padding: 10px 12px 14px; }
+  .home__code { font-size: 12px; white-space: pre-wrap; word-break: break-word; overflow-wrap: anywhere; }
+  .home__output { font-size: 12px; }
+
+  .botinfo__title { font-size: 15px; }
+  .botinfo__text, .botinfo__list-item { font-size: 12px; }
+  .botinfo__actions { flex-wrap: wrap; }
+}
+
 /* Painel de informações do bot (download e explicações) */
 .botinfo {
   margin-top: 16px;

@@ -492,3 +492,89 @@
   height: 18px;
   display: block; /* evita espaçamento inline extra */
 }
+
+/* Modal de orientação para acesso via mobile */
+.login__modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgb(10 12 22 / 65%);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  display: grid;
+  place-items: center;
+  z-index: 9999;
+}
+
+.login__modal {
+  width: 100%;
+  max-width: 520px;
+  background: rgb(34 36 58 / 92%);
+  border-radius: var(--border-radius-lg);
+  box-shadow: 0 16px 40px rgb(0 0 0 / 45%);
+  border: 1px solid rgb(119 71 255 / 30%);
+  overflow: hidden;
+}
+
+.login__modal-header {
+  padding: 16px 20px;
+  border-bottom: 1px solid rgb(255 255 255 / 10%);
+}
+
+.login__modal-title {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.login__modal-body {
+  padding: 16px 20px 8px;
+}
+
+.login__modal-text {
+  margin: 0 0 12px 0;
+  color: var(--text-primary);
+  font-size: 14px;
+}
+
+.login__modal-terminal {
+  background: rgb(20 22 36 / 85%);
+  border: 1px solid rgb(255 255 255 / 12%);
+  border-radius: var(--border-radius-md);
+  padding: 12px;
+}
+
+.login__modal-code {
+  margin: 0;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-size: 12px;
+  color: rgb(179 184 255);
+  white-space: pre-wrap;
+}
+
+.login__modal-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  padding: 12px 20px 16px;
+  border-top: 1px solid rgb(255 255 255 / 10%);
+}
+
+/* Ajustes dos botões do modal */
+.login__modal-actions .btn {
+  font-size: 13px;
+  padding: 8px 12px;
+  border-radius: var(--border-radius-sm);
+}
+
+@media (width <= 480px) {
+  .login__modal-actions .btn {
+    font-size: 12px; /* reduzir tamanho do texto em mobile */
+    padding: 8px 12px;
+  }
+  .login__modal-actions .btn-primary {
+    background: var(--accent-primary); /* tira o degradê em mobile */
+    color: #000;
+    background-image: none;
+  }
+}

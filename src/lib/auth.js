@@ -42,8 +42,8 @@ export async function logout() {
   // Limpeza ampla de storages
   try {
     if (typeof window !== "undefined") {
-      try { window.localStorage?.clear?.(); } catch {}
-      try { window.sessionStorage?.clear?.(); } catch {}
+      try { window.localStorage?.clear?.(); } catch (e) { void e; }
+      try { window.sessionStorage?.clear?.(); } catch (e) { void e; }
     }
   } catch (e) {
     void e;

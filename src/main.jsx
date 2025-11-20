@@ -15,7 +15,9 @@ if (import.meta?.env?.PROD && typeof console !== "undefined") {
     console.info = noop;
     console.warn = noop;
     console.debug = noop;
-  } catch {}
+  } catch (e) {
+    void e; // evita bloco vazio e mantém lint satisfeito
+  }
 }
 
 createRoot(document.getElementById("root")).render(

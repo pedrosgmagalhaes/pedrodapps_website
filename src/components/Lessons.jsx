@@ -89,7 +89,7 @@ export default function Lessons() {
       const list = listRes?.questions || listRes?.threads || [];
       setQuestions(Array.isArray(list) ? list : []);
       setQStatus("idle");
-    } catch (err) {
+    } catch {
       setQStatus("error");
     }
   }
@@ -104,7 +104,7 @@ export default function Lessons() {
         // revert on error
         setQuestions((prev) => prev.map((q) => (q.id === threadId ? { ...q, liked, likes: (q.likes || 0) + (liked ? 1 : -1) } : q)));
       }
-    } catch (e) {
+    } catch {
       // revert on exception
       setQuestions((prev) => prev.map((q) => (q.id === threadId ? { ...q, liked, likes: (q.likes || 0) + (liked ? 1 : -1) } : q)));
     }

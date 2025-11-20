@@ -2,14 +2,12 @@ import React, { useEffect, useRef, useState } from "react";
 import "./TopBar.css";
 import pedrodappsIcon from "../assets/pedrodapps_icon.png";
 import { getUser, logout } from "../lib/auth";
-import { useNavigate } from "react-router-dom";
 
 export default function TopBar() {
   const [open, setOpen] = useState(false);
   const [user, setUser] = useState(null);
   const menuRef = useRef(null);
   const btnRef = useRef(null);
-  const navigate = useNavigate();
 
   useEffect(() => {
     setUser(getUser());

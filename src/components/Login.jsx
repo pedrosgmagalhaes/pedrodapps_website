@@ -14,9 +14,34 @@ export default function Login() {
   const showExtras = email.trim().length > 0;
   const [status, setStatus] = useState("idle"); // idle | loading | success | error
   const [message, setMessage] = useState("");
+  const [mobileAdvisoryOpen, setMobileAdvisoryOpen] = useState(false);
+  const [mobileProceed, setMobileProceed] = useState(false);
   const navigate = useNavigate();
 
   const isValidEmail = (value) => /[^\s@]+@[^\s@]+\.[^\s@]+/.test(value);
+
+  const isMobileDevice = () => {
+    if (typeof navigator === "undefined") return false;
+    const ua = navigator.userAgent || navigator.vendor || "";
+    const isMobileUA = /(android|iphone|ipad|ipod|blackberry|iemobile|opera mini)/i.test(ua);
+    const narrowViewport = typeof window !== "undefined" ? Math.min(window.innerWidth, window.innerHeight) < 640 : false;
+    return isMobileUA || narrowViewport;
+  };
+
+  const performLogin = async () => {
+    try {
+      setStatus("loading");
+      setMessage("");
+      await loginWithPassword(email, password);
+      setStatus("success");
+      setMessage("Login efetuado com sucesso.");
+      navigate("/members/home", { replace: true });
+    } catch (err) {
+      console.error(err);
+      setStatus("error");
+      setMessage(err?.message || "Ocorreu um erro ao entrar. Tente novamente.");
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -31,19 +56,12 @@ export default function Login() {
       setMessage("A senha deve ter pelo menos 6 caracteres.");
       return;
     }
-
-    try {
-      setStatus("loading");
-      setMessage("");
-      await loginWithPassword(email, password);
-      setStatus("success");
-      setMessage("Login efetuado com sucesso.");
-      navigate("/members/home", { replace: true });
-    } catch (err) {
-      console.error(err);
-      setStatus("error");
-      setMessage(err?.message || "Ocorreu um erro ao entrar. Tente novamente.");
+    // Se for mobile e o usuário ainda não confirmou que quer prosseguir, exibe modal corporativo
+    if (isMobileDevice() && !mobileProceed) {
+      setMobileAdvisoryOpen(true);
+      return;
     }
+    await performLogin();
   };
 
   // Carregar preferências salvas ao montar
@@ -241,10 +259,42 @@ export default function Login() {
           <a href="/recuperar-senha" className="login__forgot-link">Esqueceu a senha?</a>
         </div>
         <div className="login__disclaimer" role="note">
-          Para garantir a melhor experiência e a conformidade operacional, recomenda-se o acesso por
-          computador (desktop). Determinadas etapas e execuções dependem de um ambiente de trabalho
-          de desktop.
+          Para garantir a <strong>melhor experiência</strong> e a <strong>conformidade operacional</strong>, recomenda-se o acesso por
+          <strong>computador (desktop)</strong>. Determinadas <strong>etapas</strong> e <strong>execuções</strong> dependem de um <strong>ambiente de trabalho de desktop</strong>.
         </div>
+
+        {mobileAdvisoryOpen && (
+          <div className="login__modal-overlay" role="dialog" aria-modal="true" aria-labelledby="mobile-advisory-title">
+            <div className="login__modal">
+              <header className="login__modal-header">
+                <h3 id="mobile-advisory-title" className="login__modal-title">Orientação de Acesso</h3>
+              </header>
+              <div className="login__modal-body">
+                <p className="login__modal-text">
+                  Para garantir a <strong>melhor experiência</strong> e a <strong>conformidade operacional</strong>, recomenda-se o acesso por
+                  <strong> computador (desktop)</strong>. Determinadas <strong>etapas</strong> e <strong>execuções</strong> dependem de um <strong>ambiente de trabalho de desktop</strong>.
+                </p>
+                <div className="login__modal-terminal" aria-label="Terminal">
+                  <pre className="login__modal-code">{`$ advise --device mobile
+> recomendado: desktop
+> continuar: possível, com limitações`}</pre>
+                </div>
+              </div>
+              <footer className="login__modal-actions">
+                <button type="button" className="btn btn-secondary" onClick={() => setMobileAdvisoryOpen(false)}>Voltar</button>
+                <button
+                  type="button"
+                  className="btn btn-primary"
+                  onClick={async () => {
+                    setMobileProceed(true);
+                    setMobileAdvisoryOpen(false);
+                    await performLogin();
+                  }}
+                >Prosseguir no mobile</button>
+              </footer>
+            </div>
+          </div>
+        )}
       </div>
     </section>
   );
