@@ -282,13 +282,18 @@
 .home__output-line .warn { color: #e7d46b; }
 .home__output-line .err { color: #ff827a; }
 
+/* Quando as linhas de saída estiverem dentro do bloco de código */
+.home__code .home__output-line { display: block; margin-top: 10px; }
+.home__code .home__output-line + .home__output-line { margin-top: 6px; }
+.home__code .home__output-line::before { content: "> "; opacity: 0.85; }
+
 @media (max-width: 900px) {
   .home__layout { grid-template-columns: 1fr; }
 }
 
 /* Ajustes de responsividade para telas pequenas */
 @media (width <= 480px) {
-  .home { padding: 20px 0 48px; }
+  .home { padding: 20px 20px 48px; }
   .home__container { width: 95vw; }
   .home__header { margin-bottom: 16px; }
   .home__brand-title { font-size: 18px; }
@@ -308,8 +313,8 @@
   .home__terminal-header { padding: 10px 12px; gap: 10px; }
   .home__prompt { padding: 6px 8px; gap: 6px; }
   .home__prompt-label { font-size: 12px; }
-  .home__prompt-input { font-size: 13px; }
-  .home__run-btn { min-width: 72px; padding: 8px 12px; }
+  .home__prompt-input { font-size: 12px; }
+  .home__run-btn { min-width: 72px; padding: 0 12px; align-self: stretch; }
   .home__run-icon { font-size: 14px; }
 
   .home__terminal-body { padding: 8px 10px 12px; }

@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { FaPlay, FaSpinner } from "react-icons/fa";
+import React from "react";
+import Terminal from "./Terminal";
 
 export default function WelcomeTerminal({
   title = "Bem-vindo ao grupo Builders de Elite",
@@ -21,51 +21,18 @@ export default function WelcomeTerminal({
   ],
   onRun,
 }) {
-  const [command, setCommand] = useState("");
-  const [output, setOutput] = useState([]);
-  const [running, setRunning] = useState(false);
-
-  const run = () => {
-    if (running) return;
-    const cmd = command.trim();
-    const effectiveCmd = cmd || "hello";
-    const ts = new Date().toLocaleTimeString();
-
-    setRunning(true);
-    // Mostrar o comando e o estado de "Aguarde..." imediatamente
-    setOutput((prev) => [
-      ...prev,
-      `[${ts}] ${promptLabel} ${effectiveCmd}`,
-      "Aguarde...",
-    ]);
-    setCommand("");
-
-    // Após 2s, exibir a saída simulada do terminal
-    setTimeout(() => {
-      let lines = [];
-      if (typeof onRun === "function") {
-        const res = onRun(effectiveCmd) || [];
-        lines = lines.concat(Array.isArray(res) ? res : [String(res)]);
-      } else {
-        switch (effectiveCmd) {
-          case "hello":
-          case "print(\"Hello World\")":
-            lines.push("Hello World");
-            lines.push("Bem-vindo ao grupo Builders de Elite!");
-            lines.push("use com moderação; fique atento às lives e à comunidade");
-            break;
-          default:
-            lines.push(`[erro] comando desconhecido: ${effectiveCmd}`);
-            lines.push("disponível: 'hello' — tente digitar 'hello'");
-            break;
-        }
-      }
-      setOutput((prev) => [...prev, ...lines]);
-      setRunning(false);
-    }, 2000);
+  const defaultCommands = {
+    hello: () => [
+      "Hello World",
+      "Bem-vindo ao grupo Builders de Elite!",
+      "use com moderação; fique atento às lives e à comunidade",
+    ],
+    'print("Hello World")': () => [
+      "Hello World",
+      "Bem-vindo ao grupo Builders de Elite!",
+      "use com moderação; fique atento às lives e à comunidade",
+    ],
   };
-
-  const numberedCode = codeLines.map((line, idx) => `${String(idx + 1).padEnd(3, " ")}${line}`).join("\n");
 
   return (
     <>
@@ -74,47 +41,14 @@ export default function WelcomeTerminal({
         <p className="home__welcome-text">{description}</p>
       </div>
 
-      <div className="home__terminal" role="region" aria-label="Terminal">
-        <div className="home__terminal-header">
-          <div className="home__prompt">
-            <span className="home__prompt-label">{promptLabel}</span>
-            <input
-              className="home__prompt-input"
-              type="text"
-              value={command}
-              placeholder={inputPlaceholder}
-              onChange={(e) => setCommand(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") run();
-              }}
-              aria-label="Entrada de comando"
-              disabled={running}
-            />
-          </div>
-          <button
-            className={`home__run-btn ${running ? "is-running" : ""}`}
-            onClick={run}
-            aria-label={runLabel}
-            disabled={running}
-            title={runLabel}
-          >
-            {running ? (
-              <FaSpinner className="home__run-icon home__run-spinner" />
-            ) : (
-              <FaPlay className="home__run-icon" />
-            )}
-          </button>
-        </div>
-
-        <div className="home__terminal-body">
-          <pre className="home__code" aria-label="Editor de código simulado">{numberedCode}</pre>
-          <div className="home__output" aria-live="polite">
-            {output.map((line, i) => (
-              <div key={i} className="home__output-line">{line}</div>
-            ))}
-          </div>
-        </div>
-      </div>
+      <Terminal
+        promptLabel={promptLabel}
+        inputPlaceholder={inputPlaceholder}
+        runLabel={runLabel}
+        codeLines={codeLines}
+        commands={defaultCommands}
+        onRun={onRun}
+      />
     </>
   );
 }
