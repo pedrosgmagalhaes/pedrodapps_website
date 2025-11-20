@@ -66,7 +66,7 @@ export default function ForgotPassword() {
               <button type="submit" className="btn btn-primary forgot__btn" disabled={status === "loading"}>
                 {status === "loading" ? "Enviando..." : "Enviar instruções"}
               </button>
-              <a href="#login" className="forgot__link">Voltar ao login</a>
+              <a href="/login" className="forgot__link">Voltar ao login</a>
             </div>
           </form>
         </div>

@@ -30,14 +30,14 @@ const Header = () => {
           {/* Ações / CTAs no canto direito */}
           <div className="header__actions">
             <a
-              href="#checkout"
+              href="/checkout"
               className="header__btn header__btn--primary header__btn--attention"
               aria-label="Faça parte"
             >
               <span className="header__btn-label">Faça parte!</span>
             </a>
 
-            <a href="#login" className="header__btn header__btn--outline" aria-label="Entrar">
+            <a href="/login" className="header__btn header__btn--outline" aria-label="Entrar">
               <span className="header__btn-label">Entrar</span>
             </a>
           </div>

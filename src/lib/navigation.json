@@ -1,11 +1,11 @@
 {
   "header_quick_links": [],
-  "login": { "label": "Entrar", "href": "#login" },
+  "login": { "label": "Entrar", "href": "/login" },
   "groups": [
     {
       "key": "menu",
       "title": "Menu",
-      "items": [{ "label": "Entrar", "href": "#login" }]
+      "items": [{ "label": "Entrar", "href": "/login" }]
     }
   ]
 }

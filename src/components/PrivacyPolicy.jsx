@@ -167,7 +167,7 @@ export default function PrivacyPolicy() {
               Utilizamos cookies para melhorar sua experiência e personalizar conteúdo. Serviços
               como Google AdSense podem empregar o cookie DoubleClick para exibir anúncios mais
               relevantes e limitar repetições. Para detalhes, consulte nossa{" "}
-              <a href="#cookies">Política de Cookies</a>.
+              <a href="/cookies">Política de Cookies</a>.
             </p>
           </div>
 

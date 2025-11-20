@@ -36,7 +36,7 @@ export default function Links() {
                   Conheça o programa
                 </a>
                 <a
-                  href="https://pedrodapps.com/#login"
+                  href="/login"
                   className="links__highlight-btn links__highlight-btn--secondary"
                   aria-label="Entrar agora no Builders de Elite"
                 >
@@ -239,9 +239,9 @@ export default function Links() {
               <strong> fora do aplicativo</strong>. <strong>Não nos responsabilizamos</strong> pelo conteúdo, pelas
               práticas de privacidade ou pela segurança desses domínios externos. <strong>Ao prosseguir</strong>,
               você declara ciência e concordância com nossos {" "}
-              <a href="#servicos" aria-label="Abrir Termos de Serviço"><strong>Termos de Serviço</strong></a>
+              <a href="/servicos" aria-label="Abrir Termos de Serviço"><strong>Termos de Serviço</strong></a>
               {" "}e {" "}
-              <a href="#privacidade" aria-label="Abrir Política de Privacidade"><strong>Política de Privacidade</strong></a>.
+              <a href="/privacidade" aria-label="Abrir Política de Privacidade"><strong>Política de Privacidade</strong></a>.
             </p>
           </div>
       </div>

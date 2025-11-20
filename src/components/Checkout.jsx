@@ -539,7 +539,7 @@ export default function Checkout() {
             <div className="checkout__footnote">
               <small>
                 Ao continuar, você concorda com a{" "}
-                <a href="#privacidade" aria-label="Abrir Política de Privacidade">
+                <a href="/privacidade" aria-label="Abrir Política de Privacidade">
                   {" "}
                   Política de Privacidade.
                 </a>
@@ -547,7 +547,7 @@ export default function Checkout() {
               <small>{" "}
                 Uso responsável de automação: teste em ambiente controlado, defina limites e
                 monitore execuções. Leia os{" "}
-                <a href="#servicos" aria-label="Abrir Termos de Serviço">
+                <a href="/servicos" aria-label="Abrir Termos de Serviço">
                   Termos de Serviço
                 </a>
                 .

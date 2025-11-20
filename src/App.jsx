@@ -1,4 +1,6 @@
-import React, { useEffect, useState, Suspense } from "react";
+import React, { useEffect, Suspense } from "react";
+import { useLocation, Routes, Route } from "react-router-dom";
+import ProtectedRoute from "./components/ProtectedRoute";
 const Hero = React.lazy(() => import("./components/Hero"));
 const NewsTicker = React.lazy(() => import("./components/NewsTicker"));
 const Courses = React.lazy(() => import("./components/Courses"));
@@ -19,30 +21,44 @@ const PrivacyPolicy = React.lazy(() => import("./components/DataProtection"));
 const ServicesPolicy = React.lazy(() => import("./components/ServicesPolicy"));
 const CookiesPolicy = React.lazy(() => import("./components/ConsentNotice"));
 const DataDeletionPolicy = React.lazy(() => import("./components/DataDeletionPolicy"));
+const Members = React.lazy(() => import("./members/Members"));
+const AdminTools = React.lazy(() => import("./components/AdminTools"));
 import "./App.css";
 import ViewportSection from "./components/ViewportSection";
 import heroBg from "./assets/builderselite.png";
 
 function App() {
-  const [hash, setHash] = useState(typeof window !== "undefined" ? window.location.hash : "");
-  const isLoginView = hash === "#login";
-  const isForgotView = hash === "#recuperar-senha";
-  const isCheckoutView = hash === "#checkout";
-  const isPrivacyView = hash === "#privacidade";
-  const isServicesView = hash === "#servicos";
-  const isCookiesView = hash === "#cookies";
-  const isDeletionView = hash === "#exclusao-dados";
-  const isLinksView = hash === "#links";
+  const location = useLocation();
+  const pathname = location.pathname;
+  const isLoginView = pathname === "/login";
+  const isForgotView = pathname === "/recuperar-senha";
+  const isCheckoutView = pathname === "/checkout";
+  const isPrivacyView = pathname === "/privacidade";
+  const isServicesView = pathname === "/servicos";
+  const isCookiesView = pathname === "/cookies";
+  const isDeletionView = pathname === "/exclusao-dados";
   const isPolicyView = isPrivacyView || isServicesView || isCookiesView || isDeletionView;
   const isAuthView = isLoginView || isForgotView || isCheckoutView;
 
+  // Ponte de compatibilidade: se entrar com hash antigo, converte para path
   useEffect(() => {
-    const handleHashChange = () => {
-      setHash(window.location.hash);
+    const map = {
+      "#login": "/login",
+      "#recuperar-senha": "/recuperar-senha",
+      "#checkout": "/checkout",
+      "#privacidade": "/privacidade",
+      "#servicos": "/servicos",
+      "#cookies": "/cookies",
+      "#exclusao-dados": "/exclusao-dados",
+      "#links": "/links",
+      "#members": "/members",
     };
-    window.addEventListener("hashchange", handleHashChange);
-    return () => window.removeEventListener("hashchange", handleHashChange);
-  }, []);
+    const currentHash = window.location.hash;
+    const target = map[currentHash];
+    if (target && pathname !== target) {
+      window.history.replaceState({}, "", target);
+    }
+  }, [pathname]);
 
   // Precarrega a imagem de fundo do Hero para evitar atraso mesmo com lazy
   useEffect(() => {
@@ -75,138 +91,196 @@ function App() {
     });
 
     return () => observer.disconnect();
-  }, [hash]);
+  }, [pathname]);
 
   return (
     <div className="App">
-      <main
-        className={isAuthView ? "main main--login" : isPolicyView ? "main main--policy" : "main"}
-      >
-        {isLinksView ? (
-          <>
-            <Suspense fallback={<div className="lazy-fallback" aria-hidden="true" />}> 
-              <Links />
-            </Suspense>
-          </>
-        ) : isLoginView ? (
-          <>
-            <Suspense fallback={<div className="lazy-fallback" aria-hidden="true" />}> 
-              <Login />
-            </Suspense>
-            <Suspense fallback={<div className="lazy-fallback" aria-hidden="true" />}> 
-              <Footer />
-            </Suspense>
-          </>
-        ) : isForgotView ? (
-          <>
-            <Suspense fallback={<div className="lazy-fallback" aria-hidden="true" />}> 
-              <ForgotPassword />
-            </Suspense>
-            <Suspense fallback={<div className="lazy-fallback" aria-hidden="true" />}> 
-              <Footer />
-            </Suspense>
-          </>
-        ) : isCheckoutView ? (
-          <>
-            <Suspense fallback={<div className="lazy-fallback" aria-hidden="true" />}> 
-              <Checkout />
-            </Suspense>
-          </>
-        ) : isPrivacyView ? (
-          <>
-            <Suspense fallback={<div className="lazy-fallback" aria-hidden="true" />}> 
-              <PrivacyPolicy />
-            </Suspense>
-            <Suspense fallback={<div className="lazy-fallback" aria-hidden="true" />}> 
-              <Footer />
-            </Suspense>
-          </>
-        ) : isServicesView ? (
-          <>
-            <Suspense fallback={<div className="lazy-fallback" aria-hidden="true" />}> 
-              <ServicesPolicy />
-            </Suspense>
-            <Suspense fallback={<div className="lazy-fallback" aria-hidden="true" />}> 
-              <Footer />
-            </Suspense>
-          </>
-        ) : isCookiesView ? (
-          <>
-            <Suspense fallback={<div className="lazy-fallback" aria-hidden="true" />}> 
-              <CookiesPolicy />
-            </Suspense>
-            <Suspense fallback={<div className="lazy-fallback" aria-hidden="true" />}> 
-              <Footer />
-            </Suspense>
-          </>
-        ) : isDeletionView ? (
-          <>
-            <Suspense fallback={<div className="lazy-fallback" aria-hidden="true" />}> 
-              <DataDeletionPolicy />
-            </Suspense>
-            <Suspense fallback={<div className="lazy-fallback" aria-hidden="true" />}> 
-              <Footer />
-            </Suspense>
-          </>
-        ) : (
-          <>
-            <ViewportSection>
+      <main className={isAuthView ? "main main--login" : isPolicyView ? "main main--policy" : "main"}>
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <>
+                <ViewportSection>
+                  <Suspense fallback={<div className="lazy-fallback" aria-hidden="true" />}> 
+                    <Hero />
+                  </Suspense>
+                </ViewportSection>
+                <ViewportSection>
+                  <Suspense fallback={<div className="lazy-fallback" aria-hidden="true" />}> 
+                    <NewsTicker />
+                  </Suspense>
+                </ViewportSection>
+                <ViewportSection>
+                  <Suspense fallback={<div className="lazy-fallback" aria-hidden="true" />}> 
+                    <Courses />
+                  </Suspense>
+                </ViewportSection>
+                <ViewportSection>
+                  <Suspense fallback={<div className="lazy-fallback" aria-hidden="true" />}> 
+                    <Banner />
+                  </Suspense>
+                </ViewportSection>
+                <ViewportSection>
+                  <Suspense fallback={<div className="lazy-fallback" aria-hidden="true" />}> 
+                    <Access30Days />
+                  </Suspense>
+                </ViewportSection>
+                <ViewportSection>
+                  <Suspense fallback={<div className="lazy-fallback" aria-hidden="true" />}> 
+                    <Audience />
+                  </Suspense>
+                </ViewportSection>
+                <ViewportSection>
+                  <Suspense fallback={<div className="lazy-fallback" aria-hidden="true" />}> 
+                    <VipArea />
+                  </Suspense>
+                </ViewportSection>
+                <ViewportSection>
+                  <Suspense fallback={<div className="lazy-fallback" aria-hidden="true" />}> 
+                    <FAQ />
+                  </Suspense>
+                </ViewportSection>
+                <ViewportSection>
+                  <Suspense fallback={<div className="lazy-fallback" aria-hidden="true" />}> 
+                    <FounderQuote />
+                  </Suspense>
+                </ViewportSection>
+                <ViewportSection>
+                  <Suspense fallback={<div className="lazy-fallback" aria-hidden="true" />}> 
+                    <ContactCTA />
+                  </Suspense>
+                </ViewportSection>
+                <ViewportSection>
+                  <Suspense fallback={<div className="lazy-fallback" aria-hidden="true" />}> 
+                    <Footer />
+                  </Suspense>
+                </ViewportSection>
+              </>
+            }
+          />
+
+          <Route
+            path="/links"
+            element={
               <Suspense fallback={<div className="lazy-fallback" aria-hidden="true" />}> 
-                <Hero />
+                <Links />
               </Suspense>
-            </ViewportSection>
-            <ViewportSection>
+            }
+          />
+
+          <Route
+            path="/members"
+            element={
+              <ProtectedRoute>
+                <Suspense fallback={<div className="lazy-fallback" aria-hidden="true" />}> 
+                  <Members />
+                </Suspense>
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/admin/tools"
+            element={
+              <ProtectedRoute>
+                <Suspense fallback={<div className="lazy-fallback" aria-hidden="true" />}> 
+                  <AdminTools />
+                </Suspense>
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/login"
+            element={
+              <>
+                <Suspense fallback={<div className="lazy-fallback" aria-hidden="true" />}> 
+                  <Login />
+                </Suspense>
+              </>
+            }
+          />
+
+          <Route
+            path="/recuperar-senha"
+            element={
+              <>
+                <Suspense fallback={<div className="lazy-fallback" aria-hidden="true" />}> 
+                  <ForgotPassword />
+                </Suspense>
+                <Suspense fallback={<div className="lazy-fallback" aria-hidden="true" />}> 
+                  <Footer />
+                </Suspense>
+              </>
+            }
+          />
+
+          <Route
+            path="/checkout"
+            element={
               <Suspense fallback={<div className="lazy-fallback" aria-hidden="true" />}> 
-                <NewsTicker />
+                <Checkout />
               </Suspense>
-            </ViewportSection>
-            <ViewportSection>
-              <Suspense fallback={<div className="lazy-fallback" aria-hidden="true" />}> 
-                <Courses />
-              </Suspense>
-            </ViewportSection>
-            <ViewportSection>
-              <Suspense fallback={<div className="lazy-fallback" aria-hidden="true" />}> 
-                <Banner />
-              </Suspense>
-            </ViewportSection>
-            <ViewportSection>
-              <Suspense fallback={<div className="lazy-fallback" aria-hidden="true" />}> 
-                <Access30Days />
-              </Suspense>
-            </ViewportSection>
-            <ViewportSection>
-              <Suspense fallback={<div className="lazy-fallback" aria-hidden="true" />}> 
-                <Audience />
-              </Suspense>
-            </ViewportSection>
-            <ViewportSection>
-              <Suspense fallback={<div className="lazy-fallback" aria-hidden="true" />}> 
-                <VipArea />
-              </Suspense>
-            </ViewportSection>
-            <ViewportSection>
-              <Suspense fallback={<div className="lazy-fallback" aria-hidden="true" />}> 
-                <FAQ />
-              </Suspense>
-            </ViewportSection>
-            <ViewportSection>
-              <Suspense fallback={<div className="lazy-fallback" aria-hidden="true" />}> 
-                <FounderQuote />
-              </Suspense>
-            </ViewportSection>
-            <ViewportSection>
-              <Suspense fallback={<div className="lazy-fallback" aria-hidden="true" />}> 
-                <ContactCTA />
-              </Suspense>
-            </ViewportSection>
-            <ViewportSection>
-              <Suspense fallback={<div className="lazy-fallback" aria-hidden="true" />}> 
-                <Footer />
-              </Suspense>
-            </ViewportSection>
-          </>
-        )}
+            }
+          />
+
+          <Route
+            path="/privacidade"
+            element={
+              <>
+                <Suspense fallback={<div className="lazy-fallback" aria-hidden="true" />}> 
+                  <PrivacyPolicy />
+                </Suspense>
+                <Suspense fallback={<div className="lazy-fallback" aria-hidden="true" />}> 
+                  <Footer />
+                </Suspense>
+              </>
+            }
+          />
+
+          <Route
+            path="/servicos"
+            element={
+              <>
+                <Suspense fallback={<div className="lazy-fallback" aria-hidden="true" />}> 
+                  <ServicesPolicy />
+                </Suspense>
+                <Suspense fallback={<div className="lazy-fallback" aria-hidden="true" />}> 
+                  <Footer />
+                </Suspense>
+              </>
+            }
+          />
+
+          <Route
+            path="/cookies"
+            element={
+              <>
+                <Suspense fallback={<div className="lazy-fallback" aria-hidden="true" />}> 
+                  <CookiesPolicy />
+                </Suspense>
+                <Suspense fallback={<div className="lazy-fallback" aria-hidden="true" />}> 
+                  <Footer />
+                </Suspense>
+              </>
+            }
+          />
+
+          <Route
+            path="/exclusao-dados"
+            element={
+              <>
+                <Suspense fallback={<div className="lazy-fallback" aria-hidden="true" />}> 
+                  <DataDeletionPolicy />
+                </Suspense>
+                <Suspense fallback={<div className="lazy-fallback" aria-hidden="true" />}> 
+                  <Footer />
+                </Suspense>
+              </>
+            }
+          />
+        </Routes>
       </main>
     </div>
   );

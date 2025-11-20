@@ -52,15 +52,15 @@ const Footer = () => {
         <p className="footer__bottom-text">
           Conteúdo educacional; não oferecemos aconselhamento financeiro. {""}
           Ao acessar nossa plataforma, você automaticamente aceita nossos {""}
-          <a href="#servicos" aria-label="Abrir Termos de Serviço">
+          <a href="/servicos" aria-label="Abrir Termos de Serviço">
             Termos de Serviço
           </a>
           , nossa {""}
-          <a href="#privacidade" aria-label="Abrir Política de Privacidade">
+          <a href="/privacidade" aria-label="Abrir Política de Privacidade">
             Política de Privacidade
           </a>
           , bem como nossa {""}
-          <a href="#cookies" aria-label="Abrir Política de Cookies">
+          <a href="/cookies" aria-label="Abrir Política de Cookies">
             Política de Cookies
           </a>
           .
@@ -72,9 +72,9 @@ const Footer = () => {
           <strong> fora do aplicativo</strong>. <strong>Não nos responsabilizamos</strong> pelo conteúdo, pelas
           práticas de privacidade ou pela segurança desses domínios externos. <strong>Ao prosseguir</strong>,
           você declara ciência e concordância com nossos {" "}
-          <a href="#servicos" aria-label="Abrir Termos de Serviço"><strong>Termos de Serviço</strong></a>
+          <a href="/servicos" aria-label="Abrir Termos de Serviço"><strong>Termos de Serviço</strong></a>
           {" "}e {" "}
-          <a href="#privacidade" aria-label="Abrir Política de Privacidade"><strong>Política de Privacidade</strong></a>.
+          <a href="/privacidade" aria-label="Abrir Política de Privacidade"><strong>Política de Privacidade</strong></a>.
         </p>
       </div>
     </footer>

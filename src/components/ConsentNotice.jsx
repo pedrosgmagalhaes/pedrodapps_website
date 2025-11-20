@@ -56,7 +56,7 @@ export default function CookiesPolicy() {
             </ul>
             <p>
               Para mais detalhes sobre tratamento de dados, consulte nossa{" "}
-              <a href="#privacidade">Política de Privacidade</a>.
+              <a href="/privacidade">Política de Privacidade</a>.
             </p>
           </div>
 

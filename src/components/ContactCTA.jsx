@@ -14,7 +14,7 @@ export default function ContactCTA() {
           </p>
 
           <div className="contact__actions">
-            <a href="#checkout" className="hero__btn hero__btn--primary">
+            <a href="/checkout" className="hero__btn hero__btn--primary">
               Quero fazer parte
             </a>
           </div>

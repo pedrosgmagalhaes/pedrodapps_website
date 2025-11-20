@@ -22,9 +22,15 @@
 }
 
 @keyframes floatY {
-  0% { transform: translateY(0); }
-  50% { transform: translateY(-2px); }
-  100% { transform: translateY(0); }
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-2px);
+  }
+  100% {
+    transform: translateY(0);
+  }
 }
 
 .login__card {
@@ -43,7 +49,10 @@
   background-origin: border-box;
   background-clip: padding-box, border-box; /* cria borda em gradiente */
   animation: loginPopIn 600ms cubic-bezier(0.22, 1, 0.36, 1) both;
-  transition: transform 220ms ease, box-shadow 220ms ease, border-color 220ms ease;
+  transition:
+    transform 220ms ease,
+    box-shadow 220ms ease,
+    border-color 220ms ease;
 }
 
 @keyframes loginPopIn {
@@ -115,6 +124,24 @@
   margin-top: 16px;
 }
 
+/* Container colapsável para senha: surge suavemente após foco no e-mail */
+.login__password {
+  overflow: hidden;
+  max-height: 0;
+  opacity: 0;
+  transform: translateY(-4px);
+  transition:
+    max-height 220ms ease,
+    opacity 220ms ease,
+    transform 220ms ease;
+}
+
+.login__password.is-visible {
+  max-height: 96px; /* suficiente para label + input */
+  opacity: 1;
+  transform: translateY(0);
+}
+
 .login__field {
   display: grid;
   gap: 6px;
@@ -131,8 +158,14 @@
   border: 1px solid rgb(255 255 255 / 16%);
   border-radius: var(--border-radius-md);
   padding: 12px;
+  font-size: 14px; /* fonte um pouco menor para e-mail e senha */
   outline: none;
-  transition: border-color 160ms ease, box-shadow 160ms ease, transform 120ms ease;
+  position: relative; /* garantir contexto de empilhamento interno */
+  z-index: 1;
+  transition:
+    border-color 160ms ease,
+    box-shadow 160ms ease,
+    transform 120ms ease;
 }
 
 .login__input::placeholder {
@@ -141,7 +174,9 @@
 
 .login__input:focus {
   border-color: var(--accent-primary);
-  box-shadow: 0 0 0 3px rgb(123 227 61 / 25%), 0 10px 24px rgb(0 0 0 / 25%);
+  box-shadow:
+    0 0 0 3px rgb(123 227 61 / 25%),
+    0 10px 24px rgb(0 0 0 / 25%);
   transform: translateY(-1px);
 }
 
@@ -150,20 +185,191 @@
   box-shadow: 0 0 0 3px rgb(255 86 86 / 25%);
 }
 
+/* Wrapper visual do input: contém borda/fundo e posiciona ícones/botão */
+.login__input-wrapper {
+  position: relative;
+  background: #1c1e2f; /* mesmo fundo do input */
+  border: 1px solid rgb(255 255 255 / 16%);
+  border-radius: var(--border-radius-md);
+  overflow: hidden; /* garante que conteúdo fique dentro da borda */
+}
+
+.login__input-wrapper .login__input {
+  padding-right: 48px; /* espaço para o botão com ícone */
+  background: transparent; /* usa fundo do wrapper */
+  border: none; /* remove borda do input; wrapper tem a borda */
+  box-shadow: none; /* sem sombra própria */
+}
+
+.login__input-wrapper .login__input:focus {
+  transform: none; /* foco visual fica no wrapper; evita deslocamento do texto */
+}
+
+.login__reveal-btn {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 28px;
+  width: 36px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  margin: 0;
+  border-radius: var(--border-radius-sm);
+  background: transparent; /* sem fundo */
+  border: none; /* sem borda */
+  color: var(--neutral-white);
+  z-index: 2; /* acima do input em foco */
+  cursor: pointer;
+  transition: background 160ms ease, border-color 160ms ease, transform 120ms ease;
+}
+
+.login__reveal-btn:hover {
+  background: transparent;
+}
+
+.login__reveal-btn:active {
+  transform: translateY(-50%) scale(0.98);
+}
+
+.login__reveal-btn svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* Foco no wrapper quando elementos internos ganham foco */
+.login__input-wrapper:focus-within {
+  border-color: var(--accent-primary);
+  box-shadow:
+    0 0 0 3px rgb(123 227 61 / 25%),
+    0 10px 24px rgb(0 0 0 / 25%);
+}
+
+/* Estado inválido aplicado ao wrapper para manter o olho dentro da borda com cor de erro */
+.login__input-wrapper.is-invalid {
+  border-color: rgb(255 86 86 / 75%);
+  box-shadow: 0 0 0 3px rgb(255 86 86 / 25%);
+}
+
 .login__actions {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+/* Lembrar senha: container e estilos do checkbox */
+.login__remember {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-top: 8px;
+  gap: 8px;
+  margin-top: 6px;
+  overflow: hidden;
+  max-height: 0;
+  opacity: 0;
+  transform: translateY(-4px);
+  transition:
+    max-height 220ms ease,
+    opacity 220ms ease,
+    transform 220ms ease;
+}
+
+.login__remember.is-visible {
+  max-height: 36px;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.login__remember-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--text-secondary);
+  font-size: 12px;
+}
+
+.login__remember-input {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: var(--border-radius-sm);
+  border: 1px solid rgb(255 255 255 / 35%);
+  background: transparent; /* sem fundo branco */
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease,
+    box-shadow 160ms ease,
+    transform 120ms ease;
+}
+
+.login__remember-input:hover {
+  border-color: rgb(255 255 255 / 55%);
+}
+
+.login__remember-input:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgb(123 227 61 / 25%);
+}
+
+.login__remember-input:checked {
+  background-color: var(--accent-primary);
+  border-color: var(--accent-primary);
+}
+
+.login__remember-input:checked::after {
+  content: "";
+  width: 8px;
+  height: 4px;
+  border-left: 2px solid #000;
+  border-bottom: 2px solid #000;
+  transform: rotate(-45deg);
+}
+
+/* Dica/aviso discreto abaixo de inputs (ex.: Caps Lock) */
+.login__hint {
+  margin-top: 6px;
+  font-size: 12px;
+  color: rgb(255 255 255 / 70%);
+}
+
+/* Seção de provedores (Google) após as ações */
+.login__oauth {
+  margin-top: 16px;
+  display: grid;
+  gap: 12px;
+  grid-template-columns: 1fr;
+  gap: 8px;
+  margin-left: 5px;
+}
+
+/* Wrapper do botão Google: garantir mesma largura e altura mínima do botão Entrar */
+.login__google-btn {
+  width: 100%;
+  min-height: 40px;
 }
 
 .login__btn {
   min-width: 120px;
+  width: 100%;
+  max-width: 360px; /* limitar largura máxima */
+  margin: 0 auto; /* centralizar dentro do grid */
   position: relative;
   background: var(--accent-primary);
   color: #000;
   box-shadow: 0 8px 20px rgb(123 227 61 / 20%);
-  transition: transform 160ms ease, box-shadow 160ms ease;
+  transition:
+    transform 160ms ease,
+    box-shadow 160ms ease;
+  border-radius: var(--border-radius-sm); /* raio menor para combinar com Google */
+  font-size: var(--font-size-sm); /* texto menor (~14px) como o Google */
+  min-height: 40px; /* altura igual ao Google size=large */
+  padding: 10px var(--spacing-lg); /* vertical próximo ao Google */
 }
 
 .login__btn:hover {
@@ -177,12 +383,13 @@
   transform: none;
 }
 
-
 .login__link {
   color: var(--text-secondary);
   text-decoration: none;
   font-size: 12px;
-  transition: color 160ms ease, text-decoration-color 160ms ease;
+  transition:
+    color 160ms ease,
+    text-decoration-color 160ms ease;
 }
 
 .login__link:hover {
@@ -190,10 +397,98 @@
   text-decoration: underline;
 }
 
+/* Link "Esqueci minha senha" com revelação discreta */
+.login__forgot {
+  overflow: hidden;
+  max-height: 0;
+  opacity: 0;
+  transform: translateY(-4px);
+  transition:
+    max-height 200ms ease,
+    opacity 200ms ease,
+    transform 200ms ease;
+}
+
+.login__forgot.is-visible {
+  max-height: 28px;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Disclaimer fora do card: discreto sobre fundo escuro */
+.login__disclaimer {
+  margin-top: 16px;
+  max-width: 540px;
+  text-align: center;
+  color: rgb(255 255 255 / 60%);
+  font-weight: 300; /* fontes leves */
+  font-size: 12px;
+  line-height: 1.6;
+  letter-spacing: 0.1px;
+}
+
+/* Link de recuperação acima do disclaimer */
+.login__forgot-out {
+  margin-top: 12px;
+  text-align: center;
+  overflow: hidden;
+  max-height: 0;
+  opacity: 0;
+  transform: translateY(-4px);
+  transition:
+    max-height 200ms ease,
+    opacity 200ms ease,
+    transform 200ms ease;
+}
+
+.login__forgot-out.is-visible {
+  max-height: 32px;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.login__forgot-link {
+  color: var(--neutral-white);
+  font-weight: 700; /* negrito */
+  text-decoration: underline; /* sublinhado */
+  font-size: 12px; /* mesmo tamanho do disclaimer */
+}
+
+.login__forgot-link:hover {
+  color: var(--accent-primary);
+}
+
 @media (width <= 480px) {
   .login__card {
     padding: 18px;
   }
-  .login__title { font-size: 20px; }
-  .login__link { font-size: 11px; }
+  .login__title {
+    font-size: 20px;
+  }
+  .login__link {
+    font-size: 11px;
+  }
+}
+.login__input-wrapper--email .login__input {
+  width: 100%;
+  padding-left: 40px; /* aproximar o texto do ícone de envelope */
+}
+
+.login__input-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: rgb(255 255 255 / 70%);
+  pointer-events: none; /* não interferir no foco/entrada do input */
+  z-index: 2; /* manter visível quando input estiver em foco */
+  margin: 0; /* remover margens do ícone */
+  padding: 0; /* remover padding do ícone */
+  line-height: 0; /* evitar espaço vertical extra */
+}
+
+.login__input-icon svg {
+  width: 18px;
+  height: 18px;
+  display: block; /* evita espaçamento inline extra */
 }

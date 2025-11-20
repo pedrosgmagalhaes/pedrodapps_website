@@ -38,7 +38,7 @@ export default function Access30Days() {
             </p>
 
             <div className="access30__actions">
-              <a href="#checkout" className="access30__cta btn btn-primary">
+              <a href="/checkout" className="access30__cta btn btn-primary">
                 Quero fazer parte do Builders de Elite
               </a>
             </div>
