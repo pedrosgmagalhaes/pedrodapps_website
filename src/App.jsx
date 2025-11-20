@@ -187,6 +187,9 @@ function App() {
           {/* Compatibilidade: redireciona /home para /members/home */}
           <Route path="/home" element={<Navigate to="/members/home" replace />} />
 
+          {/* Compatibilidade: redireciona /members/login para /login (client-side) */}
+          <Route path="/members/login" element={<Navigate to="/login" replace />} />
+
           <Route
             path="/lessons"
             element={

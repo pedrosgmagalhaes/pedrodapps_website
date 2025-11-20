@@ -1,10 +1,7 @@
 {
   "hosting": {
-    "source": ".",
+    "public": "dist",
     "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
-    "frameworksBackend": {
-      "region": "us-central1"
-    },
     "redirects": [
       { "source": "/members/login", "destination": "/login", "type": 301 }
     ],
