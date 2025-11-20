@@ -10,7 +10,9 @@ export default function GoogleLogin({ onSuccess, onError }) {
   useEffect(() => {
     const clientId = import.meta?.env?.VITE_GOOGLE_CLIENT_ID || (typeof __APP_VITE_GOOGLE_CLIENT_ID__ !== "undefined" ? __APP_VITE_GOOGLE_CLIENT_ID__ : undefined);
     if (!clientId) {
-      console.warn("VITE_GOOGLE_CLIENT_ID não definido. Google Login desativado.");
+      if (import.meta?.env?.DEV) {
+        console.warn("VITE_GOOGLE_CLIENT_ID não definido. Google Login desativado.");
+      }
       setMissingClientId(true);
       return;
     }
@@ -55,7 +57,7 @@ export default function GoogleLogin({ onSuccess, onError }) {
             ? btnRef.current.getBoundingClientRect()
             : null;
           const width = rect ? Math.floor(rect.width) : (btnRef.current?.offsetWidth || 320);
-          if (typeof console !== "undefined" && console.log) {
+          if (import.meta?.env?.DEV && typeof console !== "undefined" && console.log) {
             console.log("[GoogleLogin] Renderizando botão com largura:", width);
           }
           window.google.accounts.id.renderButton(btnRef.current, {
@@ -77,7 +79,7 @@ export default function GoogleLogin({ onSuccess, onError }) {
               const notDisplayed = typeof notification?.getNotDisplayedReason === "function" ? notification.getNotDisplayedReason() : null;
               const skipped = typeof notification?.getSkippedReason === "function" ? notification.getSkippedReason() : null;
               const dismissed = typeof notification?.getDismissedReason === "function" ? notification.getDismissedReason() : null;
-              if (typeof console !== "undefined" && console.debug) {
+              if (import.meta?.env?.DEV && typeof console !== "undefined" && console.debug) {
                 console.debug("[GoogleLogin] One Tap moment:", { type, notDisplayed, skipped, dismissed });
               }
             } catch {
@@ -89,7 +91,9 @@ export default function GoogleLogin({ onSuccess, onError }) {
         attempts += 1;
         timerId = setTimeout(init, 300);
       } else {
-        console.warn("Google Identity Services não carregou a tempo.");
+        if (import.meta?.env?.DEV) {
+          console.warn("Google Identity Services não carregou a tempo.");
+        }
       }
     };
 

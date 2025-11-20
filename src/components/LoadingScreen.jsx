@@ -13,7 +13,9 @@ const LoadingScreen = ({
   const [imageError, setImageError] = useState(false);
 
   const handleImageError = useCallback(() => {
-    console.warn("Erro ao carregar logo do Pedro dApps, usando fallback");
+    if (import.meta?.env?.DEV) {
+      console.warn("Erro ao carregar logo do Pedro dApps, usando fallback");
+    }
     setImageError(true);
   }, []);
 

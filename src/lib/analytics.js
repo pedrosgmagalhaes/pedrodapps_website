@@ -14,12 +14,16 @@ export function trackEvent(event, payload = {}) {
         window.gtag("event", event, payload);
         return true;
       }
-      // Fallback para depuração
-      console.debug("[analytics]", data);
+      // Fallback para depuração (apenas em desenvolvimento)
+      if (import.meta?.env?.DEV) {
+        console.debug("[analytics]", data);
+      }
       return false;
     }
   } catch (err) {
-    console.warn("[analytics] erro ao enviar evento", err);
+    if (import.meta?.env?.DEV) {
+      console.warn("[analytics] erro ao enviar evento", err);
+    }
   }
   return false;
 }
