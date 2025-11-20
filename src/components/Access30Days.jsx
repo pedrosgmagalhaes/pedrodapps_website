@@ -21,7 +21,7 @@ export default function Access30Days() {
     <section
       className="access30"
       id="acessos"
-      aria-label="O que você vai acessar no GRUPO Elite Builders"
+      aria-label="O que você vai acessar no GRUPO Builders de Elite"
     >
       <div className="container">
         <div className="access30__grid">
@@ -30,7 +30,7 @@ export default function Access30Days() {
             <h2 className="access30__title">
               O que você vai acessar
               <br />
-              no GRUPO Elite Builders!
+              no GRUPO Builders de Elite!
             </h2>
             <p className="access30__description">
               Acesso exclusivo a scripts prontos, operações DeFi avançadas e conteúdo especializado.
@@ -39,7 +39,7 @@ export default function Access30Days() {
 
             <div className="access30__actions">
               <a href="/checkout" className="access30__cta btn btn-primary">
-                Quero fazer parte do Elite Builders
+                Quero fazer parte do Builders de Elite
               </a>
             </div>
           </div>

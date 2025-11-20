@@ -150,7 +150,7 @@ export default function Home() {
         <header className="home__header">
           <div className="home__brand" role="heading" aria-level={1}>
             <h1 id="home-title" className="home__brand-title">
-              <a href="/members/home" aria-label="Voltar para a Home">{course?.title || "Elite Builders"}</a>
+              <a href="/members/home" aria-label="Voltar para a Home">{course?.title || "Builders de Elite"}</a>
             </h1>
           </div>
         </header>

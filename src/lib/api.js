@@ -76,9 +76,39 @@ export const API = {
   request: jsonFetch,
   get: (path, opts = {}) => jsonFetch(path, { ...opts, method: "GET" }),
   post: (path, body, opts = {}) => jsonFetch(path, { ...opts, method: "POST", body }),
-  // Courses catalog (public)
+  // Courses catalog and checkout context (public)
   courses: {
     get: (slug, opts = {}) => jsonFetch(`/api/courses/${slug}`, { ...opts, method: "GET" }),
+    checkoutContext: (slug, queryParams = {}, opts = {}) => {
+      const qp = new URLSearchParams();
+      Object.entries(queryParams || {}).forEach(([k, v]) => {
+        if (v !== undefined && v !== null && String(v).length > 0) qp.set(k, v);
+      });
+      const url = qp.toString()
+        ? `/api/courses/${encodeURIComponent(slug)}/checkout/context?${qp.toString()}`
+        : `/api/courses/${encodeURIComponent(slug)}/checkout/context`;
+      const acceptLanguage = typeof navigator !== 'undefined'
+        ? navigator.language || (navigator.languages && navigator.languages[0]) || 'pt'
+        : 'pt';
+      return jsonFetch(url, {
+        ...opts,
+        method: "GET",
+        token: getToken(),
+        headers: { ...(opts.headers || {}), 'Accept-Language': acceptLanguage },
+      });
+    },
+    checkoutStripe: (slug, body = {}, opts = {}) => {
+      const acceptLanguage = typeof navigator !== 'undefined'
+        ? navigator.language || (navigator.languages && navigator.languages[0]) || 'pt'
+        : 'pt';
+      return jsonFetch(`/api/courses/${encodeURIComponent(slug)}/checkout/stripe`, {
+        ...opts,
+        method: "POST",
+        token: getToken(),
+        headers: { ...(opts.headers || {}), 'Accept-Language': acceptLanguage },
+        body,
+      });
+    },
   },
   // Education endpoints (courses, modules, lessons, Q&A)
   edu: {
@@ -168,6 +198,16 @@ export const API = {
         ...opts,
         method: "GET",
         token: getToken(),
+      }),
+  },
+  // Checkout telemetry (optional)
+  checkout: {
+    trackEvent: (payload = {}, opts = {}) =>
+      jsonFetch("/api/checkout/events", {
+        ...opts,
+        method: "POST",
+        token: getToken(),
+        body: payload,
       }),
   },
 };

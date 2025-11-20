@@ -7,7 +7,7 @@ export default function Banner() {
       <div className="container banner__container">
         <div className="banner__content">
           <h2 id="banner-title" className="banner__title">
-            Grupo Exclusivo para Elite Builders em Cripto.
+            Grupo Exclusivo para Builders de Elite em Cripto.
           </h2>
           <p className="banner__description">
             Abordagens e operações financeiras avançadas envolvendo DeFi, APIs de offshore e

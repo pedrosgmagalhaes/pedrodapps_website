@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import QRCode from "qrcode";
 import "./Checkout.css";
 import pedrodappsIcon from "../assets/pedrodapps_icon.png";
@@ -9,8 +9,52 @@ import usdcIcon from "../assets/icons/usdc.svg";
 import btcIcon from "../assets/icons/btc-orange.svg";
 
 import { FaBarcode, FaCreditCard, FaBitcoin } from "react-icons/fa";
+import { SiStripe } from "react-icons/si";
+import { useLocation } from "react-router-dom";
+import { API } from "../lib/api";
+import { emitCheckoutEvent } from "../lib/checkoutTelemetry";
+import { Elements, useStripe, useElements, PaymentElement } from "@stripe/react-stripe-js";
+import { loadStripe } from "@stripe/stripe-js";
+
+// Catálogo de produtos e formatação
+const PRODUCTS = {
+  "plan-anual": { name: "Pedro dApps", priceBRL: 487.58 },
+  "plan-mensal": { name:"Pedro dApps", priceBRL: 69.9 },
+  "acesso-30-dias": { name: "Acesso 30 dias", priceBRL: 129.0 },
+};
+
+const formatBRL = (v) => new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(v);
 
 export default function Checkout() {
+  const location = useLocation();
+  const query = new URLSearchParams(location.search);
+  const productParam = query.get("product") || "plan-anual";
+  const courseSlug = query.get("course") || "builders-de-elite";
+  const [ctx, setCtx] = useState(null);
+  const productData = PRODUCTS[productParam] || PRODUCTS["plan-anual"];
+  const approvedMethods = ctx?.payments?.approvedMethods || ["pix", "card"]; // fallback padrão
+  const supportsMethod = (name) => {
+    const list = approvedMethods || [];
+    return list.includes(name) || (name === 'card' && list.includes('stripe'));
+  };
+  const STRIPE_PK = ((import.meta?.env?.VITE_STRIPE_PUBLIC_KEY ?? (
+    typeof globalThis !== 'undefined' && typeof globalThis['__APP_VITE_STRIPE_PUBLIC_KEY__'] === 'string'
+      ? globalThis['__APP_VITE_STRIPE_PUBLIC_KEY__']
+      : ""
+  )) || "").trim();
+  const stripePromise = STRIPE_PK ? loadStripe(STRIPE_PK) : null;
+  const utm = {
+    utm_source: query.get("utm_source") || null,
+    utm_medium: query.get("utm_medium") || null,
+    utm_campaign: query.get("utm_campaign") || null,
+    utm_content: query.get("utm_content") || null,
+    utm_term: query.get("utm_term") || null,
+    ref: query.get("ref") || null,
+    origin: query.get("origin") || null,
+    gclid: query.get("gclid") || null,
+    fbclid: query.get("fbclid") || null,
+  };
+
   const [method, setMethod] = useState("pix"); // pix | boleto | card
   const [status, setStatus] = useState("idle"); // idle | loading | success | error
   const [message, setMessage] = useState("");
@@ -25,20 +69,144 @@ export default function Checkout() {
 
   // Boleto
   const [doc, setDoc] = useState(""); // CPF/CNPJ (simplificado)
+  const formatCpfCnpj = (digits) => {
+    const d = String(digits || "").replace(/\D/g, "");
+    if (d.length <= 11) {
+      const p1 = d.slice(0, 3);
+      const p2 = d.slice(3, 6);
+      const p3 = d.slice(6, 9);
+      const p4 = d.slice(9, 11);
+      let out = "";
+      if (p1) out = p1;
+      if (p2) out += `.${p2}`;
+      if (p3) out += `.${p3}`;
+      if (p4) out += `-${p4}`;
+      return out;
+    }
+    // CNPJ
+    const p1 = d.slice(0, 2);
+    const p2 = d.slice(2, 5);
+    const p3 = d.slice(5, 8);
+    const p4 = d.slice(8, 12);
+    const p5 = d.slice(12, 14);
+    let out = "";
+    if (p1) out = p1;
+    if (p2) out += `.${p2}`;
+    if (p3) out += `.${p3}`;
+    if (p4) out += `/${p4}`;
+    if (p5) out += `-${p5}`;
+    return out;
+  };
 
-  // Cartão
-  const [cardNumber, setCardNumber] = useState("");
-  const [cardName, setCardName] = useState("");
-  const [cardExpiry, setCardExpiry] = useState(""); // MM/AA
-  const [cardCvv, setCardCvv] = useState("");
+  // Cartão (Stripe Elements substitui inputs locais)
 
   // Crypto
   const [cryptoCurrency, setCryptoCurrency] = useState("BTC"); // BTC | USDT | USDC
   const [cryptoAmount, setCryptoAmount] = useState(null); // numeric
   const [cryptoAddress, setCryptoAddress] = useState("");
   const [cryptoQr, setCryptoQr] = useState("");
+  // Stripe
+  const [clientSecret, setClientSecret] = useState("");
+  const requestClientSecret = async () => {
+    try {
+      setStatus('loading');
+      setMessage('Preparando pagamento com cartão...');
+      const trimmedEmail = (buyerEmail || '').trim();
+      const payload = {
+        preferredLanguage: (utm.lang || (typeof navigator !== 'undefined' ? navigator.language : 'pt')),
+        receiptEmail: trimmedEmail && /[^\s@]+@[^\s@]+\.[^\s@]+/.test(trimmedEmail) ? trimmedEmail : undefined,
+      };
+      const res = await API.courses.checkoutStripe(courseSlug, payload);
+      if (res && res.clientSecret) {
+        setClientSecret(res.clientSecret);
+        setStatus('idle');
+        setMessage('');
+      } else if (res && res.error) {
+        // Tratamento explícito de indisponibilidade no ambiente (ex.: 404)
+        setStatus('error');
+        setMessage(res.status === 404
+          ? 'Cartão indisponível neste ambiente. Use PIX ou tente novamente mais tarde.'
+          : 'Não foi possível iniciar o pagamento com cartão.');
+        // Se houver PIX aprovado, alterna automaticamente para PIX como fallback
+        if (supportsMethod('pix')) {
+          setMethod('pix');
+        }
+      } else {
+        setStatus('error');
+        setMessage('Não foi possível iniciar o pagamento com cartão.');
+      }
+    } catch (err) {
+      setStatus('error');
+      setMessage(err?.message || 'Falha ao obter autorização de pagamento.');
+      // Fallback para PIX quando disponível
+      if (supportsMethod('pix')) {
+        setMethod('pix');
+      }
+    }
+  };
+  const PRICE_BRL = ctx?.product?.totalCents
+    ? (ctx.product.totalCents / 100)
+    : (ctx?.course?.priceCents ? (ctx.course.priceCents / 100) : productData.priceBRL);
 
-  const PRICE_BRL = 987.58; // valor em BRL para conversão
+  // Persistir metadados de checkout para análises e integração com backend
+  useEffect(() => {
+    (async () => {
+      try {
+        // Monta os query params a partir da URL atual para o backend
+        const qp = Object.fromEntries(Array.from(query.entries()));
+        const res = await API.courses.checkoutContext(courseSlug, qp);
+        if (!res?.error) {
+          setCtx(res);
+          // Ajusta método inicial com base em recomendação + métodos aprovados
+          const recommended = res?.payments?.recommended;
+          const approved = Array.isArray(res?.payments?.approvedMethods) ? res.payments.approvedMethods : [];
+          let nextMethod = method;
+          if (approved.length > 0) {
+            if (recommended && approved.includes(recommended)) {
+              nextMethod = recommended === 'stripe' ? 'card' : recommended; // normaliza 'stripe' → 'card' na UI
+            } else {
+              const first = approved[0];
+              nextMethod = first === 'stripe' ? 'card' : first;
+            }
+          }
+          setMethod(nextMethod);
+        }
+      } catch {
+        // mantém fallback local
+      }
+      // Persistência de metadados (merge do contexto quando presente)
+      try {
+        const meta = {
+          product: productParam,
+          product_name: (ctx?.course?.title || productData.name),
+          product_price_brl: PRICE_BRL,
+          course: courseSlug,
+          marketing: ctx?.marketing || utm,
+          path: location.pathname,
+          referrer: typeof document !== "undefined" ? document.referrer || null : null,
+          environment: ctx?.environment || null,
+          visitor: ctx?.visitor || null,
+          ts: Date.now(),
+        };
+        localStorage.setItem("checkout_meta", JSON.stringify(meta));
+        // Telemetry: pageview
+        await emitCheckoutEvent({ courseSlug, eventType: 'pageview', metadata: meta });
+      } catch {
+        // Ignora falhas de acesso
+      }
+    })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [location.search]);
+
+  // Buscar clientSecret quando método "card" estiver ativo
+  useEffect(() => {
+    (async () => {
+      if (method !== 'card') return;
+      if (!supportsMethod('card')) return;
+      await requestClientSecret();
+    })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [method, buyerEmail, courseSlug]);
 
   const fetchOkxTicker = async (instId) => {
     const url = `https://www.okx.com/api/v5/market/ticker?instId=${encodeURIComponent(instId)}`;
@@ -146,6 +314,11 @@ export default function Checkout() {
 
   const handlePixPay = async () => {
     if (!validateCommon()) return;
+    if (!doc || doc.length < 11) {
+      setStatus("error");
+      setMessage("Informe um CPF/CNPJ válido.");
+      return;
+    }
     if (!pixQr) {
       setStatus("error");
       setMessage("Gere o QR Code antes de confirmar o pagamento.");
@@ -182,30 +355,6 @@ export default function Checkout() {
     }
   };
 
-  const handleCardPay = async () => {
-    if (!validateCommon()) return;
-    if (
-      cardNumber.replace(/\s/g, "").length < 13 ||
-      !cardName ||
-      !/^(0[1-9]|1[0-2])\/(\d{2})$/.test(cardExpiry) ||
-      cardCvv.length < 3
-    ) {
-      setStatus("error");
-      setMessage("Preencha dados do cartão corretamente.");
-      return;
-    }
-    try {
-      setStatus("loading");
-      setMessage("");
-      await new Promise((r) => setTimeout(r, 1200));
-      setStatus("success");
-      setMessage("Pagamento aprovado.");
-    } catch {
-      setStatus("error");
-      setMessage("Erro ao processar cartão.");
-    }
-  };
-
   return (
     <section className="checkout" id="checkout" aria-labelledby="checkout-title">
       <div className="container checkout__container">
@@ -213,7 +362,7 @@ export default function Checkout() {
           <img src={pedrodappsIcon} alt="Pedro dApps" className="checkout__brand-logo" />
         </div>
 
-        <div className="checkout__card reveal-on-scroll" role="form" aria-describedby="checkout-desc">
+        <div className="checkout__card reveal-on-scroll is-visible" role="form" aria-describedby="checkout-desc">
           <header className="checkout__header">
             <h2 id="checkout-title" className="checkout__title">
               Faça parte
@@ -233,58 +382,78 @@ export default function Checkout() {
             </div>
           )}
 
-          <div className="checkout__summary">
+          <div className="checkout__summary reveal-on-scroll is-visible">
             <div className="checkout__summary-row">
               <span>Produto</span>
-              <strong>Pedro dApps – Plano anual</strong>
+              <strong>{ctx?.product?.name || ctx?.course?.title || productData.name}</strong>
             </div>
             <div className="checkout__summary-row">
               <span>Total</span>
-              <strong>R$ 487,58</strong>
-            </div>
+              <strong>{ctx?.product?.displayTotal || (ctx?.course?.currency ? new Intl.NumberFormat("pt-BR", { style: "currency", currency: ctx.course.currency }).format(PRICE_BRL) : formatBRL(PRICE_BRL))}</strong>
           </div>
+        </div>
 
-          <div className="checkout__methods" role="tablist" aria-label="Métodos de pagamento">
+          <div className="checkout__methods reveal-on-scroll is-visible" role="tablist" aria-label="Métodos de pagamento">
+            {supportsMethod('pix') && (
             <button
               type="button"
               className={`checkout__tab ${method === "pix" ? "is-active" : ""}`}
-              onClick={() => setMethod("pix")}
+              onClick={async () => {
+                setMethod("pix");
+                await emitCheckoutEvent({ courseSlug, eventType: 'method_change', paymentMethod: 'pix', ctaId: 'tab-pix', metadata: { component: 'methods' } });
+              }}
               role="tab"
               aria-selected={method === "pix"}
             >
               <img src={pixIcon} className="checkout__tab-icon" alt="" aria-hidden="true" />
               <span>PIX</span>
             </button>
+            )}
+            {supportsMethod('boleto') && (
             <button
               type="button"
               className={`checkout__tab ${method === "boleto" ? "is-active" : ""}`}
-              onClick={() => setMethod("boleto")}
+              onClick={async () => {
+                setMethod("boleto");
+                await emitCheckoutEvent({ courseSlug, eventType: 'method_change', paymentMethod: undefined, ctaId: 'tab-boleto', metadata: { component: 'methods' } });
+              }}
               role="tab"
               aria-selected={method === "boleto"}
             >
               <FaBarcode className="checkout__tab-icon" aria-hidden="true" />
               <span>Boleto</span>
             </button>
+            )}
+            {supportsMethod('card') && (
             <button
               type="button"
               className={`checkout__tab ${method === "card" ? "is-active" : ""}`}
-              onClick={() => setMethod("card")}
+              onClick={async () => {
+                setMethod("card");
+                await emitCheckoutEvent({ courseSlug, eventType: 'method_change', paymentMethod: 'stripe', ctaId: 'tab-card', metadata: { component: 'methods' } });
+              }}
               role="tab"
               aria-selected={method === "card"}
             >
               <FaCreditCard className="checkout__tab-icon" aria-hidden="true" />
               <span>Cartão de crédito</span>
             </button>
+            )}
+            {supportsMethod('crypto') && (
             <button
               type="button"
               className={`checkout__tab ${method === "crypto" ? "is-active" : ""}`}
-              onClick={() => setMethod("crypto")}
+              onClick={async () => {
+                setMethod("crypto");
+                await emitCheckoutEvent({ courseSlug, eventType: 'method_change', paymentMethod: undefined, ctaId: 'tab-crypto', metadata: { component: 'methods' } });
+              }}
               role="tab"
               aria-selected={method === "crypto"}
             >
               <FaBitcoin className="checkout__tab-icon" aria-hidden="true" />
               <span>Criptomoedas</span>
             </button>
+            )}
           </div>
 
           <form className="checkout__form" onSubmit={(e) => e.preventDefault()}>
@@ -315,11 +484,25 @@ export default function Checkout() {
               />
             </div>
 
-            {method === "pix" && (
+            {approvedMethods.includes('pix') && method === "pix" && (
               <div className="checkout__panel" aria-labelledby="pix-title">
                 <h3 id="pix-title" className="checkout__panel-title">
                   Pagamento via PIX
                 </h3>
+                <div className="checkout__field">
+                  <label htmlFor="pix-doc" className="checkout__label">CPF/CNPJ</label>
+                  <input
+                    id="pix-doc"
+                    className="checkout__input"
+                    type="text"
+                    placeholder="CPF ou CNPJ"
+                    value={formatCpfCnpj(doc)}
+                    onChange={(e) => setDoc(e.target.value.replace(/[^0-9]/g, ""))}
+                    inputMode="numeric"
+                    autoComplete="off"
+                    pattern="\d*"
+                  />
+                </div>
                 {pixQr && (
                   <div className="checkout__pix-qr" aria-label="QR Code PIX">
                     <img src={pixQr} alt="QR Code PIX" className="checkout__pix-qr-img" />
@@ -329,6 +512,13 @@ export default function Checkout() {
                   type="button"
                   className="btn btn-primary checkout__btn"
                   onClick={async () => {
+                    // Exige CPF/CNPJ válido antes de gerar QR
+                    if (!doc || doc.length < 11) {
+                      setStatus("error");
+                      setMessage("Informe um CPF/CNPJ válido.");
+                      return;
+                    }
+                    await emitCheckoutEvent({ courseSlug, eventType: 'cta_click', ctaId: 'pix-generate-qr', metadata: { component: 'pix' } });
                     try {
                       setStatus("loading");
                       setMessage("");
@@ -349,7 +539,12 @@ export default function Checkout() {
                     type="button"
                     className="btn checkout__btn checkout__btn--secondary"
                     disabled={status === "loading"}
-                    onClick={handlePixPay}
+                    onClick={async () => {
+                      await emitCheckoutEvent({ courseSlug, eventType: 'cta_click', ctaId: 'pix-confirm', metadata: { component: 'pix' } });
+                      await emitCheckoutEvent({ courseSlug, eventType: 'purchase_start', paymentMethod: 'pix', metadata: { component: 'pix' } });
+                      await handlePixPay();
+                      await emitCheckoutEvent({ courseSlug, eventType: 'purchase_confirm', paymentMethod: 'pix', metadata: { component: 'pix' } });
+                    }}
                   >
                     {status === "loading" ? "Iniciando..." : "Confirmar pagamento PIX"}
                   </button>
@@ -357,106 +552,115 @@ export default function Checkout() {
               </div>
             )}
 
-            {method === "boleto" && (
+            {approvedMethods.includes('boleto') && method === "boleto" && (
               <div className="checkout__panel" aria-labelledby="boleto-title">
                 <h3 id="boleto-title" className="checkout__panel-title">
                   Gerar Boleto
                 </h3>
                 <div className="checkout__field">
-                  <label htmlFor="buyer-doc" className="checkout__label">
-                    CPF/CNPJ
-                  </label>
+                  <label htmlFor="buyer-doc" className="checkout__label">CPF/CNPJ</label>
                   <input
                     id="buyer-doc"
                     className="checkout__input"
                     type="text"
-                    placeholder="Somente números"
-                    value={doc}
+                    placeholder="CPF ou CNPJ"
+                    value={formatCpfCnpj(doc)}
                     onChange={(e) => setDoc(e.target.value.replace(/[^0-9]/g, ""))}
+                    inputMode="numeric"
+                    autoComplete="off"
+                    pattern="\d*"
                   />
                 </div>
                 <button
                   type="button"
                   className="btn btn-primary checkout__btn"
                   disabled={status === "loading"}
-                  onClick={handleBoleto}
+                  onClick={async () => {
+                    await emitCheckoutEvent({ courseSlug, eventType: 'cta_click', ctaId: 'boleto-generate', metadata: { component: 'boleto' } });
+                    await emitCheckoutEvent({ courseSlug, eventType: 'purchase_start', metadata: { component: 'boleto' } });
+                    await handleBoleto();
+                    await emitCheckoutEvent({ courseSlug, eventType: 'purchase_confirm', metadata: { component: 'boleto' } });
+                  }}
                 >
                   {status === "loading" ? "Gerando..." : "Gerar boleto"}
                 </button>
               </div>
             )}
 
-            {method === "card" && (
+            {supportsMethod('card') && method === "card" && (
               <div className="checkout__panel" aria-labelledby="card-title">
-                <h3 id="card-title" className="checkout__panel-title">
-                  Pagar com Cartão
-                </h3>
-                <div className="checkout__grid">
-                  <div className="checkout__field">
-                    <label htmlFor="card-number" className="checkout__label">
-                      Número do cartão
-                    </label>
-                    <input
-                      id="card-number"
-                      className="checkout__input"
-                      type="text"
-                      placeholder="0000 0000 0000 0000"
-                      value={cardNumber}
-                      onChange={(e) => setCardNumber(e.target.value)}
-                    />
-                  </div>
-                  <div className="checkout__field">
-                    <label htmlFor="card-name" className="checkout__label">
-                      Nome impresso
-                    </label>
-                    <input
-                      id="card-name"
-                      className="checkout__input"
-                      type="text"
-                      placeholder="Como no cartão"
-                      value={cardName}
-                      onChange={(e) => setCardName(e.target.value)}
-                    />
-                  </div>
-                  <div className="checkout__field">
-                    <label htmlFor="card-expiry" className="checkout__label">
-                      Validade (MM/AA)
-                    </label>
-                    <input
-                      id="card-expiry"
-                      className="checkout__input"
-                      type="text"
-                      placeholder="MM/AA"
-                      value={cardExpiry}
-                      onChange={(e) => setCardExpiry(e.target.value)}
-                    />
-                  </div>
-                  <div className="checkout__field">
-                    <label htmlFor="card-cvv" className="checkout__label">
-                      CVV
-                    </label>
-                    <input
-                      id="card-cvv"
-                      className="checkout__input"
-                      type="password"
-                      placeholder="***"
-                      value={cardCvv}
-                      onChange={(e) => setCardCvv(e.target.value.replace(/[^0-9]/g, ""))}
-                    />
-                  </div>
+                <h3 id="card-title" className="checkout__panel-title">Cartão de crédito (Stripe)</h3>
+                <div className="checkout__stripe" aria-label="Processado pela Stripe">
+                  <span className="checkout__stripe-powered">Processado por</span>
+                  <span className="checkout__stripe-badge">
+                    <span className="checkout__stripe-wordmark">
+                      <SiStripe size={16} /> Stripe
+                    </span>
+                  </span>
                 </div>
-                <button
-                  type="button"
-                  className="btn btn-primary checkout__btn"
-                  disabled={status === "loading"}
-                  onClick={handleCardPay}
-                >
-                  {status === "loading" ? "Processando..." : "Pagar com cartão"}
-                </button>
+                {stripePromise ? (
+                  clientSecret ? (
+                    <Elements
+                      stripe={stripePromise}
+                      options={{
+                        clientSecret,
+                        locale: (utm.lang || 'auto'),
+                        // Prioriza cartão e evita exibir Boleto na UI do PaymentElement
+                        paymentMethodOrder: ['card'],
+                        appearance: {
+                          theme: 'night',
+                          variables: {
+                            colorPrimary: '#635BFF',
+                            colorBackground: '#1c1e2f',
+                            colorText: '#ffffff',
+                            colorTextSecondary: 'rgba(255,255,255,0.8)',
+                            colorIcon: '#c7c9d1',
+                            borderRadius: '8px',
+                            fontFamily:
+                              'system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Helvetica Neue, Arial, sans-serif',
+                            spacingUnit: '4px',
+                          },
+                          rules: {
+                            '.Input, .Textarea, .Select': {
+                              backgroundColor: '#1c1e2f',
+                              border: '1px solid rgba(255,255,255,0.16)',
+                              color: '#ffffff',
+                            },
+                            '.Input:hover': { borderColor: '#635BFF' },
+                            '.Label': { color: 'rgba(255,255,255,0.85)' },
+                            '.Tab': { color: '#ffffff' },
+                            '.Block': { backgroundColor: 'transparent' },
+                          },
+                        },
+                      }}
+                    >
+                      <StripePaymentForm
+                        courseSlug={courseSlug}
+                        onTelemetry={emitCheckoutEvent}
+                        setStatus={setStatus}
+                        setMessage={setMessage}
+                      />
+                    </Elements>
+                  ) : (
+                    <div className="checkout__panel-desc" role="status" aria-live="polite">
+                      {status === 'loading' && 'Preparando pagamento com cartão...'}
+                      {status !== 'loading' && (message || 'Iniciando pagamento com cartão...')}
+                      {status === 'error' && (
+                        <div style={{ marginTop: 8 }}>
+                          <button type="button" className="btn checkout__btn checkout__btn--secondary" onClick={requestClientSecret}>
+                            Tentar novamente
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                  )
+                ) : (
+                  <div className="checkout__panel-desc">Stripe não configurado. Defina VITE_STRIPE_PUBLIC_KEY para habilitar.</div>
+                )}
               </div>
             )}
 
-            {method === "crypto" && (
+            {approvedMethods.includes('crypto') && method === "crypto" && (
               <div className="checkout__panel" aria-labelledby="crypto-title">
                 <h3 id="crypto-title" className="checkout__panel-title">
                   Pagar com Criptomoedas
@@ -499,7 +703,10 @@ export default function Checkout() {
                   type="button"
                   className="btn btn-primary checkout__btn"
                   disabled={status === "loading"}
-                  onClick={handleGenerateCryptoWallet}
+                  onClick={async () => {
+                    await emitCheckoutEvent({ courseSlug, eventType: 'cta_click', ctaId: 'crypto-generate', metadata: { component: 'crypto', currency: cryptoCurrency } });
+                    await handleGenerateCryptoWallet();
+                  }}
                 >
                   {status === "loading" ? "Gerando..." : "Gerar carteira"}
                 </button>
@@ -528,7 +735,11 @@ export default function Checkout() {
                     type="button"
                     className="btn checkout__btn checkout__btn--secondary"
                     disabled={status === 'loading'}
-                    onClick={handleCryptoConfirm}
+                    onClick={async () => {
+                      await emitCheckoutEvent({ courseSlug, eventType: 'cta_click', ctaId: 'crypto-confirm', metadata: { component: 'crypto', currency: cryptoCurrency } });
+                      await emitCheckoutEvent({ courseSlug, eventType: 'purchase_confirm', metadata: { component: 'crypto', currency: cryptoCurrency } });
+                      await handleCryptoConfirm();
+                    }}
                   >
                     {status === 'loading' ? 'Verificando...' : 'Realizei o pagamento'}
                   </button>
@@ -570,5 +781,53 @@ export default function Checkout() {
         </div>
       </div>
     </section>
+  );
+}
+
+function StripePaymentForm({ courseSlug, onTelemetry, setStatus, setMessage }) {
+  const stripe = useStripe();
+  const elements = useElements();
+  const handlePay = async () => {
+    if (!stripe || !elements) return;
+    await onTelemetry({ courseSlug, eventType: 'cta_click', ctaId: 'card-pay', metadata: { component: 'card' } });
+    await onTelemetry({ courseSlug, eventType: 'purchase_start', paymentMethod: 'stripe', metadata: { component: 'card' } });
+    try {
+      setStatus('loading'); setMessage('');
+      const { error, paymentIntent } = await stripe.confirmPayment({
+        elements,
+        confirmParams: { return_url: `${window.location.origin}/checkout/success` },
+      });
+      if (error) {
+        setStatus('error');
+        setMessage(error.message || 'Erro ao confirmar pagamento.');
+        return;
+      }
+      if (paymentIntent?.status === 'succeeded') {
+        setStatus('success');
+        setMessage('Pagamento confirmado. Matrícula será processada.');
+        await onTelemetry({ courseSlug, eventType: 'purchase_confirm', paymentMethod: 'stripe', metadata: { component: 'card' } });
+      } else {
+        setStatus('success');
+        setMessage('Pagamento iniciado. Se necessário, complete a autenticação.');
+      }
+    } catch (err) {
+      setStatus('error');
+      setMessage(err?.message || 'Erro ao processar cartão.');
+    }
+  };
+  return (
+    <div>
+      <div className="checkout__field">
+        <label className="checkout__label">Dados do pagamento</label>
+        <div className="checkout__input" style={{ padding: "12px" }}>
+          <PaymentElement />
+        </div>
+      </div>
+      <div className="checkout__stripe-actions">
+        <button type="button" className="btn checkout__btn checkout__stripe-btn" onClick={handlePay}>
+          Processar pagamento
+        </button>
+      </div>
+    </div>
   );
 }

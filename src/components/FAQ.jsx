@@ -10,7 +10,7 @@ const faqs = [
   },
   {
     q: "O que é o Builder Elite Club e por que ele é importante para quem usa a Pixley Wallet?",
-    a: "O Builder Elite Club (R$ 487,58 por ano) é o plano premium que desbloqueia todo o ecossistema: acesso ao acervo completo de scripts de automação, lives fechadas semanais, GRUPO Elite Builders, suporte dedicado e recursos exclusivos dentro do app.",
+    a: "O Builder Elite Club (R$ 487,58 por ano) é o plano premium que desbloqueia todo o ecossistema: acesso ao acervo completo de scripts de automação, lives fechadas semanais, GRUPO Builders de Elite, suporte dedicado e recursos exclusivos dentro do app.",
   },
   {
     q: "A Wallet funciona sem o Pedro dApps?",
@@ -22,7 +22,7 @@ const faqs = [
   },
   {
     q: "O Pedro dApps ensina como usar os scripts dentro da Pixley Wallet?",
-    a: "Sim. As lives fechadas, os tutoriais e o GRUPO Elite Builders explicam passo a passo como usar cada automação dentro da Pixley, garantindo segurança e resultado.",
+    a: "Sim. As lives fechadas, os tutoriais e o GRUPO Builders de Elite explicam passo a passo como usar cada automação dentro da Pixley, garantindo segurança e resultado.",
   },
   {
     q: "É necessário saber programar para usar os scripts do Pedro dApps?",

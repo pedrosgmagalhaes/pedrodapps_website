@@ -17,6 +17,7 @@ const Login = React.lazy(() => import("./components/Login"));
 const ForgotPassword = React.lazy(() => import("./components/ForgotPassword"));
 const Signup = React.lazy(() => import("./components/Signup"));
 const Checkout = React.lazy(() => import("./components/Checkout"));
+const CheckoutSuccess = React.lazy(() => import("./components/CheckoutSuccess"));
 const Links = React.lazy(() => import("./components/Links"));
 const Home = React.lazy(() => import("./components/Home"));
 const Lessons = React.lazy(() => import("./components/Lessons"));
@@ -288,6 +289,15 @@ function App() {
             element={
               <Suspense fallback={<div className="lazy-fallback" aria-hidden="true" />}> 
                 <Checkout />
+              </Suspense>
+            }
+          />
+
+          <Route
+            path="/checkout/success"
+            element={
+              <Suspense fallback={<div className="lazy-fallback" aria-hidden="true" />}> 
+                <CheckoutSuccess />
               </Suspense>
             }
           />

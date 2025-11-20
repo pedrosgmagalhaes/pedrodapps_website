@@ -129,7 +129,7 @@ Endpoint: `POST /admin/test-create-builder`
 {
   "email": "pedrosgmagalhaes@gmail.com",
   "name": "Pedro Magalhaes",
-  "note": "Manual test: Elite Builders granted"
+  "note": "Manual test: Builders de Elite granted"
 }
 ```
 

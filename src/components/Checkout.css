@@ -35,6 +35,22 @@
 }
 
 .checkout__header { margin-bottom: 16px; }
+.checkout__header--center { text-align: center; }
+.checkout__status { display: flex; align-items: center; justify-content: center; gap: 8px; color: var(--accent-primary); margin-bottom: 6px; }
+.checkout__status-icon { width: 28px; height: 28px; display: inline-block; }
+
+/* Stripe branding (card checkout) */
+.checkout__stripe { display: flex; align-items: center; gap: 10px; margin-top: 6px; }
+.checkout__stripe-badge { display: inline-flex; align-items: center; gap: 8px; }
+.checkout__stripe-wordmark { background: #635BFF; color: #fff; font-weight: 800; border-radius: 999px; padding: 6px 10px; font-size: 13px; letter-spacing: 0.2px; box-shadow: 0 6px 14px rgba(99,91,255,0.25); }
+.checkout__stripe-wordmark { display: inline-flex; align-items: center; gap: 6px; line-height: 1; }
+.checkout__stripe-wordmark svg { width: 16px; height: 16px; display: block; }
+.checkout__stripe-powered { font-size: 12px; color: rgba(255,255,255,0.8); }
+.checkout__stripe-btn { background: #635BFF; color: #fff; box-shadow: 0 10px 20px rgba(99,91,255,0.32); }
+.checkout__stripe-btn:hover { filter: brightness(1.05); box-shadow: 0 12px 24px rgba(99,91,255,0.38); transform: translateY(-1px); }
+/* Espaçamento e centralização do botão do Stripe */
+.checkout__stripe-actions { display: flex; justify-content: center; }
+.checkout__stripe-btn { margin-top: 12px; }
 .checkout__title { font-size: 24px; font-weight: 800; margin: 0 0 6px 0; color: var(--neutral-white); }
 .checkout__subtitle { font-size: 14px; color: rgba(255, 255, 255, 0.8); margin: 0; }
 
@@ -50,6 +66,7 @@
 .checkout__tab { display: inline-flex; align-items: center; gap: 8px; padding: 10px 14px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.18); background: transparent; color: #fff; cursor: pointer; transition: border-color 0.2s ease, background 0.2s ease; }
 .checkout__tab.is-active { border-color: var(--accent-primary); background: rgba(123,227,61,0.12); color: #c7ffc0; }
 .checkout__tab-icon { width: 18px; height: 18px; display: inline-block; }
+.checkout__tab:disabled { opacity: 0.6; cursor: not-allowed; filter: grayscale(0.2); }
 
 .checkout__form { display: grid; gap: 14px; }
 .checkout__field { display: grid; gap: 6px; }
