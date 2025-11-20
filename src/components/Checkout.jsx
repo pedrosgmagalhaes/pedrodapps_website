@@ -9,7 +9,7 @@ import usdcIcon from "../assets/icons/usdc.svg";
 import btcIcon from "../assets/icons/btc-orange.svg";
 
 import { FaBarcode, FaCreditCard, FaBitcoin } from "react-icons/fa";
-import { SiStripe } from "react-icons/si";
+import stripeWordmark from "../assets/stripe_wordmark.svg";
 import { useLocation } from "react-router-dom";
 import { API } from "../lib/api";
 import { emitCheckoutEvent } from "../lib/checkoutTelemetry";
@@ -31,6 +31,7 @@ export default function Checkout() {
   const productParam = query.get("product") || "plan-anual";
   const courseSlug = query.get("course") || "builders-de-elite";
   const [ctx, setCtx] = useState(null);
+  const [ctxLoading, setCtxLoading] = useState(true);
   const productData = PRODUCTS[productParam] || PRODUCTS["plan-anual"];
   const approvedMethods = ctx?.payments?.approvedMethods || ["pix", "card"]; // fallback padrão
   const supportsMethod = (name) => {
@@ -151,6 +152,7 @@ export default function Checkout() {
   // Persistir metadados de checkout para análises e integração com backend
   useEffect(() => {
     (async () => {
+      setCtxLoading(true);
       try {
         // Monta os query params a partir da URL atual para o backend
         const qp = Object.fromEntries(Array.from(query.entries()));
@@ -194,6 +196,7 @@ export default function Checkout() {
       } catch {
         // Ignora falhas de acesso
       }
+      setCtxLoading(false);
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location.search]);
@@ -382,7 +385,12 @@ export default function Checkout() {
             </div>
           )}
 
-          <div className="checkout__summary reveal-on-scroll is-visible">
+          <div className="checkout__summary reveal-on-scroll is-visible" style={{ position: 'relative', minHeight: 96 }}>
+            {ctxLoading && (
+              <div className="checkout__spinner" role="status" aria-live="polite" aria-label="Carregando contexto">
+                <div className="checkout__spinner-circle" />
+              </div>
+            )}
             <div className="checkout__summary-row">
               <span>Produto</span>
               <strong>{ctx?.product?.name || ctx?.course?.title || productData.name}</strong>
@@ -594,7 +602,7 @@ export default function Checkout() {
                   <span className="checkout__stripe-powered">Processado por</span>
                   <span className="checkout__stripe-badge">
                     <span className="checkout__stripe-wordmark">
-                      <SiStripe size={16} /> Stripe
+                      <img src={stripeWordmark} alt="Stripe" className="checkout__stripe-logo" />
                     </span>
                   </span>
                 </div>
@@ -642,11 +650,16 @@ export default function Checkout() {
                       />
                     </Elements>
                   ) : (
-                    <div className="checkout__panel-desc" role="status" aria-live="polite">
-                      {status === 'loading' && 'Preparando pagamento com cartão...'}
-                      {status !== 'loading' && (message || 'Iniciando pagamento com cartão...')}
+                    <div className="checkout__panel-desc" role="status" aria-live="polite" style={{ position: 'relative', minHeight: 96 }}>
+                      {status === 'loading' ? (
+                        <div className="checkout__spinner" aria-label="Preparando pagamento">
+                          <div className="checkout__spinner-circle" />
+                        </div>
+                      ) : (
+                        <span>{message || 'Iniciando pagamento com cartão...'}</span>
+                      )}
                       {status === 'error' && (
-                        <div style={{ marginTop: 8 }}>
+                        <div style={{ marginTop: 12 }}>
                           <button type="button" className="btn checkout__btn checkout__btn--secondary" onClick={requestClientSecret}>
                             Tentar novamente
                           </button>
@@ -787,6 +800,7 @@ export default function Checkout() {
 function StripePaymentForm({ courseSlug, onTelemetry, setStatus, setMessage }) {
   const stripe = useStripe();
   const elements = useElements();
+  const [isReady, setIsReady] = useState(false);
   const handlePay = async () => {
     if (!stripe || !elements) return;
     await onTelemetry({ courseSlug, eventType: 'cta_click', ctaId: 'card-pay', metadata: { component: 'card' } });
@@ -819,8 +833,13 @@ function StripePaymentForm({ courseSlug, onTelemetry, setStatus, setMessage }) {
     <div>
       <div className="checkout__field">
         <label className="checkout__label">Dados do pagamento</label>
-        <div className="checkout__input" style={{ padding: "12px" }}>
-          <PaymentElement />
+        <div className="checkout__input" style={{ padding: "12px", position: 'relative', minHeight: '250px' }} aria-busy={!isReady}>
+          {!isReady && (
+            <div className="checkout__spinner" role="status" aria-live="polite" aria-label="Carregando pagamento">
+              <div className="checkout__spinner-circle" />
+            </div>
+          )}
+          <PaymentElement onReady={() => setIsReady(true)} />
         </div>
       </div>
       <div className="checkout__stripe-actions">

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 24" role="img" aria-label="Stripe">
+  <title>Stripe</title>
+  <g fill="#ffffff">
+    <!-- Simple wordmark rendering; sized to fit inside a small badge -->
+    <text x="0" y="18" font-family="-apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Helvetica Neue, Arial, sans-serif" font-size="18" font-weight="700">Stripe</text>
+  </g>
+</svg>
