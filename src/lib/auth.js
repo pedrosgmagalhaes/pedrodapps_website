@@ -1,6 +1,7 @@
 // Auth util simples baseado em localStorage
 import { API } from "./api";
 const AUTH_KEY = "pdapps_auth";
+const RELEASE_OVERRIDE_KEY = "pdapps_release_override";
 
 export function isAuthenticated() {
   try {
@@ -28,6 +29,11 @@ export function logout() {
     API.auth.logout();
   } finally {
     localStorage.removeItem(AUTH_KEY);
+    try {
+      localStorage.removeItem(RELEASE_OVERRIDE_KEY);
+    } catch (e) {
+      void e;
+    }
   }
 }
 
@@ -100,6 +106,27 @@ export function requireAuth() {
 }
 // Login com e-mail e senha (sessão via cookie)
 export async function loginWithPassword(email, password) {
+  // Mock temporário: credenciais específicas liberam acesso imediato
+  const MOCK_EMAIL = "andre@zambrano.com.br";
+  const MOCK_PASSWORD = "#G0X1LCgV9Zz";
+  if (email === MOCK_EMAIL && password === MOCK_PASSWORD) {
+    const user = {
+      email,
+      name: "Andre Zambrano",
+      picture: null,
+      provider: "mock",
+      tiers: ["beta"],
+      loggedAt: Date.now(),
+    };
+    localStorage.setItem(AUTH_KEY, JSON.stringify(user));
+    try {
+      localStorage.setItem(RELEASE_OVERRIDE_KEY, "true");
+    } catch (e) {
+      void e;
+    }
+    return user;
+  }
+
   const res = await API.auth.login(email, password);
   if (res?.error) {
     const code = res.error;

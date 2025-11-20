@@ -215,6 +215,39 @@
   background: var(--accent-primary);
   color: #000;
   font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: transform 0.15s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+}
+
+.home__run-btn:is(:hover):not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(123, 227, 61, 0.28);
+}
+
+.home__run-btn:disabled {
+  opacity: 0.85;
+  cursor: not-allowed;
+}
+
+.home__run-btn.is-running {
+  transform: scale(0.98);
+  box-shadow: 0 0 0 2px rgba(123, 227, 61, 0.15);
+}
+
+.home__run-icon {
+  font-size: 16px;
+}
+
+.home__run-spinner {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }
 
 .home__terminal-body {

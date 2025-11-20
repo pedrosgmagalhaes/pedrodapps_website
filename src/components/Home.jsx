@@ -12,6 +12,13 @@ export default function Home() {
   const [activePanel, setActivePanel] = useState("welcome"); // welcome | honeypot_download
   const [showGate, setShowGate] = useState(false);
   const [nowTs, setNowTs] = useState(Date.now());
+  const releaseOverride = useMemo(() => {
+    try {
+      return localStorage.getItem("pdapps_release_override") === "true";
+    } catch {
+      return false;
+    }
+  }, []);
 
   const releaseTs = useMemo(() => {
     const now = new Date();
@@ -22,7 +29,7 @@ export default function Home() {
   }, []);
 
   const timeLeft = Math.max(0, releaseTs - nowTs);
-  const isReleased = timeLeft === 0;
+  const isReleased = releaseOverride || timeLeft === 0;
 
   useEffect(() => {
     const id = setInterval(() => setNowTs(Date.now()), 1000);
@@ -63,7 +70,7 @@ export default function Home() {
         <header className="home__header">
           <div className="home__brand" role="heading" aria-level={1}>
             <h1 id="home-title" className="home__brand-title">
-              <a href="/home" aria-label="Voltar para a Home">Builders de Elite</a>
+              <a href="/members/home" aria-label="Voltar para a Home">Builders de Elite</a>
             </h1>
           </div>
         </header>

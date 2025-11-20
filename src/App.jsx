@@ -1,5 +1,5 @@
 import React, { useEffect, Suspense } from "react";
-import { useLocation, Routes, Route } from "react-router-dom";
+import { useLocation, Routes, Route, Navigate } from "react-router-dom";
 import ProtectedRoute from "./components/ProtectedRoute";
 const Hero = React.lazy(() => import("./components/Hero"));
 const NewsTicker = React.lazy(() => import("./components/NewsTicker"));
@@ -174,7 +174,7 @@ function App() {
           />
 
           <Route
-            path="/home"
+            path="/members/home"
             element={
               <ProtectedRoute>
                 <Suspense fallback={<div className="lazy-fallback" aria-hidden="true" />}> 
@@ -183,6 +183,9 @@ function App() {
               </ProtectedRoute>
             }
           />
+
+          {/* Compatibilidade: redireciona /home para /members/home */}
+          <Route path="/home" element={<Navigate to="/members/home" replace />} />
 
           <Route
             path="/lessons"
