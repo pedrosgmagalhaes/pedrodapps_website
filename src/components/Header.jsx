@@ -20,7 +20,7 @@ const Header = () => {
         <div className="header__content">
           {/* Logo */}
           <div className="header__logo">
-            <a href="/" className="logo" aria-label="Ir para a página principal">
+            <a href="/home" className="logo" aria-label="Ir para a página principal">
               <img src={logoPedrodApps} alt="Pedro dApps" className="logo__image" />
             </a>
           </div>

@@ -16,6 +16,10 @@ const Login = React.lazy(() => import("./components/Login"));
 const ForgotPassword = React.lazy(() => import("./components/ForgotPassword"));
 const Checkout = React.lazy(() => import("./components/Checkout"));
 const Links = React.lazy(() => import("./components/Links"));
+const Home = React.lazy(() => import("./components/Home"));
+const Lessons = React.lazy(() => import("./components/Lessons"));
+const Videos = React.lazy(() => import("./components/Videos"));
+const TeachingFiles = React.lazy(() => import("./components/TeachingFiles"));
 // Carregar sob demanda para evitar preload bloqueado por extensões
 const PrivacyPolicy = React.lazy(() => import("./components/DataProtection"));
 const ServicesPolicy = React.lazy(() => import("./components/ServicesPolicy"));
@@ -168,6 +172,52 @@ function App() {
               </Suspense>
             }
           />
+
+          <Route
+            path="/home"
+            element={
+              <ProtectedRoute>
+                <Suspense fallback={<div className="lazy-fallback" aria-hidden="true" />}> 
+                  <Home />
+                </Suspense>
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/lessons"
+            element={
+              <ProtectedRoute>
+                <Suspense fallback={<div className="lazy-fallback" aria-hidden="true" />}> 
+                  <Lessons />
+                </Suspense>
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/videos"
+            element={
+              <ProtectedRoute>
+                <Suspense fallback={<div className="lazy-fallback" aria-hidden="true" />}> 
+                  <Videos />
+                </Suspense>
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/files"
+            element={
+              <ProtectedRoute>
+                <Suspense fallback={<div className="lazy-fallback" aria-hidden="true" />}> 
+                  <TeachingFiles />
+                </Suspense>
+              </ProtectedRoute>
+            }
+          />
+
+          {/* Rota /bots/honeypot removida em favor do colapse local na Home */}
 
           <Route
             path="/members"

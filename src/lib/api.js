@@ -76,6 +76,40 @@ export const API = {
   request: jsonFetch,
   get: (path, opts = {}) => jsonFetch(path, { ...opts, method: "GET" }),
   post: (path, body, opts = {}) => jsonFetch(path, { ...opts, method: "POST", body }),
+  // Education endpoints (courses, modules, lessons, Q&A)
+  edu: {
+    courses: {
+      getModules: (courseSlug, opts = {}) =>
+        jsonFetch(`/edu/courses/${courseSlug}/modules`, { ...opts, method: "GET" }),
+    },
+    modules: {
+      get: (slug, opts = {}) => jsonFetch(`/edu/modules/${slug}`, { ...opts, method: "GET" }),
+      getLessons: (slug, opts = {}) => jsonFetch(`/edu/modules/${slug}/lessons`, { ...opts, method: "GET" }),
+    },
+    lessons: {
+      get: (slug, opts = {}) => jsonFetch(`/edu/lessons/${slug}`, { ...opts, method: "GET" }),
+      questions: {
+        list: (slug, opts = {}) => jsonFetch(`/edu/lessons/${slug}/questions`, { ...opts, method: "GET" }),
+        create: (slug, { title, content }, opts = {}) =>
+          jsonFetch(`/edu/lessons/${slug}/questions`, {
+            ...opts,
+            method: "POST",
+            body: { title, content },
+          }),
+      },
+    },
+    questions: {
+      thread: (threadId, opts = {}) => jsonFetch(`/edu/questions/${threadId}`, { ...opts, method: "GET" }),
+      reply: (threadId, content, parent_post_id = null, opts = {}) =>
+        jsonFetch(`/edu/questions/${threadId}/replies`, {
+          ...opts,
+          method: "POST",
+          body: parent_post_id ? { content, parent_post_id } : { content },
+        }),
+      like: (threadId, opts = {}) => jsonFetch(`/edu/questions/${threadId}/like`, { ...opts, method: "POST" }),
+      unlike: (threadId, opts = {}) => jsonFetch(`/edu/questions/${threadId}/like`, { ...opts, method: "DELETE" }),
+    },
+  },
   // Admin endpoints
   admin: {
     testCreateBuilder: ({ email, name, note }, adminToken, opts = {}) =>

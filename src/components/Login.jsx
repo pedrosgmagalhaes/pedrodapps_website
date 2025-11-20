@@ -38,7 +38,7 @@ export default function Login() {
       await loginWithPassword(email, password);
       setStatus("success");
       setMessage("Login efetuado com sucesso.");
-      navigate("/members", { replace: true });
+      navigate("/home", { replace: true });
     } catch (err) {
       console.error(err);
       setStatus("error");
@@ -226,7 +226,7 @@ export default function Login() {
               onSuccess={() => {
                 setStatus("success");
                 setMessage("Login efetuado com Google.");
-                navigate("/members", { replace: true });
+      navigate("/home", { replace: true });
               }}
               onError={(err) => {
                 setStatus("error");
