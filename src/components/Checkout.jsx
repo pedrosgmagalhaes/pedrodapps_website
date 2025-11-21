@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import QRCode from "qrcode";
+import JsBarcode from "jsbarcode";
 import "./Checkout.css";
 import pedrodappsIcon from "../assets/pedrodapps_icon.png";
 import pixIcon from "../assets/icons8-foto.svg";
@@ -59,6 +60,8 @@ export default function Checkout() {
 
   // Boleto
   const [doc, setDoc] = useState(""); // CPF/CNPJ (simplificado)
+  const [boletoCodigoBarras, setBoletoCodigoBarras] = useState("");
+  const boletoBarcodeRef = React.useRef(null);
   const formatCpfCnpj = (digits) => {
     const d = String(digits || "").replace(/\D/g, "");
     if (d.length <= 11) {
@@ -102,7 +105,6 @@ export default function Checkout() {
     return p2 ? `${p1}-${p2}` : p1;
   };
   const [boletoLinhaDigitavel, setBoletoLinhaDigitavel] = useState("");
-  const [boletoPixCopiaECola, setBoletoPixCopiaECola] = useState("");
   useEffect(() => {
     const d = cep.replace(/\D/g, "");
     if (d.length === 8) {
@@ -124,6 +126,21 @@ export default function Checkout() {
       })();
     }
   }, [cep]);
+
+  useEffect(() => {
+    if (boletoBarcodeRef.current && boletoCodigoBarras) {
+      try {
+        JsBarcode(boletoBarcodeRef.current, boletoCodigoBarras, {
+          format: "CODE128",
+          displayValue: false,
+          height: 60,
+          margin: 0,
+        });
+      } catch {
+        void 0;
+      }
+    }
+  }, [boletoCodigoBarras]);
 
   useEffect(() => {
     if (!pixQrId) return;
@@ -408,8 +425,30 @@ export default function Checkout() {
         setMessage(backendMsg ? String(backendMsg) : "Boleto indisponível no momento.");
         return;
       }
-      if (data?.linhaDigitavel) setBoletoLinhaDigitavel(String(data.linhaDigitavel));
-      if (data?.pixCopiaECola) setBoletoPixCopiaECola(String(data.pixCopiaECola));
+      if (data?.linhaDigitavel) {
+        const ld = String(data.linhaDigitavel);
+        setBoletoLinhaDigitavel(ld);
+        try {
+          const { validarBoleto, linhaDigitavel2CodBarras } = await import(
+            "@mrmgomes/boleto-utils"
+          );
+          let barras = "";
+          try {
+            const info = validarBoleto(ld, "LINHA_DIGITAVEL");
+            barras = String(info?.codigoBarras || "");
+          } catch {
+            try {
+              barras = String(linhaDigitavel2CodBarras(ld) || "");
+            } catch {
+              void 0;
+            }
+          }
+          if (barras) setBoletoCodigoBarras(barras);
+        } catch {
+          void 0;
+        }
+      }
+      void data?.pixCopiaECola;
       void data?.id;
       setStatus("success");
       setMessage("Boleto gerado. Utilize a linha digitável para pagar.");
@@ -776,183 +815,214 @@ export default function Checkout() {
                 <h3 id="boleto-title" className="checkout__panel-title">
                   Gerar Boleto
                 </h3>
-                {nameReady && (
-                  <div className={`checkout__field fade-in`}>
-                    <label htmlFor="buyer-doc" className="checkout__label">
-                      CPF/CNPJ
-                    </label>
-                    <input
-                      id="buyer-doc"
-                      className="checkout__input"
-                      type="text"
-                      placeholder="CPF ou CNPJ"
-                      value={formatCpfCnpj(doc)}
-                      onChange={(e) => setDoc(e.target.value.replace(/[^0-9]/g, ""))}
-                      inputMode="numeric"
-                      autoComplete="off"
-                      pattern="\d*"
-                    />
-                  </div>
-                )}
-                {nameReady && doc.replace(/\D/g, "").length >= 11 && (
-                  <div className={`checkout__field fade-in`}>
-                    <label htmlFor="buyer-cep" className="checkout__label">
-                      CEP
-                    </label>
-                    <input
-                      id="buyer-cep"
-                      className="checkout__input"
-                      type="text"
-                      placeholder="00000-000"
-                      value={formatCep(cep)}
-                      onChange={(e) => setCep(e.target.value.replace(/[^0-9]/g, ""))}
-                      inputMode="numeric"
-                      autoComplete="postal-code"
-                      pattern="\d*"
-                      aria-busy={cepLoading}
-                    />
-                    {cepLoading && (
-                      <div
-                        className="checkout__spinner-circle"
-                        aria-hidden="true"
-                        style={{ display: "inline-block", marginLeft: 8 }}
-                      />
-                    )}
-                  </div>
-                )}
-                {cep.replace(/\D/g, "").length === 8 && (
+                {(boletoLinhaDigitavel || boletoCodigoBarras) && (
                   <>
-                    <div className={`checkout__field fade-in`}>
-                      <label htmlFor="buyer-street" className="checkout__label">
-                        Endereço
-                      </label>
-                      <input
-                        id="buyer-street"
-                        className="checkout__input"
-                        type="text"
-                        placeholder="Rua/Av."
-                        value={addressStreet}
-                        onChange={(e) => setAddressStreet(e.target.value)}
-                        disabled={cepLoading}
-                      />
-                    </div>
-                    <div className={`checkout__grid`}>
-                      <div className={`checkout__field fade-in`}>
-                        <label htmlFor="buyer-number" className="checkout__label">
-                          Número
-                        </label>
-                        <input
-                          id="buyer-number"
-                          className="checkout__input"
-                          type="text"
-                          placeholder="Número"
-                          value={addressNumber}
-                          onChange={(e) => setAddressNumber(e.target.value)}
-                          inputMode="numeric"
-                          disabled={cepLoading}
+                    {boletoCodigoBarras && (
+                      <div className="checkout__pix-qr" aria-label="Código de barras do boleto">
+                        <svg
+                          ref={boletoBarcodeRef}
+                          xmlns="http://www.w3.org/2000/svg"
+                          role="img"
+                          aria-label="Código de barras"
+                          style={{ width: "100%", height: 80 }}
                         />
                       </div>
-                      <div className={`checkout__field fade-in`}>
-                        <label htmlFor="buyer-complement" className="checkout__label">
-                          Complemento
-                        </label>
-                        <input
-                          id="buyer-complement"
-                          className="checkout__input"
-                          type="text"
-                          placeholder="Apto, bloco, referência"
-                          value={addressComplement}
-                          onChange={(e) => setAddressComplement(e.target.value)}
-                          disabled={cepLoading}
-                        />
+                    )}
+                    {boletoLinhaDigitavel && (
+                      <div className="checkout__field" aria-label="Linha Digitável">
+                        <label className="checkout__label">Linha Digitável</label>
+                        <div style={{ position: "relative", width: "100%" }}>
+                          <input
+                            className="checkout__input"
+                            type="text"
+                            readOnly
+                            value={boletoLinhaDigitavel}
+                            onFocus={(e) => e.currentTarget.select()}
+                            style={{ width: "100%", paddingRight: 36 }}
+                          />
+                          <button
+                            type="button"
+                            aria-label="Copiar"
+                            onClick={async () => {
+                              try {
+                                await navigator.clipboard.writeText(boletoLinhaDigitavel);
+                                setMessage("Linha Digitável copiada.");
+                              } catch {
+                                void 0;
+                              }
+                            }}
+                            style={{
+                              position: "absolute",
+                              right: 8,
+                              top: "50%",
+                              transform: "translateY(-50%)",
+                              border: "none",
+                              background: "transparent",
+                              padding: 4,
+                              cursor: "pointer",
+                              color: "inherit",
+                            }}
+                          >
+                            <FaCopy aria-hidden="true" />
+                          </button>
+                        </div>
                       </div>
-                    </div>
-                    <div className={`checkout__grid`}>
-                      <div className={`checkout__field fade-in`}>
-                        <label htmlFor="buyer-city" className="checkout__label">
-                          Cidade
-                        </label>
-                        <input
-                          id="buyer-city"
-                          className="checkout__input"
-                          type="text"
-                          placeholder="Cidade"
-                          value={addressCity}
-                          onChange={(e) => setAddressCity(e.target.value)}
-                          disabled={cepLoading}
-                        />
-                      </div>
-                      <div className={`checkout__field fade-in`}>
-                        <label htmlFor="buyer-state" className="checkout__label">
-                          Estado
-                        </label>
-                        <input
-                          id="buyer-state"
-                          className="checkout__input"
-                          type="text"
-                          placeholder="UF"
-                          value={addressState}
-                          onChange={(e) => setAddressState(e.target.value.toUpperCase())}
-                          maxLength={2}
-                          disabled={cepLoading}
-                        />
-                      </div>
-                    </div>
+                    )}
                   </>
                 )}
-                <button
-                  type="button"
-                  className="btn btn-primary checkout__btn"
-                  disabled={status === "loading"}
-                  onClick={async () => {
-                    await emitCheckoutEvent({
-                      courseSlug,
-                      eventType: "cta_click",
-                      ctaId: "boleto-generate",
-                      metadata: { component: "boleto" },
-                    });
-                    await emitCheckoutEvent({
-                      courseSlug,
-                      eventType: "purchase_start",
-                      metadata: { component: "boleto" },
-                    });
-                    await handleBoleto();
-                    await emitCheckoutEvent({
-                      courseSlug,
-                      eventType: "purchase_confirm",
-                      metadata: { component: "boleto" },
-                    });
-                  }}
-                >
-                  {status === "loading" ? "Gerando..." : "Gerar boleto"}
-                </button>
-                {(boletoLinhaDigitavel || boletoPixCopiaECola) && (
-                  <div className="checkout__panel" aria-label="Dados do Boleto">
-                    {boletoLinhaDigitavel && (
-                      <div className="checkout__field">
-                        <label className="checkout__label">Linha Digitável</label>
+                {!(boletoLinhaDigitavel || boletoCodigoBarras) && (
+                  <>
+                    {nameReady && (
+                      <div className={`checkout__field fade-in`}>
+                        <label htmlFor="buyer-doc" className="checkout__label">
+                          CPF/CNPJ
+                        </label>
                         <input
+                          id="buyer-doc"
                           className="checkout__input"
                           type="text"
-                          readOnly
-                          value={boletoLinhaDigitavel}
-                          onFocus={(e) => e.currentTarget.select()}
+                          placeholder="CPF ou CNPJ"
+                          value={formatCpfCnpj(doc)}
+                          onChange={(e) => setDoc(e.target.value.replace(/[^0-9]/g, ""))}
+                          inputMode="numeric"
+                          autoComplete="off"
+                          pattern="\d*"
                         />
                       </div>
                     )}
-                    {boletoPixCopiaECola && (
-                      <div className="checkout__field">
-                        <label className="checkout__label">PIX Copia e Cola</label>
+                    {nameReady && doc.replace(/\D/g, "").length >= 11 && (
+                      <div className={`checkout__field fade-in`}>
+                        <label htmlFor="buyer-cep" className="checkout__label">
+                          CEP
+                        </label>
                         <input
+                          id="buyer-cep"
                           className="checkout__input"
                           type="text"
-                          readOnly
-                          value={boletoPixCopiaECola}
-                          onFocus={(e) => e.currentTarget.select()}
+                          placeholder="00000-000"
+                          value={formatCep(cep)}
+                          onChange={(e) => setCep(e.target.value.replace(/[^0-9]/g, ""))}
+                          inputMode="numeric"
+                          autoComplete="postal-code"
+                          pattern="\d*"
+                          aria-busy={cepLoading}
                         />
+                        {cepLoading && (
+                          <div
+                            className="checkout__spinner-circle"
+                            aria-hidden="true"
+                            style={{ display: "inline-block", marginLeft: 8 }}
+                          />
+                        )}
                       </div>
                     )}
-                  </div>
+                    {cep.replace(/\D/g, "").length === 8 && (
+                      <>
+                        <div className={`checkout__field fade-in`}>
+                          <label htmlFor="buyer-street" className="checkout__label">
+                            Endereço
+                          </label>
+                          <input
+                            id="buyer-street"
+                            className="checkout__input"
+                            type="text"
+                            placeholder="Rua/Av."
+                            value={addressStreet}
+                            onChange={(e) => setAddressStreet(e.target.value)}
+                            disabled={cepLoading}
+                          />
+                        </div>
+                        <div className={`checkout__grid`}>
+                          <div className={`checkout__field fade-in`}>
+                            <label htmlFor="buyer-number" className="checkout__label">
+                              Número
+                            </label>
+                            <input
+                              id="buyer-number"
+                              className="checkout__input"
+                              type="text"
+                              placeholder="Número"
+                              value={addressNumber}
+                              onChange={(e) => setAddressNumber(e.target.value)}
+                              inputMode="numeric"
+                              disabled={cepLoading}
+                            />
+                          </div>
+                          <div className={`checkout__field fade-in`}>
+                            <label htmlFor="buyer-complement" className="checkout__label">
+                              Complemento
+                            </label>
+                            <input
+                              id="buyer-complement"
+                              className="checkout__input"
+                              type="text"
+                              placeholder="Apto, bloco, referência"
+                              value={addressComplement}
+                              onChange={(e) => setAddressComplement(e.target.value)}
+                              disabled={cepLoading}
+                            />
+                          </div>
+                        </div>
+                        <div className={`checkout__grid`}>
+                          <div className={`checkout__field fade-in`}>
+                            <label htmlFor="buyer-city" className="checkout__label">
+                              Cidade
+                            </label>
+                            <input
+                              id="buyer-city"
+                              className="checkout__input"
+                              type="text"
+                              placeholder="Cidade"
+                              value={addressCity}
+                              onChange={(e) => setAddressCity(e.target.value)}
+                              disabled={cepLoading}
+                            />
+                          </div>
+                          <div className={`checkout__field fade-in`}>
+                            <label htmlFor="buyer-state" className="checkout__label">
+                              Estado
+                            </label>
+                            <input
+                              id="buyer-state"
+                              className="checkout__input"
+                              type="text"
+                              placeholder="UF"
+                              value={addressState}
+                              onChange={(e) => setAddressState(e.target.value.toUpperCase())}
+                              maxLength={2}
+                              disabled={cepLoading}
+                            />
+                          </div>
+                        </div>
+                      </>
+                    )}
+                    <button
+                      type="button"
+                      className="btn btn-primary checkout__btn"
+                      disabled={status === "loading"}
+                      onClick={async () => {
+                        await emitCheckoutEvent({
+                          courseSlug,
+                          eventType: "cta_click",
+                          ctaId: "boleto-generate",
+                          metadata: { component: "boleto" },
+                        });
+                        await emitCheckoutEvent({
+                          courseSlug,
+                          eventType: "purchase_start",
+                          metadata: { component: "boleto" },
+                        });
+                        await handleBoleto();
+                        await emitCheckoutEvent({
+                          courseSlug,
+                          eventType: "purchase_confirm",
+                          metadata: { component: "boleto" },
+                        });
+                      }}
+                    >
+                      {status === "loading" ? "Gerando..." : "Gerar boleto"}
+                    </button>
+                  </>
                 )}
               </div>
             )}

@@ -24,10 +24,12 @@
     "optimize:svg:card-machine:multipass": "svgo --multipass src/assets/card-machine.svg -o src/assets/card-machine.svg"
   },
   "dependencies": {
+    "@mrmgomes/boleto-utils": "^1.3.3",
     "@stripe/react-stripe-js": "^2.3.0",
     "@stripe/stripe-js": "^3.4.0",
     "i18next": "^25.6.3",
     "i18next-browser-languagedetector": "^8.2.0",
+    "jsbarcode": "^3.12.1",
     "lucide-react": "^0.548.0",
     "qrcode": "^1.5.4",
     "react": "^19.1.1",
