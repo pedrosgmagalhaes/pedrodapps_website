@@ -732,7 +732,14 @@ export default function Checkout() {
                   <EmbeddedCheckoutProvider stripe={stripePromise} options={{ fetchClientSecret }}>
                     <div
                       className="checkout__embedded"
-                      style={{ position: "relative", minHeight: "320px" }}
+                      style={{
+                        position: "relative",
+                        minHeight: "720px",
+                        backgroundColor: "var(--bg-primary)",
+                        "--ec-color-primary": "var(--accent-primary)",
+                        "--ec-color-text": "var(--text-primary)",
+                        "--ec-content-background": "var(--bg-primary)",
+                      }}
                     >
                       <EmbeddedCheckout />
                     </div>
