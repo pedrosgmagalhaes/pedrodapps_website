@@ -18,7 +18,6 @@ const ForgotPassword = React.lazy(() => import("./components/ForgotPassword"));
 const Signup = React.lazy(() => import("./components/Signup"));
 const Checkout = React.lazy(() => import("./components/Checkout"));
 const CheckoutSuccess = React.lazy(() => import("./components/CheckoutSuccess"));
-const CheckoutReturn = React.lazy(() => import("./components/CheckoutReturn"));
 const Links = React.lazy(() => import("./components/Links"));
 const Home = React.lazy(() => import("./components/Home"));
 const Lessons = React.lazy(() => import("./components/Lessons"));
@@ -43,13 +42,12 @@ function App() {
   // Adicionar isSignupView após isCheckoutView e atualizar isAuthView
   const isCheckoutView = pathname === "/checkout";
   const isSignupView = pathname === "/signup";
-  const isReturnView = pathname === "/return";
   const isPrivacyView = pathname === "/privacidade";
   const isServicesView = pathname === "/servicos";
   const isCookiesView = pathname === "/cookies";
   const isDeletionView = pathname === "/exclusao-dados";
   const isPolicyView = isPrivacyView || isServicesView || isCookiesView || isDeletionView;
-  const isAuthView = isLoginView || isForgotView || isCheckoutView || isSignupView || isReturnView;
+  const isAuthView = isLoginView || isForgotView || isCheckoutView || isSignupView;
   const isMembersArea =
     pathname.startsWith("/members") ||
     ["/lessons", "/videos", "/files", "/admin/tools"].includes(pathname);
@@ -304,14 +302,7 @@ function App() {
             }
           />
 
-          <Route
-            path="/return"
-            element={
-              <Suspense fallback={<div className="lazy-fallback" aria-hidden="true" />}> 
-                <CheckoutReturn />
-              </Suspense>
-            }
-          />
+          
 
           <Route
             path="/privacidade"

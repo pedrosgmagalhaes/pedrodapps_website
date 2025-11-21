@@ -13,8 +13,7 @@ import stripeWordmark from "../assets/stripe_wordmark.svg";
 import { useLocation } from "react-router-dom";
 import { API } from "../lib/api";
 import { emitCheckoutEvent } from "../lib/checkoutTelemetry";
-import { EmbeddedCheckoutProvider, EmbeddedCheckout } from "@stripe/react-stripe-js";
-import { loadStripe } from "@stripe/stripe-js";
+// Stripe Payment Link
 
 // Catálogo de produtos e formatação
 
@@ -30,15 +29,7 @@ export default function Checkout() {
     const list = approvedMethods || [];
     return list.includes(name) || (name === "card" && list.includes("stripe"));
   };
-  const STRIPE_PK = (
-    (import.meta?.env?.VITE_STRIPE_PUBLIC_KEY ??
-      (typeof globalThis !== "undefined" &&
-      typeof globalThis["__APP_VITE_STRIPE_PUBLIC_KEY__"] === "string"
-        ? globalThis["__APP_VITE_STRIPE_PUBLIC_KEY__"]
-        : "")) ||
-    ""
-  ).trim();
-  const stripePromise = STRIPE_PK ? loadStripe(STRIPE_PK) : null;
+  const STRIPE_PAYMENT_LINK = "https://buy.stripe.com/eVq3cu3bx5nYdpn0e983C0b";
   const PAYMENTS_BASE = (
     (import.meta?.env?.VITE_PAYMENTS_BASE_URL ??
       (typeof globalThis !== "undefined" &&
@@ -113,47 +104,7 @@ export default function Checkout() {
   const [cryptoAddress, setCryptoAddress] = useState("");
   const [cryptoQr, setCryptoQr] = useState("");
   // Stripe Embedded Checkout
-  const fetchClientSecret = React.useCallback(async () => {
-    try {
-      const trimmedEmail = (buyerEmail || "").trim();
-      const priceCents = ctx?.product?.totalCents ?? ctx?.course?.priceCents ?? null;
-      const price = priceCents ? priceCents / 100 : null;
-      const priceId =
-        ctx?.product?.priceId || ctx?.course?.priceId || ctx?.product?.stripe_price_id || null;
-      const currency = (ctx?.product?.currency || ctx?.course?.currency || "brl").toLowerCase();
-      const name = ctx?.product?.name || ctx?.course?.title || "Produto";
-      const body = {
-        course: courseSlug,
-        product: productParam,
-        quantity: 1,
-        mode: "payment",
-        receiptEmail:
-          trimmedEmail && /[^\s@]+@[^\s@]+\.[^\s@]+/.test(trimmedEmail) ? trimmedEmail : undefined,
-        marketing: utm,
-      };
-      if (priceId) body.priceId = priceId;
-      else if (price !== null) { body.price = price; body.currency = currency; body.name = name; }
-      const headers = {};
-      if (priceId) headers["x-price-id"] = priceId;
-      else if (price !== null) headers["x-price"] = String(price);
-      const res = await API.post("/api/payments/create-checkout-session", body, {
-        method: "POST",
-        headers,
-        baseUrl: PAYMENTS_BASE,
-      });
-      if (res && res.clientSecret) return res.clientSecret;
-      // fallback alias
-      const res2 = await API.post("/api/payments/checkout/session", body, {
-        method: "POST",
-        headers,
-        baseUrl: PAYMENTS_BASE,
-      });
-      if (res2 && res2.clientSecret) return res2.clientSecret;
-      return null;
-    } catch {
-      return null;
-    }
-  }, [buyerEmail, courseSlug, productParam, utm, ctx, PAYMENTS_BASE]);
+  
   const PRICE_BRL = ctx?.product?.totalCents
     ? ctx.product.totalCents / 100
     : ctx?.course?.priceCents
@@ -728,27 +679,20 @@ export default function Checkout() {
                     </span>
                   </span>
                 </div>
-                {stripePromise ? (
-                  <EmbeddedCheckoutProvider stripe={stripePromise} options={{ fetchClientSecret }}>
-                    <div
-                      className="checkout__embedded"
-                      style={{
-                        position: "relative",
-                        minHeight: "720px",
-                        backgroundColor: "var(--bg-primary)",
-                        "--ec-color-primary": "var(--accent-primary)",
-                        "--ec-color-text": "var(--text-primary)",
-                        "--ec-content-background": "var(--bg-primary)",
-                      }}
-                    >
-                      <EmbeddedCheckout />
-                    </div>
-                  </EmbeddedCheckoutProvider>
-                ) : (
-                  <div className="checkout__panel-desc">
-                    Stripe não configurado. Defina VITE_STRIPE_PUBLIC_KEY para habilitar.
-                  </div>
-                )}
+                <div className="checkout__stripe-actions">
+                  <a
+                    href={STRIPE_PAYMENT_LINK}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="btn checkout__btn checkout__stripe-btn"
+                    onClick={async () => {
+                      await emitCheckoutEvent({ courseSlug, eventType: "cta_click", paymentMethod: "stripe", ctaId: "stripe-link", metadata: { component: "card" } });
+                      await emitCheckoutEvent({ courseSlug, eventType: "purchase_start", paymentMethod: "stripe", metadata: { component: "card" } });
+                    }}
+                  >
+                    Checkout com Stripe
+                  </a>
+                </div>
               </div>
             )}
 
