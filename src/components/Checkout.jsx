@@ -425,20 +425,36 @@ export default function Checkout() {
         setMessage(backendMsg ? String(backendMsg) : "Boleto indisponível no momento.");
         return;
       }
-      if (data?.linhaDigitavel) {
-        const ld = String(data.linhaDigitavel);
+      const ldCandidate =
+        data?.linhaDigitavel ||
+        data?.data?.linhaDigitavel ||
+        data?.data?.completeData?.linhaDigitavel ||
+        data?.completeData?.linhaDigitavel ||
+        null;
+      if (ldCandidate) {
+        const ld = String(ldCandidate);
         setBoletoLinhaDigitavel(ld);
         try {
           const { validarBoleto, linhaDigitavel2CodBarras } = await import(
             "@mrmgomes/boleto-utils"
           );
-          let barras = "";
+          let barras =
+            String(
+              data?.codigoBarras ||
+                data?.data?.codigoBarras ||
+                data?.data?.completeData?.codigoBarras ||
+                data?.completeData?.codigoBarras ||
+                data?.boletoCode ||
+                ""
+            ) || "";
           try {
-            const info = validarBoleto(ld, "LINHA_DIGITAVEL");
-            barras = String(info?.codigoBarras || "");
+            if (!barras) {
+              const info = validarBoleto(ld, "LINHA_DIGITAVEL");
+              barras = String(info?.codigoBarras || "");
+            }
           } catch {
             try {
-              barras = String(linhaDigitavel2CodBarras(ld) || "");
+              if (!barras) barras = String(linhaDigitavel2CodBarras(ld) || "");
             } catch {
               void 0;
             }
@@ -811,10 +827,26 @@ export default function Checkout() {
             )}
 
             {approvedMethods.includes("boleto") && method === "boleto" && (
-              <div className="checkout__panel" aria-labelledby="boleto-title">
+              <div
+                className="checkout__panel"
+                aria-labelledby="boleto-title"
+                aria-busy={status === "loading"}
+              >
                 <h3 id="boleto-title" className="checkout__panel-title">
                   Gerar Boleto
                 </h3>
+                {status === "loading" && (
+                  <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 12 }}>
+                    <div
+                      className="checkout__spinner-circle"
+                      aria-hidden="true"
+                      style={{ display: "inline-block" }}
+                    />
+                    <span className="checkout__label" aria-live="polite">
+                      Carregando dados do boleto...
+                    </span>
+                  </div>
+                )}
                 {(boletoLinhaDigitavel || boletoCodigoBarras) && (
                   <>
                     {boletoCodigoBarras && (

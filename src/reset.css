@@ -135,7 +135,7 @@ table {
 input,
 select,
 textarea {
-  font-size: 16px; /* Evita o zoom automático no iOS Safari */
+  font-size: 15px; /* Evita o zoom automático no iOS Safari */
 }
 
 /* Opcional: Para telas menores, use media queries se precisar ajustar */
