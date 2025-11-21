@@ -401,11 +401,18 @@ export default function Checkout() {
           </div>
         </div>
 
-          <div className="checkout__methods reveal-on-scroll is-visible" role="tablist" aria-label="Métodos de pagamento">
+          <div className="checkout__methods reveal-on-scroll is-visible" role="tablist" aria-label="Métodos de pagamento" style={{ position: 'relative', minHeight: 54 }}>
+            {ctxLoading && (
+              <div className="checkout__spinner" role="status" aria-live="polite" aria-label="Carregando métodos">
+                <div className="checkout__spinner-circle" />
+              </div>
+            )}
             {supportsMethod('pix') && (
             <button
               type="button"
               className={`checkout__tab ${method === "pix" ? "is-active" : ""}`}
+              disabled={ctxLoading}
+              aria-disabled={ctxLoading}
               onClick={async () => {
                 setMethod("pix");
                 await emitCheckoutEvent({ courseSlug, eventType: 'method_change', paymentMethod: 'pix', ctaId: 'tab-pix', metadata: { component: 'methods' } });
@@ -421,6 +428,8 @@ export default function Checkout() {
             <button
               type="button"
               className={`checkout__tab ${method === "boleto" ? "is-active" : ""}`}
+              disabled={ctxLoading}
+              aria-disabled={ctxLoading}
               onClick={async () => {
                 setMethod("boleto");
                 await emitCheckoutEvent({ courseSlug, eventType: 'method_change', paymentMethod: undefined, ctaId: 'tab-boleto', metadata: { component: 'methods' } });
@@ -436,6 +445,8 @@ export default function Checkout() {
             <button
               type="button"
               className={`checkout__tab ${method === "card" ? "is-active" : ""}`}
+              disabled={ctxLoading}
+              aria-disabled={ctxLoading}
               onClick={async () => {
                 setMethod("card");
                 await emitCheckoutEvent({ courseSlug, eventType: 'method_change', paymentMethod: 'stripe', ctaId: 'tab-card', metadata: { component: 'methods' } });
@@ -451,6 +462,8 @@ export default function Checkout() {
             <button
               type="button"
               className={`checkout__tab ${method === "crypto" ? "is-active" : ""}`}
+              disabled={ctxLoading}
+              aria-disabled={ctxLoading}
               onClick={async () => {
                 setMethod("crypto");
                 await emitCheckoutEvent({ courseSlug, eventType: 'method_change', paymentMethod: undefined, ctaId: 'tab-crypto', metadata: { component: 'methods' } });
