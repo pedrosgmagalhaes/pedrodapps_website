@@ -429,9 +429,8 @@ export default function Checkout() {
               }}
               role="tab"
               aria-selected={method === "card"}
-            >
-              <img src={stripeWordmark} className="checkout__tab-icon" alt="Stripe" />
-              <span>Stripe</span>
+            aria-label="Stripe">
+              <img src={stripeWordmark} className="checkout__tab-icon" alt="Stripe" style={{ width: '96px', height: 'auto' }} />
             </button>
             )}
             {supportsMethod('crypto') && (
