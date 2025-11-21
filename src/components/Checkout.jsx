@@ -131,12 +131,24 @@ export default function Checkout() {
     const val = boletoCodigoBarras || boletoLinhaDigitavel;
     if (boletoBarcodeRef.current && val) {
       try {
-        JsBarcode(boletoBarcodeRef.current, String(val), {
-          format: "CODE128",
+        const s = String(val);
+        const fmt = /^\d{44}$/.test(s) ? "ITF" : "CODE128";
+        JsBarcode(boletoBarcodeRef.current, s, {
+          format: fmt,
           displayValue: false,
+          width: fmt === "ITF" ? 2 : 1.6,
           height: 60,
           margin: 0,
         });
+        try {
+          boletoBarcodeRef.current.removeAttribute("width");
+          boletoBarcodeRef.current.removeAttribute("height");
+          boletoBarcodeRef.current.setAttribute("preserveAspectRatio", "xMidYMid meet");
+          boletoBarcodeRef.current.style.width = "100%";
+          boletoBarcodeRef.current.style.height = "80px";
+        } catch {
+          void 0;
+        }
       } catch {
         void 0;
       }
