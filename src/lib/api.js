@@ -14,10 +14,16 @@ const isLocalhost = () => {
 };
 
 export const getBaseURL = () => {
-  // Prefer explicit env var if present
+  const runtime = (() => {
+    try {
+      const v = globalThis && globalThis['__APP_API_BASE_URL__'];
+      return typeof v === 'string' && v.length > 0 ? v : null;
+    } catch { return null; }
+  })();
   const explicit = import.meta?.env?.VITE_API_BASE_URL;
+  if (runtime) return runtime;
   if (explicit) return explicit;
-  return isLocalhost() ? "http://localhost:3000" : "https://api.pedrodapps.com";
+  return isLocalhost() ? "http://localhost:3002" : "https://api.pedrodapps.com";
 };
 
 async function jsonFetch(path, options = {}) {

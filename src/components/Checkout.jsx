@@ -107,6 +107,7 @@ export default function Checkout() {
       const trimmedEmail = (buyerEmail || '').trim();
       const priceCents = ctx?.product?.totalCents ?? ctx?.course?.priceCents ?? null;
       const price = priceCents ? (priceCents / 100) : null;
+      const priceId = ctx?.product?.priceId || ctx?.course?.priceId || ctx?.product?.stripe_price_id || null;
       const body = {
         course: courseSlug,
         product: productParam,
@@ -115,10 +116,14 @@ export default function Checkout() {
         receiptEmail: trimmedEmail && /[^\s@]+@[^\s@]+\.[^\s@]+/.test(trimmedEmail) ? trimmedEmail : undefined,
         marketing: utm,
       };
+      if (priceId) body.priceId = priceId; else if (price !== null) body.price = price;
       const headers = {};
-      if (price !== null) headers['x-price'] = String(price);
+      if (priceId) headers['x-price-id'] = priceId; else if (price !== null) headers['x-price'] = String(price);
       const res = await API.post('/api/payments/create-checkout-session', body, { method: 'POST', headers });
       if (res && res.clientSecret) return res.clientSecret;
+      // fallback alias
+      const res2 = await API.post('/api/payments/checkout/session', body, { method: 'POST', headers });
+      if (res2 && res2.clientSecret) return res2.clientSecret;
       return null;
     } catch {
       return null;
