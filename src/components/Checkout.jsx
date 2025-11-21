@@ -684,7 +684,6 @@ export default function Checkout() {
                     aria-label="Checkout com Stripe"
                     title="Checkout com Stripe"
                   >
-                    <img src={stripeWordmark} alt="" aria-hidden="true" className="stripe-btn__logo" />
                     <span className="stripe-btn__text">Checkout com Stripe</span>
                   </a>
                 </div>

@@ -83,6 +83,10 @@
 .checkout__stripe-btn { margin-top: 12px; }
 .stripe-btn__logo { height: 18px; width: auto; display: block; filter: brightness(100%); }
 .stripe-btn__text { color: #ffffff; font-weight: 600; font-size: 14px; letter-spacing: 0.2px; }
+
+/* Forçar cores oficiais da Stripe quando combinado com classe base de botão */
+.checkout__btn.checkout__stripe-btn { background: #635BFF; color: #fff; box-shadow: 0 10px 20px rgba(99,91,255,0.32); }
+.checkout__btn.checkout__stripe-btn:hover { filter: brightness(1.05); box-shadow: 0 12px 24px rgba(99,91,255,0.38); transform: translateY(-1px); }
 .checkout__title { font-size: 24px; font-weight: 800; margin: 0 0 6px 0; color: var(--neutral-white); }
 .checkout__subtitle { font-size: 14px; color: rgba(255, 255, 255, 0.8); margin: 0; }
 
