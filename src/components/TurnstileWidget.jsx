@@ -6,6 +6,7 @@ export default function TurnstileWidget({
   size = "normal",
   onToken = () => {},
   className = "turnstile__container",
+  containerStyle = { display: "block", minHeight: 70, width: "100%" },
 }) {
   const containerRef = useRef(null);
   const [widgetId, setWidgetId] = useState(null);
@@ -35,6 +36,16 @@ export default function TurnstileWidget({
                 void e;
               }
             },
+            "expired-callback": () => {
+              try {
+                onToken("");
+              } catch (e) {
+                void e;
+              }
+            },
+            "error-callback": () => {
+              setUnavailable(true);
+            },
           });
           setWidgetId(id);
           setLoaded(true);
@@ -63,7 +74,7 @@ export default function TurnstileWidget({
   }, [sitekey, theme, size]);
 
   return (
-    <div ref={containerRef} className={className} aria-live="polite">
+    <div ref={containerRef} className={className} aria-live="polite" style={containerStyle}>
       {!loaded && !unavailable && (
         <span className="turnstile__loading" aria-label="Carregando verificação" />
       )}
