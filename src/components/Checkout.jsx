@@ -8,7 +8,7 @@ import usdtIcon from "../assets/icons/usdt.svg";
 import usdcIcon from "../assets/icons/usdc.svg";
 import btcIcon from "../assets/icons/btc-orange.svg";
 
-import { FaBarcode, FaCreditCard, FaBitcoin } from "react-icons/fa";
+import { FaBarcode, FaCreditCard, FaBitcoin, FaCopy } from "react-icons/fa";
 import { useLocation } from "react-router-dom";
 import { API } from "../lib/api";
 import { emitCheckoutEvent } from "../lib/checkoutTelemetry";
@@ -301,30 +301,6 @@ export default function Checkout() {
       return false;
     }
     return true;
-  };
-
-  const handlePixPay = async () => {
-    if (!validateCommon()) return;
-    if (!doc || doc.length < 11) {
-      setStatus("error");
-      setMessage("Informe um CPF/CNPJ válido.");
-      return;
-    }
-    if (!pixQr) {
-      setStatus("error");
-      setMessage("Gere o QR Code antes de confirmar o pagamento.");
-      return;
-    }
-    try {
-      setStatus("loading");
-      setMessage("");
-      await new Promise((r) => setTimeout(r, 900));
-      setStatus("success");
-      setMessage("Pagamento via PIX iniciado. Escaneie o QR para concluir.");
-    } catch {
-      setStatus("error");
-      setMessage("Erro ao iniciar pagamento PIX.");
-    }
   };
 
   const handleBoleto = async () => {
@@ -678,17 +654,25 @@ export default function Checkout() {
                       }
                       const data = await API.courses.pixleyQr(courseSlug, payload);
                       if (data?.error) throw new Error("request_failed");
-                      if (data?.qrCode && String(data.qrCode).startsWith("data:image")) {
-                        setPixQr(data.qrCode);
+                      if (data?.qrCode) {
+                        const v = String(data.qrCode);
+                        if (v.startsWith("data:image")) {
+                          setPixQr(v);
+                        } else {
+                          setPixPayload(v);
+                          const img = await QRCode.toDataURL(v);
+                          setPixQr(img);
+                        }
                       } else if (data?.qrCodeData) {
-                        setPixPayload(String(data.qrCodeData));
-                        const img = await QRCode.toDataURL(String(data.qrCodeData));
+                        const v = String(data.qrCodeData);
+                        setPixPayload(v);
+                        const img = await QRCode.toDataURL(v);
                         setPixQr(img);
                       } else {
                         throw new Error("invalid_response");
                       }
                       setStatus("success");
-                      setMessage("QR Code gerado. Escaneie com seu app do banco.");
+                      setMessage("Confirmar pagamento PIX");
                     } catch {
                       setStatus("error");
                       setMessage("Não foi possível gerar o QR Code de PIX.");
@@ -700,7 +684,7 @@ export default function Checkout() {
                 {pixPayload && (
                   <div className="checkout__field" aria-label="PIX Copia e Cola">
                     <label className="checkout__label">PIX Copia e Cola</label>
-                    <div style={{ display: "flex", gap: 8 }}>
+                    <div style={{ position: "relative" }}>
                       <input
                         className="checkout__input"
                         type="text"
@@ -710,7 +694,7 @@ export default function Checkout() {
                       />
                       <button
                         type="button"
-                        className="btn checkout__btn checkout__btn--secondary"
+                        aria-label="Copiar"
                         onClick={async () => {
                           try {
                             await navigator.clipboard.writeText(pixPayload);
@@ -719,41 +703,22 @@ export default function Checkout() {
                             void 0;
                           }
                         }}
+                        style={{
+                          position: "absolute",
+                          right: 8,
+                          top: "50%",
+                          transform: "translateY(-50%)",
+                          border: "none",
+                          background: "transparent",
+                          padding: 4,
+                          cursor: "pointer",
+                          color: "inherit",
+                        }}
                       >
-                        Copiar
+                        <FaCopy aria-hidden="true" />
                       </button>
                     </div>
                   </div>
-                )}
-                {pixQr && (
-                  <button
-                    type="button"
-                    className="btn checkout__btn checkout__btn--secondary"
-                    disabled={status === "loading"}
-                    onClick={async () => {
-                      await emitCheckoutEvent({
-                        courseSlug,
-                        eventType: "cta_click",
-                        ctaId: "pix-confirm",
-                        metadata: { component: "pix" },
-                      });
-                      await emitCheckoutEvent({
-                        courseSlug,
-                        eventType: "purchase_start",
-                        paymentMethod: "pix",
-                        metadata: { component: "pix" },
-                      });
-                      await handlePixPay();
-                      await emitCheckoutEvent({
-                        courseSlug,
-                        eventType: "purchase_confirm",
-                        paymentMethod: "pix",
-                        metadata: { component: "pix" },
-                      });
-                    }}
-                  >
-                    {status === "loading" ? "Iniciando..." : "Confirmar pagamento PIX"}
-                  </button>
                 )}
               </div>
             )}
