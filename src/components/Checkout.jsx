@@ -430,8 +430,8 @@ export default function Checkout() {
               role="tab"
               aria-selected={method === "card"}
             >
-              <FaCreditCard className="checkout__tab-icon" aria-hidden="true" />
-              <span>Cartão de crédito</span>
+              <img src={stripeWordmark} className="checkout__tab-icon" alt="Stripe" />
+              <span>Stripe</span>
             </button>
             )}
             {supportsMethod('crypto') && (
@@ -454,6 +454,8 @@ export default function Checkout() {
           </div>
 
           <form className="checkout__form" onSubmit={(e) => e.preventDefault()}>
+            {method !== "card" && (
+            <>
             <div className="checkout__field">
               <label htmlFor="buyer-name" className="checkout__label">
                 Nome completo
@@ -480,6 +482,8 @@ export default function Checkout() {
                 onChange={(e) => setBuyerEmail(e.target.value)}
               />
             </div>
+            </>
+            )}
 
             {approvedMethods.includes('pix') && method === "pix" && (
               <div className="checkout__panel" aria-labelledby="pix-title">
@@ -586,7 +590,7 @@ export default function Checkout() {
 
             {supportsMethod('card') && method === "card" && (
               <div className="checkout__panel" aria-labelledby="card-title">
-                <h3 id="card-title" className="checkout__panel-title">Cartão de crédito (Stripe)</h3>
+                <h3 id="card-title" className="checkout__panel-title">Stripe</h3>
                 <div className="checkout__stripe" aria-label="Processado pela Stripe">
                   <span className="checkout__stripe-powered">Processado por</span>
                   <span className="checkout__stripe-badge">
