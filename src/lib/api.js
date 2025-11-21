@@ -123,6 +123,32 @@ export const API = {
         body,
       });
     },
+    pixleyQr: (slug, body = {}, opts = {}) => {
+      const acceptLanguage =
+        typeof navigator !== "undefined"
+          ? navigator.language || (navigator.languages && navigator.languages[0]) || "pt"
+          : "pt";
+      return jsonFetch(`/api/courses/${encodeURIComponent(slug)}/checkout/pixley/qr`, {
+        ...opts,
+        method: "POST",
+        token: getToken(),
+        headers: { ...(opts.headers || {}), "Accept-Language": acceptLanguage },
+        body,
+      });
+    },
+    pixleyBoleto: (slug, body = {}, opts = {}) => {
+      const acceptLanguage =
+        typeof navigator !== "undefined"
+          ? navigator.language || (navigator.languages && navigator.languages[0]) || "pt"
+          : "pt";
+      return jsonFetch(`/api/courses/${encodeURIComponent(slug)}/checkout/pixley/boleto`, {
+        ...opts,
+        method: "POST",
+        token: getToken(),
+        headers: { ...(opts.headers || {}), "Accept-Language": acceptLanguage },
+        body,
+      });
+    },
   },
   // Education endpoints (courses, modules, lessons, Q&A)
   edu: {

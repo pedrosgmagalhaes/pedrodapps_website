@@ -29,14 +29,6 @@ export default function Checkout() {
     return list.includes(name) || (name === "card" && list.includes("stripe"));
   };
   const STRIPE_PAYMENT_LINK = "https://buy.stripe.com/eVq3cu3bx5nYdpn0e983C0b";
-  const PAYMENTS_BASE = (
-    (import.meta?.env?.VITE_PAYMENTS_BASE_URL ??
-      (typeof globalThis !== "undefined" &&
-      typeof globalThis["__APP_PAYMENTS_BASE_URL__"] === "string"
-        ? globalThis["__APP_PAYMENTS_BASE_URL__"]
-        : "")) ||
-    "http://localhost:3002"
-  ).trim();
   const utm = React.useMemo(() => {
     const q = new URLSearchParams(location.search);
     return {
@@ -61,8 +53,8 @@ export default function Checkout() {
   const [buyerEmail, setBuyerEmail] = useState("");
 
   // PIX
-  const pixKey = "pix@pedrodapps.com"; // placeholder de chave
   const [pixQr, setPixQr] = useState("");
+  const [pixPayload, setPixPayload] = useState("");
 
   // Boleto
   const [doc, setDoc] = useState(""); // CPF/CNPJ (simplificado)
@@ -94,6 +86,43 @@ export default function Checkout() {
     if (p5) out += `-${p5}`;
     return out;
   };
+
+  const [cep, setCep] = useState("");
+  const [cepLoading, setCepLoading] = useState(false);
+  const [addressStreet, setAddressStreet] = useState("");
+  const [addressNumber, setAddressNumber] = useState("");
+  const [addressComplement, setAddressComplement] = useState("");
+  const [addressCity, setAddressCity] = useState("");
+  const [addressState, setAddressState] = useState("");
+  const formatCep = (digits) => {
+    const d = String(digits || "").replace(/\D/g, "");
+    const p1 = d.slice(0, 5);
+    const p2 = d.slice(5, 8);
+    return p2 ? `${p1}-${p2}` : p1;
+  };
+  const [boletoLinhaDigitavel, setBoletoLinhaDigitavel] = useState("");
+  const [boletoPixCopiaECola, setBoletoPixCopiaECola] = useState("");
+  useEffect(() => {
+    const d = cep.replace(/\D/g, "");
+    if (d.length === 8) {
+      (async () => {
+        try {
+          setCepLoading(true);
+          const res = await fetch(`https://viacep.com.br/ws/${encodeURIComponent(d)}/json/`);
+          const data = await res.json();
+          if (!data?.erro) {
+            setAddressStreet(data?.logradouro || "");
+            setAddressCity(data?.localidade || "");
+            setAddressState(data?.uf || "");
+          }
+        } catch {
+          void 0;
+        } finally {
+          setCepLoading(false);
+        }
+      })();
+    }
+  }, [cep]);
 
   // Cartão (Stripe Elements substitui inputs locais)
 
@@ -305,12 +334,60 @@ export default function Checkout() {
       setMessage("Informe um CPF/CNPJ válido.");
       return;
     }
+    if (cep.replace(/\D/g, "").length !== 8) {
+      setStatus("error");
+      setMessage("Informe um CEP válido.");
+      return;
+    }
+    if (
+      !addressStreet.trim() ||
+      !addressNumber.trim() ||
+      !addressCity.trim() ||
+      !addressState.trim()
+    ) {
+      setStatus("error");
+      setMessage("Preencha endereço, número, cidade e estado.");
+      return;
+    }
     try {
       setStatus("loading");
       setMessage("");
-      await new Promise((r) => setTimeout(r, 900));
+      const linkSlug =
+        ctx?.payments?.pixley?.linkSlug ||
+        ctx?.payments?.pixleyLinkSlug ||
+        ctx?.pixley?.linkSlug ||
+        ctx?.pixleyLinkSlug ||
+        null;
+      if (!linkSlug) throw new Error("missing_link_slug");
+      const payload = {
+        linkSlug,
+        payer: {
+          name: buyerName,
+          document: String(doc || "").replace(/\D/g, ""),
+          email: buyerEmail,
+          address: {
+            street: addressStreet,
+            number: addressNumber,
+            complement: addressComplement,
+            neighborhood: "",
+            city: addressCity,
+            state: addressState,
+            zipCode: formatCep(cep),
+          },
+        },
+        externalId: `boleto-${Date.now()}`,
+        description: "Boleto via Payment Link",
+      };
+      if (ctx?.payments?.pixley?.allowCustomAmount === true && PRICE_BRL) {
+        payload.amount = Number(PRICE_BRL);
+      }
+      const data = await API.courses.pixleyBoleto(courseSlug, payload);
+      if (data?.error) throw new Error("request_failed");
+      if (data?.linhaDigitavel) setBoletoLinhaDigitavel(String(data.linhaDigitavel));
+      if (data?.pixCopiaECola) setBoletoPixCopiaECola(String(data.pixCopiaECola));
+      void data?.id;
       setStatus("success");
-      setMessage("Boleto gerado. Enviado para seu e-mail.");
+      setMessage("Boleto gerado. Utilize a linha digitável para pagar.");
     } catch {
       setStatus("error");
       setMessage("Erro ao gerar boleto.");
@@ -572,8 +649,36 @@ export default function Checkout() {
                     try {
                       setStatus("loading");
                       setMessage("");
-                      const dataUrl = await QRCode.toDataURL(pixKey, { width: 256, margin: 1 });
-                      setPixQr(dataUrl);
+                      const linkSlug =
+                        ctx?.payments?.pixley?.linkSlug ||
+                        ctx?.payments?.pixleyLinkSlug ||
+                        ctx?.pixley?.linkSlug ||
+                        ctx?.pixleyLinkSlug ||
+                        null;
+                      if (!linkSlug) throw new Error("missing_link_slug");
+                      const payload = {
+                        linkSlug,
+                        payer: {
+                          name: buyerName,
+                          document: String(doc || "").replace(/\D/g, ""),
+                          email: buyerEmail,
+                        },
+                        externalId: `pix-session-${Date.now()}`,
+                      };
+                      if (ctx?.payments?.pixley?.allowCustomAmount === true && PRICE_BRL) {
+                        payload.amount = Number(PRICE_BRL);
+                      }
+                      const data = await API.courses.pixleyQr(courseSlug, payload);
+                      if (data?.error) throw new Error("request_failed");
+                      if (data?.qrCode && String(data.qrCode).startsWith("data:image")) {
+                        setPixQr(data.qrCode);
+                      } else if (data?.qrCodeData) {
+                        setPixPayload(String(data.qrCodeData));
+                        const img = await QRCode.toDataURL(String(data.qrCodeData));
+                        setPixQr(img);
+                      } else {
+                        throw new Error("invalid_response");
+                      }
                       setStatus("success");
                       setMessage("QR Code gerado. Escaneie com seu app do banco.");
                     } catch {
@@ -584,6 +689,34 @@ export default function Checkout() {
                 >
                   {status === "loading" ? "Gerando..." : "Gerar QR Code"}
                 </button>
+                {pixPayload && (
+                  <div className="checkout__field" aria-label="PIX Copia e Cola">
+                    <label className="checkout__label">PIX Copia e Cola</label>
+                    <div style={{ display: "flex", gap: 8 }}>
+                      <input
+                        className="checkout__input"
+                        type="text"
+                        readOnly
+                        value={pixPayload}
+                        onFocus={(e) => e.currentTarget.select()}
+                      />
+                      <button
+                        type="button"
+                        className="btn checkout__btn checkout__btn--secondary"
+                        onClick={async () => {
+                          try {
+                            await navigator.clipboard.writeText(pixPayload);
+                            setMessage("PIX Copia e Cola copiado.");
+                          } catch {
+                            void 0;
+                          }
+                        }}
+                      >
+                        Copiar
+                      </button>
+                    </div>
+                  </div>
+                )}
                 {pixQr && (
                   <button
                     type="button"
@@ -640,6 +773,112 @@ export default function Checkout() {
                     />
                   </div>
                 )}
+                {nameReady && doc.replace(/\D/g, "").length >= 11 && (
+                  <div className={`checkout__field fade-in`}>
+                    <label htmlFor="buyer-cep" className="checkout__label">
+                      CEP
+                    </label>
+                    <input
+                      id="buyer-cep"
+                      className="checkout__input"
+                      type="text"
+                      placeholder="00000-000"
+                      value={formatCep(cep)}
+                      onChange={(e) => setCep(e.target.value.replace(/[^0-9]/g, ""))}
+                      inputMode="numeric"
+                      autoComplete="postal-code"
+                      pattern="\d*"
+                      aria-busy={cepLoading}
+                    />
+                    {cepLoading && (
+                      <div
+                        className="checkout__spinner-circle"
+                        aria-hidden="true"
+                        style={{ display: "inline-block", marginLeft: 8 }}
+                      />
+                    )}
+                  </div>
+                )}
+                {cep.replace(/\D/g, "").length === 8 && (
+                  <>
+                    <div className={`checkout__field fade-in`}>
+                      <label htmlFor="buyer-street" className="checkout__label">
+                        Endereço
+                      </label>
+                      <input
+                        id="buyer-street"
+                        className="checkout__input"
+                        type="text"
+                        placeholder="Rua/Av."
+                        value={addressStreet}
+                        onChange={(e) => setAddressStreet(e.target.value)}
+                        disabled={cepLoading}
+                      />
+                    </div>
+                    <div className={`checkout__grid`}>
+                      <div className={`checkout__field fade-in`}>
+                        <label htmlFor="buyer-number" className="checkout__label">
+                          Número
+                        </label>
+                        <input
+                          id="buyer-number"
+                          className="checkout__input"
+                          type="text"
+                          placeholder="Número"
+                          value={addressNumber}
+                          onChange={(e) => setAddressNumber(e.target.value)}
+                          inputMode="numeric"
+                          disabled={cepLoading}
+                        />
+                      </div>
+                      <div className={`checkout__field fade-in`}>
+                        <label htmlFor="buyer-complement" className="checkout__label">
+                          Complemento
+                        </label>
+                        <input
+                          id="buyer-complement"
+                          className="checkout__input"
+                          type="text"
+                          placeholder="Apto, bloco, referência"
+                          value={addressComplement}
+                          onChange={(e) => setAddressComplement(e.target.value)}
+                          disabled={cepLoading}
+                        />
+                      </div>
+                    </div>
+                    <div className={`checkout__grid`}>
+                      <div className={`checkout__field fade-in`}>
+                        <label htmlFor="buyer-city" className="checkout__label">
+                          Cidade
+                        </label>
+                        <input
+                          id="buyer-city"
+                          className="checkout__input"
+                          type="text"
+                          placeholder="Cidade"
+                          value={addressCity}
+                          onChange={(e) => setAddressCity(e.target.value)}
+                          disabled={cepLoading}
+                        />
+                      </div>
+                      <div className={`checkout__field fade-in`}>
+                        <label htmlFor="buyer-state" className="checkout__label">
+                          Estado
+                        </label>
+                        <input
+                          id="buyer-state"
+                          className="checkout__input"
+                          type="text"
+                          placeholder="UF"
+                          value={addressState}
+                          onChange={(e) => setAddressState(e.target.value.toUpperCase())}
+                          maxLength={2}
+                          disabled={cepLoading}
+                        />
+                      </div>
+                    </div>
+                  </>
+                )}
                 <button
                   type="button"
                   className="btn btn-primary checkout__btn"
@@ -666,6 +905,34 @@ export default function Checkout() {
                 >
                   {status === "loading" ? "Gerando..." : "Gerar boleto"}
                 </button>
+                {(boletoLinhaDigitavel || boletoPixCopiaECola) && (
+                  <div className="checkout__panel" aria-label="Dados do Boleto">
+                    {boletoLinhaDigitavel && (
+                      <div className="checkout__field">
+                        <label className="checkout__label">Linha Digitável</label>
+                        <input
+                          className="checkout__input"
+                          type="text"
+                          readOnly
+                          value={boletoLinhaDigitavel}
+                          onFocus={(e) => e.currentTarget.select()}
+                        />
+                      </div>
+                    )}
+                    {boletoPixCopiaECola && (
+                      <div className="checkout__field">
+                        <label className="checkout__label">PIX Copia e Cola</label>
+                        <input
+                          className="checkout__input"
+                          type="text"
+                          readOnly
+                          value={boletoPixCopiaECola}
+                          onFocus={(e) => e.currentTarget.select()}
+                        />
+                      </div>
+                    )}
+                  </div>
+                )}
               </div>
             )}
 
