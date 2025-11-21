@@ -13,7 +13,7 @@ import stripeWordmark from "../assets/stripe_wordmark.svg";
 import { useLocation } from "react-router-dom";
 import { API } from "../lib/api";
 import { emitCheckoutEvent } from "../lib/checkoutTelemetry";
-import { Elements, useStripe, useElements, PaymentElement } from "@stripe/react-stripe-js";
+import { EmbeddedCheckoutProvider, EmbeddedCheckout } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
 
 // Catálogo de produtos e formatação
@@ -36,17 +36,20 @@ export default function Checkout() {
       : ""
   )) || "").trim();
   const stripePromise = STRIPE_PK ? loadStripe(STRIPE_PK) : null;
-  const utm = {
-    utm_source: query.get("utm_source") || null,
-    utm_medium: query.get("utm_medium") || null,
-    utm_campaign: query.get("utm_campaign") || null,
-    utm_content: query.get("utm_content") || null,
-    utm_term: query.get("utm_term") || null,
-    ref: query.get("ref") || null,
-    origin: query.get("origin") || null,
-    gclid: query.get("gclid") || null,
-    fbclid: query.get("fbclid") || null,
-  };
+  const utm = React.useMemo(() => {
+    const q = new URLSearchParams(location.search);
+    return {
+      utm_source: q.get("utm_source") || null,
+      utm_medium: q.get("utm_medium") || null,
+      utm_campaign: q.get("utm_campaign") || null,
+      utm_content: q.get("utm_content") || null,
+      utm_term: q.get("utm_term") || null,
+      ref: q.get("ref") || null,
+      origin: q.get("origin") || null,
+      gclid: q.get("gclid") || null,
+      fbclid: q.get("fbclid") || null,
+    };
+  }, [location.search]);
 
   const [method, setMethod] = useState("pix"); // pix | boleto | card
   const [status, setStatus] = useState("idle"); // idle | loading | success | error
@@ -98,45 +101,23 @@ export default function Checkout() {
   const [cryptoAmount, setCryptoAmount] = useState(null); // numeric
   const [cryptoAddress, setCryptoAddress] = useState("");
   const [cryptoQr, setCryptoQr] = useState("");
-  // Stripe
-  const [clientSecret, setClientSecret] = useState("");
-  const requestClientSecret = async () => {
+  // Stripe Embedded Checkout
+  const fetchClientSecret = React.useCallback(async () => {
     try {
-      setStatus('loading');
-      setMessage('Preparando pagamento com cartão...');
       const trimmedEmail = (buyerEmail || '').trim();
-      const payload = {
-        preferredLanguage: (utm.lang || (typeof navigator !== 'undefined' ? navigator.language : 'pt')),
+      const body = {
+        course: courseSlug,
+        product: productParam,
         receiptEmail: trimmedEmail && /[^\s@]+@[^\s@]+\.[^\s@]+/.test(trimmedEmail) ? trimmedEmail : undefined,
+        marketing: utm,
       };
-      const res = await API.courses.checkoutStripe(courseSlug, payload);
-      if (res && res.clientSecret) {
-        setClientSecret(res.clientSecret);
-        setStatus('idle');
-        setMessage('');
-      } else if (res && res.error) {
-        // Tratamento explícito de indisponibilidade no ambiente (ex.: 404)
-        setStatus('error');
-        setMessage(res.status === 404
-          ? 'Cartão indisponível neste ambiente. Use PIX ou tente novamente mais tarde.'
-          : 'Não foi possível iniciar o pagamento com cartão.');
-        // Se houver PIX aprovado, alterna automaticamente para PIX como fallback
-        if (supportsMethod('pix')) {
-          setMethod('pix');
-        }
-      } else {
-        setStatus('error');
-        setMessage('Não foi possível iniciar o pagamento com cartão.');
-      }
-    } catch (err) {
-      setStatus('error');
-      setMessage(err?.message || 'Falha ao obter autorização de pagamento.');
-      // Fallback para PIX quando disponível
-      if (supportsMethod('pix')) {
-        setMethod('pix');
-      }
+      const res = await API.post('/create-checkout-session', body, { method: 'POST' });
+      if (res && res.clientSecret) return res.clientSecret;
+      return null;
+    } catch {
+      return null;
     }
-  };
+  }, [buyerEmail, courseSlug, productParam, utm]);
   const PRICE_BRL = ctx?.product?.totalCents
     ? (ctx.product.totalCents / 100)
     : (ctx?.course?.priceCents ? (ctx.course.priceCents / 100) : null);
@@ -193,15 +174,7 @@ export default function Checkout() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location.search]);
 
-  // Buscar clientSecret quando método "card" estiver ativo
-  useEffect(() => {
-    (async () => {
-      if (method !== 'card') return;
-      if (!supportsMethod('card')) return;
-      await requestClientSecret();
-    })();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [method, buyerEmail, courseSlug]);
+  // Método card usa Embedded Checkout; sem pré-fetch local
 
   const fetchOkxTicker = async (instId) => {
     const url = `https://www.okx.com/api/v5/market/ticker?instId=${encodeURIComponent(instId)}`;
@@ -612,66 +585,11 @@ export default function Checkout() {
                   </span>
                 </div>
                 {stripePromise ? (
-                  clientSecret ? (
-                    <Elements
-                      stripe={stripePromise}
-                      options={{
-                        clientSecret,
-                        locale: (utm.lang || 'auto'),
-                        // Prioriza cartão e evita exibir Boleto na UI do PaymentElement
-                        paymentMethodOrder: ['card'],
-                        appearance: {
-                          theme: 'night',
-                          variables: {
-                            colorPrimary: '#635BFF',
-                            colorBackground: '#1c1e2f',
-                            colorText: '#ffffff',
-                            colorTextSecondary: 'rgba(255,255,255,0.8)',
-                            colorIcon: '#c7c9d1',
-                            borderRadius: '8px',
-                            fontFamily:
-                              'system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Helvetica Neue, Arial, sans-serif',
-                            spacingUnit: '4px',
-                          },
-                          rules: {
-                            '.Input, .Textarea, .Select': {
-                              backgroundColor: '#1c1e2f',
-                              border: '1px solid rgba(255,255,255,0.16)',
-                              color: '#ffffff',
-                            },
-                            '.Input:hover': { borderColor: '#635BFF' },
-                            '.Label': { color: 'rgba(255,255,255,0.85)' },
-                            '.Tab': { color: '#ffffff' },
-                            '.Block': { backgroundColor: 'transparent' },
-                          },
-                        },
-                      }}
-                    >
-                      <StripePaymentForm
-                        courseSlug={courseSlug}
-                        onTelemetry={emitCheckoutEvent}
-                        setStatus={setStatus}
-                        setMessage={setMessage}
-                      />
-                    </Elements>
-                  ) : (
-                    <div className="checkout__panel-desc" role="status" aria-live="polite" style={{ position: 'relative', minHeight: 96 }}>
-                      {status === 'loading' ? (
-                        <div className="checkout__spinner" aria-label="Preparando pagamento">
-                          <div className="checkout__spinner-circle" />
-                        </div>
-                      ) : (
-                        <span>{message || 'Iniciando pagamento com cartão...'}</span>
-                      )}
-                      {status === 'error' && (
-                        <div style={{ marginTop: 12 }}>
-                          <button type="button" className="btn checkout__btn checkout__btn--secondary" onClick={requestClientSecret}>
-                            Tentar novamente
-                          </button>
-                        </div>
-                      )}
+                  <EmbeddedCheckoutProvider stripe={stripePromise} options={{ fetchClientSecret }}>
+                    <div className="checkout__embedded" style={{ position: 'relative', minHeight: '320px' }}>
+                      <EmbeddedCheckout />
                     </div>
-                  )
+                  </EmbeddedCheckoutProvider>
                 ) : (
                   <div className="checkout__panel-desc">Stripe não configurado. Defina VITE_STRIPE_PUBLIC_KEY para habilitar.</div>
                 )}
@@ -802,56 +720,4 @@ export default function Checkout() {
   );
 }
 
-function StripePaymentForm({ courseSlug, onTelemetry, setStatus, setMessage }) {
-  const stripe = useStripe();
-  const elements = useElements();
-  const [isReady, setIsReady] = useState(false);
-  const handlePay = async () => {
-    if (!stripe || !elements) return;
-    await onTelemetry({ courseSlug, eventType: 'cta_click', ctaId: 'card-pay', metadata: { component: 'card' } });
-    await onTelemetry({ courseSlug, eventType: 'purchase_start', paymentMethod: 'stripe', metadata: { component: 'card' } });
-    try {
-      setStatus('loading'); setMessage('');
-      const { error, paymentIntent } = await stripe.confirmPayment({
-        elements,
-        confirmParams: { return_url: `${window.location.origin}/checkout/success` },
-      });
-      if (error) {
-        setStatus('error');
-        setMessage(error.message || 'Erro ao confirmar pagamento.');
-        return;
-      }
-      if (paymentIntent?.status === 'succeeded') {
-        setStatus('success');
-        setMessage('Pagamento confirmado. Matrícula será processada.');
-        await onTelemetry({ courseSlug, eventType: 'purchase_confirm', paymentMethod: 'stripe', metadata: { component: 'card' } });
-      } else {
-        setStatus('success');
-        setMessage('Pagamento iniciado. Se necessário, complete a autenticação.');
-      }
-    } catch (err) {
-      setStatus('error');
-      setMessage(err?.message || 'Erro ao processar cartão.');
-    }
-  };
-  return (
-    <div>
-      <div className="checkout__field">
-        <label className="checkout__label">Dados do pagamento</label>
-        <div className="checkout__input" style={{ padding: "12px", position: 'relative', minHeight: '250px' }} aria-busy={!isReady}>
-          {!isReady && (
-            <div className="checkout__spinner" role="status" aria-live="polite" aria-label="Carregando pagamento">
-              <div className="checkout__spinner-circle" />
-            </div>
-          )}
-          <PaymentElement onReady={() => setIsReady(true)} />
-        </div>
-      </div>
-      <div className="checkout__stripe-actions">
-        <button type="button" className="btn checkout__btn checkout__stripe-btn" onClick={handlePay}>
-          Processar pagamento
-        </button>
-      </div>
-    </div>
-  );
-}
+// Embedded Checkout substitui o PaymentElement para cartão
