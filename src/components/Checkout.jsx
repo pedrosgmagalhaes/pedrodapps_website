@@ -355,30 +355,16 @@ export default function Checkout() {
       const linkSlug =
         ctx?.payments?.pixley?.linkSlug ||
         ctx?.payments?.pixleyLinkSlug ||
-        ctx?.pixley?.linkSlug ||
+        ctx?.course?.pixleyLinkSlug ||
         ctx?.pixleyLinkSlug ||
         null;
-      let effectiveSlug = linkSlug;
-      if (!effectiveSlug) {
-        const created = await API.courses.pixleyLinkCreate(courseSlug, {
-          product: productParam,
-        });
-        if (created?.error || !created?.slug) throw new Error("missing_link_slug");
-        effectiveSlug = created.slug;
-        try {
-          setCtx({
-            ...(ctx || {}),
-            payments: {
-              ...(ctx?.payments || {}),
-              pixley: { ...(ctx?.payments?.pixley || {}), linkSlug: effectiveSlug },
-            },
-          });
-        } catch {
-          void 0;
-        }
+      if (!linkSlug) {
+        setStatus("error");
+        setMessage("Boleto indisponível no momento.");
+        return;
       }
       const payload = {
-        linkSlug: effectiveSlug,
+        linkSlug,
         payer: {
           name: buyerName,
           document: String(doc || "").replace(/\D/g, ""),
@@ -670,30 +656,16 @@ export default function Checkout() {
                       const linkSlug =
                         ctx?.payments?.pixley?.linkSlug ||
                         ctx?.payments?.pixleyLinkSlug ||
-                        ctx?.pixley?.linkSlug ||
+                        ctx?.course?.pixleyLinkSlug ||
                         ctx?.pixleyLinkSlug ||
                         null;
-                      let effectiveSlug = linkSlug;
-                      if (!effectiveSlug) {
-                        const created = await API.courses.pixleyLinkCreate(courseSlug, {
-                          product: productParam,
-                        });
-                        if (created?.error || !created?.slug) throw new Error("missing_link_slug");
-                        effectiveSlug = created.slug;
-                        try {
-                          setCtx({
-                            ...(ctx || {}),
-                            payments: {
-                              ...(ctx?.payments || {}),
-                              pixley: { ...(ctx?.payments?.pixley || {}), linkSlug: effectiveSlug },
-                            },
-                          });
-                        } catch {
-                          void 0;
-                        }
+                      if (!linkSlug) {
+                        setStatus("error");
+                        setMessage("PIX indisponível no momento.");
+                        return;
                       }
                       const payload = {
-                        linkSlug: effectiveSlug,
+                        linkSlug,
                         payer: {
                           name: buyerName,
                           document: String(doc || "").replace(/\D/g, ""),
