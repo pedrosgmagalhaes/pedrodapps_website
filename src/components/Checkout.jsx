@@ -358,9 +358,27 @@ export default function Checkout() {
         ctx?.pixley?.linkSlug ||
         ctx?.pixleyLinkSlug ||
         null;
-      if (!linkSlug) throw new Error("missing_link_slug");
+      let effectiveSlug = linkSlug;
+      if (!effectiveSlug) {
+        const created = await API.courses.pixleyLinkCreate(courseSlug, {
+          product: productParam,
+        });
+        if (created?.error || !created?.slug) throw new Error("missing_link_slug");
+        effectiveSlug = created.slug;
+        try {
+          setCtx({
+            ...(ctx || {}),
+            payments: {
+              ...(ctx?.payments || {}),
+              pixley: { ...(ctx?.payments?.pixley || {}), linkSlug: effectiveSlug },
+            },
+          });
+        } catch {
+          void 0;
+        }
+      }
       const payload = {
-        linkSlug,
+        linkSlug: effectiveSlug,
         payer: {
           name: buyerName,
           document: String(doc || "").replace(/\D/g, ""),
@@ -655,9 +673,27 @@ export default function Checkout() {
                         ctx?.pixley?.linkSlug ||
                         ctx?.pixleyLinkSlug ||
                         null;
-                      if (!linkSlug) throw new Error("missing_link_slug");
+                      let effectiveSlug = linkSlug;
+                      if (!effectiveSlug) {
+                        const created = await API.courses.pixleyLinkCreate(courseSlug, {
+                          product: productParam,
+                        });
+                        if (created?.error || !created?.slug) throw new Error("missing_link_slug");
+                        effectiveSlug = created.slug;
+                        try {
+                          setCtx({
+                            ...(ctx || {}),
+                            payments: {
+                              ...(ctx?.payments || {}),
+                              pixley: { ...(ctx?.payments?.pixley || {}), linkSlug: effectiveSlug },
+                            },
+                          });
+                        } catch {
+                          void 0;
+                        }
+                      }
                       const payload = {
-                        linkSlug,
+                        linkSlug: effectiveSlug,
                         payer: {
                           name: buyerName,
                           document: String(doc || "").replace(/\D/g, ""),

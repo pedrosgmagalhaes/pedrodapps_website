@@ -123,6 +123,19 @@ export const API = {
         body,
       });
     },
+    pixleyLinkCreate: (slug, body = {}, opts = {}) => {
+      const acceptLanguage =
+        typeof navigator !== "undefined"
+          ? navigator.language || (navigator.languages && navigator.languages[0]) || "pt"
+          : "pt";
+      return jsonFetch(`/api/courses/${encodeURIComponent(slug)}/checkout/pixley/link`, {
+        ...opts,
+        method: "POST",
+        token: getToken(),
+        headers: { ...(opts.headers || {}), "Accept-Language": acceptLanguage },
+        body,
+      });
+    },
     pixleyQr: (slug, body = {}, opts = {}) => {
       const acceptLanguage =
         typeof navigator !== "undefined"
