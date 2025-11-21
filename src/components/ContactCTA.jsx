@@ -1,8 +1,19 @@
 import React from "react";
 import "./ContactCTA.css";
 import coins2Img from "../assets/icons2.png";
+import { useLocation } from "react-router-dom";
 
 export default function ContactCTA() {
+  const location = useLocation();
+  const buildCheckoutUrl = () => {
+    const base = new URLSearchParams({ course: "builders-de-elite", product: "plan-anual" });
+    const src = new URLSearchParams(location.search);
+    ["utm_source","utm_medium","utm_campaign","utm_content","utm_term","ref","origin","gclid","fbclid","lang"].forEach((k) => {
+      const v = src.get(k);
+      if (v) base.set(k, v);
+    });
+    return `/checkout?${base.toString()}`;
+  };
   return (
     <section className="contact" id="duvidas">
       <div className="container contact__container">
@@ -14,7 +25,7 @@ export default function ContactCTA() {
           </p>
 
           <div className="contact__actions">
-            <a href="/checkout" className="hero__btn hero__btn--primary">
+            <a href={buildCheckoutUrl()} className="hero__btn hero__btn--primary">
               Quero fazer parte
             </a>
           </div>

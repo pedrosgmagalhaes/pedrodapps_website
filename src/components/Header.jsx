@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./Header.css";
 import logoPedrodApps from "../assets/pedro_dapps_logo.png";
+import { useLocation } from "react-router-dom";
 
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -14,6 +15,16 @@ const Header = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  const location = useLocation();
+  const buildCheckoutUrl = () => {
+    const base = new URLSearchParams({ course: "builders-de-elite", product: "plan-anual" });
+    const src = new URLSearchParams(location.search);
+    ["utm_source","utm_medium","utm_campaign","utm_content","utm_term","ref","origin","gclid","fbclid","lang"].forEach((k) => {
+      const v = src.get(k);
+      if (v) base.set(k, v);
+    });
+    return `/checkout?${base.toString()}`;
+  };
   return (
     <header className={`header ${isScrolled ? "header--scrolled" : ""}`}>
       <div className="container">
@@ -30,7 +41,7 @@ const Header = () => {
           {/* Ações / CTAs no canto direito */}
           <div className="header__actions">
             <a
-              href="/checkout"
+              href={buildCheckoutUrl()}
               className="header__btn header__btn--primary header__btn--attention"
               aria-label="Faça parte"
             >

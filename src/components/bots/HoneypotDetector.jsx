@@ -2,8 +2,19 @@ import React, { useMemo, useEffect, useState } from "react";
 import { API } from "../../lib/api";
 import "./Bots.css";
 import { FaPlay, FaDownload, FaLifeRing, FaCheckCircle, FaTimesCircle, FaExclamationTriangle, FaShieldAlt } from "react-icons/fa";
+import { useLocation } from "react-router-dom";
 
 export default function HoneypotDetector() {
+  const location = useLocation();
+  const buildCheckoutUrl = () => {
+    const base = new URLSearchParams({ course: "builders-de-elite", product: "plan-anual" });
+    const src = new URLSearchParams(location.search);
+    ["utm_source","utm_medium","utm_campaign","utm_content","utm_term","ref","origin","gclid","fbclid","lang"].forEach((k) => {
+      const v = src.get(k);
+      if (v) base.set(k, v);
+    });
+    return `/checkout?${base.toString()}`;
+  };
   const [address, setAddress] = useState("");
   const [network, setNetwork] = useState("Ethereum");
   const [slippage, setSlippage] = useState(10);
@@ -116,7 +127,7 @@ export default function HoneypotDetector() {
                   <span className="action">Em breve</span>
                 </button>
               ) : moduleInfo?.locked ? (
-                <a className="bot__sidebar-item" href="/checkout">
+                <a className="bot__sidebar-item" href={buildCheckoutUrl()}>
                   <span className="icon"><FaDownload /></span>
                   <span>Download Bot</span>
                   <span className="action">Assinar</span>

@@ -1,8 +1,19 @@
 import React, { useEffect, useState } from "react";
 import "./Resources.css";
 import { API, withAuth } from "../lib/api";
+import { useLocation } from "react-router-dom";
 
 export default function Lessons() {
+  const location = useLocation();
+  const buildCheckoutUrl = () => {
+    const base = new URLSearchParams({ course: "builders-de-elite", product: "plan-anual" });
+    const src = new URLSearchParams(location.search);
+    ["utm_source","utm_medium","utm_campaign","utm_content","utm_term","ref","origin","gclid","fbclid","lang"].forEach((k) => {
+      const v = src.get(k);
+      if (v) base.set(k, v);
+    });
+    return `/checkout?${base.toString()}`;
+  };
   const [course, setCourse] = useState(null);
   const [lessons, setLessons] = useState([]);
   const [status, setStatus] = useState("idle"); // idle | loading | error
@@ -135,7 +146,7 @@ export default function Lessons() {
             <div key={item.slug} className="resources__item" role="listitem">
               <span className="resources__item-title">{item.title}</span>
               {item.locked ? (
-                <a className="resources__action" href="/checkout">Assinar</a>
+                <a className="resources__action" href={buildCheckoutUrl()}>Assinar</a>
               ) : (
                 <button className="resources__action" onClick={() => openLesson(item.slug, item.locked)}>Abrir</button>
               )}

@@ -50,6 +50,10 @@ src/
 - Otimização de performance
 - Acessibilidade (WCAG)
 
+## 📈 UTM & Marketing
+
+- Documentação completa: `docs/utm-tracking.md`
+
 ## 🚀 Deploy
 
 ### Firebase Hosting

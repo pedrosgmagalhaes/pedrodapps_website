@@ -5,6 +5,15 @@ import checkIcon from "../assets/check_purple.svg";
 
 export default function CheckoutSuccess() {
   const location = useLocation();
+  const buildCheckoutUrl = () => {
+    const base = new URLSearchParams({ course: "builders-de-elite", product: "plan-anual" });
+    const src = new URLSearchParams(location.search);
+    ["utm_source","utm_medium","utm_campaign","utm_content","utm_term","ref","origin","gclid","fbclid","lang"].forEach((k) => {
+      const v = src.get(k);
+      if (v) base.set(k, v);
+    });
+    return `/checkout?${base.toString()}`;
+  };
   const params = new URLSearchParams(location.search);
   const paymentIntent = params.get("payment_intent") || params.get("payment_intent_client_secret") || null;
   const redirectStatus = params.get("redirect_status") || null;
@@ -50,7 +59,7 @@ export default function CheckoutSuccess() {
             <Link to="/members/home" className="btn btn-primary checkout__btn" aria-label="Ir para Área de Membros">
               Ir para Área de Membros
             </Link>
-            <Link to="/checkout" className="btn checkout__btn checkout__btn--secondary" aria-label="Voltar ao Checkout">
+            <Link to={buildCheckoutUrl()} className="btn checkout__btn checkout__btn--secondary" aria-label="Voltar ao Checkout">
               Voltar ao Checkout
             </Link>
           </div>

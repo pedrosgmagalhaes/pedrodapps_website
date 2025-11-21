@@ -17,13 +17,6 @@ import { Elements, useStripe, useElements, PaymentElement } from "@stripe/react-
 import { loadStripe } from "@stripe/stripe-js";
 
 // Catálogo de produtos e formatação
-const PRODUCTS = {
-  "plan-anual": { name: "Pedro dApps", priceBRL: 487.58 },
-  "plan-mensal": { name:"Pedro dApps", priceBRL: 69.9 },
-  "acesso-30-dias": { name: "Acesso 30 dias", priceBRL: 129.0 },
-};
-
-const formatBRL = (v) => new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(v);
 
 export default function Checkout() {
   const location = useLocation();
@@ -32,7 +25,6 @@ export default function Checkout() {
   const courseSlug = query.get("course") || "builders-de-elite";
   const [ctx, setCtx] = useState(null);
   const [ctxLoading, setCtxLoading] = useState(true);
-  const productData = PRODUCTS[productParam] || PRODUCTS["plan-anual"];
   const approvedMethods = ctx?.payments?.approvedMethods || ["pix", "card"]; // fallback padrão
   const supportsMethod = (name) => {
     const list = approvedMethods || [];
@@ -147,7 +139,7 @@ export default function Checkout() {
   };
   const PRICE_BRL = ctx?.product?.totalCents
     ? (ctx.product.totalCents / 100)
-    : (ctx?.course?.priceCents ? (ctx.course.priceCents / 100) : productData.priceBRL);
+    : (ctx?.course?.priceCents ? (ctx.course.priceCents / 100) : null);
 
   // Persistir metadados de checkout para análises e integração com backend
   useEffect(() => {
@@ -180,7 +172,7 @@ export default function Checkout() {
       try {
         const meta = {
           product: productParam,
-          product_name: (ctx?.course?.title || productData.name),
+          product_name: (ctx?.product?.name || ctx?.course?.title || null),
           product_price_brl: PRICE_BRL,
           course: courseSlug,
           marketing: ctx?.marketing || utm,
@@ -393,11 +385,11 @@ export default function Checkout() {
             )}
             <div className="checkout__summary-row">
               <span>Produto</span>
-              <strong>{ctx?.product?.name || ctx?.course?.title || productData.name}</strong>
+              <strong>{ctx?.product?.name || ctx?.course?.title || "—"}</strong>
             </div>
             <div className="checkout__summary-row">
               <span>Total</span>
-              <strong>{ctx?.product?.displayTotal || (ctx?.course?.currency ? new Intl.NumberFormat("pt-BR", { style: "currency", currency: ctx.course.currency }).format(PRICE_BRL) : formatBRL(PRICE_BRL))}</strong>
+              <strong>{ctx?.product?.displayTotal || (ctx?.course?.currency && PRICE_BRL !== null ? new Intl.NumberFormat("pt-BR", { style: "currency", currency: ctx.course.currency }).format(PRICE_BRL) : "—")}</strong>
           </div>
         </div>
 

@@ -4,6 +4,7 @@ import checkNavy from "../assets/check_navy.svg";
 import cardsImg from "../assets/cards.svg";
 import pixleyLogo from "../assets/pixley_logo_white.png";
 import usdtIcon from "../assets/icons/usdt.svg";
+import { useLocation } from "react-router-dom";
 
 const benefits = [
   "Acesso completo à plataforma exclusiva com scripts, treinamentos, insights, dicas e atualizações",
@@ -56,6 +57,16 @@ export default function VipArea() {
     return () => clearInterval(timer);
   }, []);
 
+  const location = useLocation();
+  const buildCheckoutUrl = () => {
+    const base = new URLSearchParams({ course: "builders-de-elite", product: "plan-anual" });
+    const src = new URLSearchParams(location.search);
+    ["utm_source","utm_medium","utm_campaign","utm_content","utm_term","ref","origin","gclid","fbclid","lang"].forEach((k) => {
+      const v = src.get(k);
+      if (v) base.set(k, v);
+    });
+    return `/checkout?${base.toString()}`;
+  };
   return (
     <section className="vip" id="vip" aria-label="Área VIP e oferta">
       <div className="container">
@@ -162,7 +173,7 @@ export default function VipArea() {
                 <span className="vip-card__amount">487,58</span>
                 <span className="vip-card__period">por ano</span>
               </div>
-              <a href="/checkout" className="vip-card__cta" aria-label="Quero comprar agora">
+              <a href={buildCheckoutUrl()} className="vip-card__cta" aria-label="Quero comprar agora">
                 Quero comprar agora
               </a>
               <div className="vip-card__footnote">Pagamento seguro • Cartão</div>

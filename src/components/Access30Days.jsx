@@ -1,6 +1,7 @@
 import React from "react";
 import "./Access30Days.css";
 import checkPurple from "../assets/check_purple.svg";
+import { useLocation } from "react-router-dom";
 
 const BENEFITS = [
   "Execução de Flash Loans em DeFi para arbitragem e liquidez",
@@ -17,6 +18,16 @@ const BENEFITS = [
 ];
 
 export default function Access30Days() {
+  const location = useLocation();
+  const buildCheckoutUrl = () => {
+    const base = new URLSearchParams({ course: "builders-de-elite", product: "plan-anual" });
+    const src = new URLSearchParams(location.search);
+    ["utm_source","utm_medium","utm_campaign","utm_content","utm_term","ref","origin","gclid","fbclid","lang"].forEach((k) => {
+      const v = src.get(k);
+      if (v) base.set(k, v);
+    });
+    return `/checkout?${base.toString()}`;
+  };
   return (
     <section
       className="access30"
@@ -38,7 +49,7 @@ export default function Access30Days() {
             </p>
 
             <div className="access30__actions">
-              <a href="/checkout" className="access30__cta btn btn-primary">
+              <a href={buildCheckoutUrl()} className="access30__cta btn btn-primary">
                 Quero fazer parte do Builders de Elite
               </a>
             </div>
