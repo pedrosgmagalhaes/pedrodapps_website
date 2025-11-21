@@ -270,12 +270,20 @@ export const API = {
   },
   // Users endpoints
   users: {
-    exists: (email, opts = {}) =>
-      jsonFetch(`/api/users/exists?email=${encodeURIComponent(email)}`, {
+    exists: (email, opts = {}) => {
+      const turnstileToken = opts?.turnstileToken || null;
+      const qs = new URLSearchParams({ email: String(email || "") });
+      if (turnstileToken) qs.set("turnstileToken", turnstileToken);
+      return jsonFetch(`/api/users/exists?${qs.toString()}`, {
         ...opts,
         method: "GET",
         token: getToken(),
-      }),
+        headers: {
+          ...(opts.headers || {}),
+          ...(turnstileToken ? { "x-turnstile-token": turnstileToken } : {}),
+        },
+      });
+    },
   },
   // Checkout telemetry (optional)
   checkout: {

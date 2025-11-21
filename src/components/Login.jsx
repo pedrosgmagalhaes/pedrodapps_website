@@ -62,9 +62,12 @@ export default function Login() {
   const checkEmailExists = useCallback(
     async (emailValue) => {
       if (!isValidEmail(emailValue)) return;
+      if (TURNSTILE_ENABLED && !turnstileToken) return;
       setIsCheckingEmail(true);
       try {
-        const res = await API.users.exists(emailValue);
+        const res = await API.users.exists(emailValue, {
+          turnstileToken: TURNSTILE_ENABLED ? turnstileToken : null,
+        });
         if (res?.error) {
           setEmailExists(null);
         } else {
@@ -76,19 +79,20 @@ export default function Login() {
         setIsCheckingEmail(false);
       }
     },
-    [isValidEmail]
+    [isValidEmail, TURNSTILE_ENABLED, turnstileToken]
   );
 
   useEffect(() => {
     const handler = setTimeout(() => {
       if (email.trim() && isValidEmail(email)) {
+        if (TURNSTILE_ENABLED && !turnstileToken) return;
         checkEmailExists(email);
       } else {
         setEmailExists(null);
       }
     }, 800);
     return () => clearTimeout(handler);
-  }, [email, isValidEmail, checkEmailExists]);
+  }, [email, isValidEmail, checkEmailExists, TURNSTILE_ENABLED, turnstileToken]);
 
   const performAuth = async () => {
     setStatus("loading");
@@ -253,6 +257,11 @@ export default function Login() {
                 <div className="login__hint">Email encontrado. Digite sua senha.</div>
               )}
             </div>
+            {TURNSTILE_ENABLED && (
+              <div style={{ marginTop: 8 }}>
+                <TurnstileWidget onToken={(t) => setTurnstileToken(t)} />
+              </div>
+            )}
             {showPasswordFields && (
               <>
                 {isSignupMode && (
@@ -442,11 +451,7 @@ export default function Login() {
                     </label>
                   </div>
                 )}
-                {TURNSTILE_ENABLED && (
-                  <div style={{ marginTop: 8 }}>
-                    <TurnstileWidget onToken={(t) => setTurnstileToken(t)} />
-                  </div>
-                )}
+                {/* Turnstile já renderizado acima para liberar verificação antecipada */}
               </>
             )}
             {/* bloco duplicado removido: "Lembrar senha" já é exibido acima quando não é signup */}
