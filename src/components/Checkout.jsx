@@ -402,15 +402,21 @@ export default function Checkout() {
         payload.amount = Number(PRICE_BRL);
       }
       const data = await API.courses.pixleyBoleto(courseSlug, payload);
-      if (data?.error) throw new Error("request_failed");
+      if (data?.error) {
+        const backendMsg = data?.data?.error || data?.data?.message;
+        setStatus("error");
+        setMessage(backendMsg ? String(backendMsg) : "Boleto indisponível no momento.");
+        return;
+      }
       if (data?.linhaDigitavel) setBoletoLinhaDigitavel(String(data.linhaDigitavel));
       if (data?.pixCopiaECola) setBoletoPixCopiaECola(String(data.pixCopiaECola));
       void data?.id;
       setStatus("success");
       setMessage("Boleto gerado. Utilize a linha digitável para pagar.");
-    } catch {
+    } catch (err) {
+      const msg = err?.message || "Erro ao gerar boleto.";
       setStatus("error");
-      setMessage("Erro ao gerar boleto.");
+      setMessage(msg);
     }
   };
 
@@ -725,13 +731,14 @@ export default function Checkout() {
                 {pixPayload && (
                   <div className="checkout__field" aria-label="PIX Copia e Cola">
                     <label className="checkout__label">PIX Copia e Cola</label>
-                    <div style={{ position: "relative" }}>
+                    <div style={{ position: "relative", width: "100%" }}>
                       <input
                         className="checkout__input"
                         type="text"
                         readOnly
                         value={pixPayload}
                         onFocus={(e) => e.currentTarget.select()}
+                        style={{ width: "100%", paddingRight: 36 }}
                       />
                       <button
                         type="button"
