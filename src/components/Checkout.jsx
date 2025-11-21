@@ -262,6 +262,8 @@ export default function Checkout() {
   };
 
   const isValidEmail = (value) => /[^\s@]+@[^\s@]+\.[^\s@]+/.test(value);
+  const emailReady = isValidEmail(buyerEmail);
+  const nameReady = emailReady && buyerName.trim().length > 0;
 
   const validateCommon = () => {
     if (!buyerName || !isValidEmail(buyerEmail)) {
@@ -492,20 +494,7 @@ export default function Checkout() {
           <form className="checkout__form" onSubmit={(e) => e.preventDefault()}>
             {method !== "card" && (
               <>
-                <div className="checkout__field">
-                  <label htmlFor="buyer-name" className="checkout__label">
-                    Nome completo
-                  </label>
-                  <input
-                    id="buyer-name"
-                    className="checkout__input"
-                    type="text"
-                    placeholder="Seu nome"
-                    value={buyerName}
-                    onChange={(e) => setBuyerName(e.target.value)}
-                  />
-                </div>
-                <div className="checkout__field">
+                <div className={`checkout__field fade-in`}>
                   <label htmlFor="buyer-email" className="checkout__label">
                     E-mail
                   </label>
@@ -518,6 +507,21 @@ export default function Checkout() {
                     onChange={(e) => setBuyerEmail(e.target.value)}
                   />
                 </div>
+                {emailReady && (
+                  <div className={`checkout__field fade-in`}>
+                    <label htmlFor="buyer-name" className="checkout__label">
+                      Nome completo
+                    </label>
+                    <input
+                      id="buyer-name"
+                      className="checkout__input"
+                      type="text"
+                      placeholder="Seu nome"
+                      value={buyerName}
+                      onChange={(e) => setBuyerName(e.target.value)}
+                    />
+                  </div>
+                )}
               </>
             )}
 
@@ -526,22 +530,24 @@ export default function Checkout() {
                 <h3 id="pix-title" className="checkout__panel-title">
                   Pagamento via PIX
                 </h3>
-                <div className="checkout__field">
-                  <label htmlFor="pix-doc" className="checkout__label">
-                    CPF/CNPJ
-                  </label>
-                  <input
-                    id="pix-doc"
-                    className="checkout__input"
-                    type="text"
-                    placeholder="CPF ou CNPJ"
-                    value={formatCpfCnpj(doc)}
-                    onChange={(e) => setDoc(e.target.value.replace(/[^0-9]/g, ""))}
-                    inputMode="numeric"
-                    autoComplete="off"
-                    pattern="\d*"
-                  />
-                </div>
+                {nameReady && (
+                  <div className={`checkout__field fade-in`}>
+                    <label htmlFor="pix-doc" className="checkout__label">
+                      CPF/CNPJ
+                    </label>
+                    <input
+                      id="pix-doc"
+                      className="checkout__input"
+                      type="text"
+                      placeholder="CPF ou CNPJ"
+                      value={formatCpfCnpj(doc)}
+                      onChange={(e) => setDoc(e.target.value.replace(/[^0-9]/g, ""))}
+                      inputMode="numeric"
+                      autoComplete="off"
+                      pattern="\d*"
+                    />
+                  </div>
+                )}
                 {pixQr && (
                   <div className="checkout__pix-qr" aria-label="QR Code PIX">
                     <img src={pixQr} alt="QR Code PIX" className="checkout__pix-qr-img" />
@@ -616,22 +622,24 @@ export default function Checkout() {
                 <h3 id="boleto-title" className="checkout__panel-title">
                   Gerar Boleto
                 </h3>
-                <div className="checkout__field">
-                  <label htmlFor="buyer-doc" className="checkout__label">
-                    CPF/CNPJ
-                  </label>
-                  <input
-                    id="buyer-doc"
-                    className="checkout__input"
-                    type="text"
-                    placeholder="CPF ou CNPJ"
-                    value={formatCpfCnpj(doc)}
-                    onChange={(e) => setDoc(e.target.value.replace(/[^0-9]/g, ""))}
-                    inputMode="numeric"
-                    autoComplete="off"
-                    pattern="\d*"
-                  />
-                </div>
+                {nameReady && (
+                  <div className={`checkout__field fade-in`}>
+                    <label htmlFor="buyer-doc" className="checkout__label">
+                      CPF/CNPJ
+                    </label>
+                    <input
+                      id="buyer-doc"
+                      className="checkout__input"
+                      type="text"
+                      placeholder="CPF ou CNPJ"
+                      value={formatCpfCnpj(doc)}
+                      onChange={(e) => setDoc(e.target.value.replace(/[^0-9]/g, ""))}
+                      inputMode="numeric"
+                      autoComplete="off"
+                      pattern="\d*"
+                    />
+                  </div>
+                )}
                 <button
                   type="button"
                   className="btn btn-primary checkout__btn"
