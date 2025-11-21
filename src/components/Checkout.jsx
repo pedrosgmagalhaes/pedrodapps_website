@@ -111,7 +111,7 @@ export default function Checkout() {
         receiptEmail: trimmedEmail && /[^\s@]+@[^\s@]+\.[^\s@]+/.test(trimmedEmail) ? trimmedEmail : undefined,
         marketing: utm,
       };
-      const res = await API.post('/create-checkout-session', body, { method: 'POST' });
+      const res = await API.post('/api/payments/checkout/session', body, { method: 'POST' });
       if (res && res.clientSecret) return res.clientSecret;
       return null;
     } catch {

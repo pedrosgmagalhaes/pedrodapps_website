@@ -14,7 +14,7 @@ export default function CheckoutReturn() {
         const q = new URLSearchParams(location.search);
         const sessionId = q.get("session_id");
         if (!sessionId) return;
-        const data = await API.get(`/session-status?session_id=${encodeURIComponent(sessionId)}`, { method: "GET" });
+        const data = await API.get(`/api/payments/checkout/session-status?session_id=${encodeURIComponent(sessionId)}`, { method: "GET" });
         if (data) {
           setStatus(data.status || null);
           setCustomerEmail(data.customer_email || "");
@@ -50,4 +50,3 @@ export default function CheckoutReturn() {
 
   return null;
 }
-
