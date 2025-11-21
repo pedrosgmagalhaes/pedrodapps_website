@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./Header.css";
 import logoPedrodApps from "../assets/pedro_dapps_logo.png";
 import { useLocation } from "react-router-dom";
+import { collectContextParams } from "../lib/checkoutTelemetry";
 
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -23,6 +24,8 @@ const Header = () => {
       const v = src.get(k);
       if (v) base.set(k, v);
     });
+    const extra = collectContextParams();
+    Object.entries(extra).forEach(([k, v]) => { if (v !== undefined && v !== null && String(v).length > 0) base.set(k, String(v)); });
     const checkoutBase = (
       (import.meta?.env?.VITE_CHECKOUT_BASE_URL ??
         (typeof globalThis !== "undefined" && typeof globalThis["__APP_CHECKOUT_BASE_URL__"] === "string"

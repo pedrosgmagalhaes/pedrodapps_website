@@ -5,6 +5,7 @@ import cardsImg from "../assets/cards.svg";
 import pixleyLogo from "../assets/pixley_logo_white.png";
 import usdtIcon from "../assets/icons/usdt.svg";
 import { useLocation } from "react-router-dom";
+import { collectContextParams } from "../lib/checkoutTelemetry";
 
 const benefits = [
   "Acesso completo à plataforma exclusiva com scripts, treinamentos, insights, dicas e atualizações",
@@ -71,6 +72,8 @@ export default function VipArea() {
           ? globalThis["__APP_CHECKOUT_BASE_URL__"]
           : "")) || `${window.location.origin}/checkout`
     ).trim();
+    const extra = collectContextParams();
+    Object.entries(extra).forEach(([k, v]) => { if (v !== undefined && v !== null && String(v).length > 0) base.set(k, String(v)); });
     return `${checkoutBase}?${base.toString()}`;
   };
   return (

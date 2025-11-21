@@ -2,6 +2,7 @@ import React from "react";
 import "./Access30Days.css";
 import checkPurple from "../assets/check_purple.svg";
 import { useLocation } from "react-router-dom";
+import { collectContextParams } from "../lib/checkoutTelemetry";
 
 const BENEFITS = [
   "Execução de Flash Loans em DeFi para arbitragem e liquidez",
@@ -32,6 +33,8 @@ export default function Access30Days() {
           ? globalThis["__APP_CHECKOUT_BASE_URL__"]
           : "")) || `${window.location.origin}/checkout`
     ).trim();
+    const extra = collectContextParams();
+    Object.entries(extra).forEach(([k, v]) => { if (v !== undefined && v !== null && String(v).length > 0) base.set(k, String(v)); });
     return `${checkoutBase}?${base.toString()}`;
   };
   return (

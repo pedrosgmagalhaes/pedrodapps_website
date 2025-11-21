@@ -3,6 +3,7 @@ import { API } from "../../lib/api";
 import "./Bots.css";
 import { FaPlay, FaDownload, FaLifeRing, FaCheckCircle, FaTimesCircle, FaExclamationTriangle, FaShieldAlt } from "react-icons/fa";
 import { useLocation } from "react-router-dom";
+import { collectContextParams } from "../../lib/checkoutTelemetry";
 
 export default function HoneypotDetector() {
   const location = useLocation();
@@ -19,6 +20,8 @@ export default function HoneypotDetector() {
           ? globalThis["__APP_CHECKOUT_BASE_URL__"]
           : "")) || `${window.location.origin}/checkout`
     ).trim();
+    const extra = collectContextParams();
+    Object.entries(extra).forEach(([k, v]) => { if (v !== undefined && v !== null && String(v).length > 0) base.set(k, String(v)); });
     return `${checkoutBase}?${base.toString()}`;
   };
   const [address, setAddress] = useState("");

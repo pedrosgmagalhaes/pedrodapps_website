@@ -2,6 +2,7 @@ import React from "react";
 import "./ContactCTA.css";
 import coins2Img from "../assets/icons2.png";
 import { useLocation } from "react-router-dom";
+import { collectContextParams } from "../lib/checkoutTelemetry";
 
 export default function ContactCTA() {
   const location = useLocation();
@@ -18,6 +19,8 @@ export default function ContactCTA() {
           ? globalThis["__APP_CHECKOUT_BASE_URL__"]
           : "")) || `${window.location.origin}/checkout`
     ).trim();
+    const extra = collectContextParams();
+    Object.entries(extra).forEach(([k, v]) => { if (v !== undefined && v !== null && String(v).length > 0) base.set(k, String(v)); });
     return `${checkoutBase}?${base.toString()}`;
   };
   return (

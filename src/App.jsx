@@ -78,6 +78,13 @@ function App() {
     img.src = heroBg;
   }, []);
 
+  useEffect(() => {
+    try {
+      const k = "entry_url";
+      if (!localStorage.getItem(k)) localStorage.setItem(k, window.location.href);
+    } catch { void 0; }
+  }, []);
+
   // Inicializa animações de reveal ao rolar a página
   useEffect(() => {
     if (typeof window === "undefined") return;

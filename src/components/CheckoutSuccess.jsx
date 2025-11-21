@@ -1,5 +1,6 @@
 import React from "react";
 import { useLocation, Link } from "react-router-dom";
+import { collectContextParams } from "../lib/checkoutTelemetry";
 import "./Checkout.css";
 import checkIcon from "../assets/check_purple.svg";
 
@@ -18,6 +19,8 @@ export default function CheckoutSuccess() {
           ? globalThis["__APP_CHECKOUT_BASE_URL__"]
           : "")) || `${window.location.origin}/checkout`
     ).trim();
+    const extra = collectContextParams();
+    Object.entries(extra).forEach(([k, v]) => { if (v !== undefined && v !== null && String(v).length > 0) base.set(k, String(v)); });
     return `${checkoutBase}?${base.toString()}`;
   };
   const params = new URLSearchParams(location.search);
