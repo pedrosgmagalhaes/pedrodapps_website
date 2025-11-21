@@ -23,7 +23,13 @@ const Header = () => {
       const v = src.get(k);
       if (v) base.set(k, v);
     });
-    return `/checkout?${base.toString()}`;
+    const checkoutBase = (
+      (import.meta?.env?.VITE_CHECKOUT_BASE_URL ??
+        (typeof globalThis !== "undefined" && typeof globalThis["__APP_CHECKOUT_BASE_URL__"] === "string"
+          ? globalThis["__APP_CHECKOUT_BASE_URL__"]
+          : "")) || `${window.location.origin}/checkout`
+    ).trim();
+    return `${checkoutBase}?${base.toString()}`;
   };
   return (
     <header className={`header ${isScrolled ? "header--scrolled" : ""}`}>
