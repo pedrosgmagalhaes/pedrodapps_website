@@ -107,6 +107,12 @@
   border: 1px solid rgb(255 86 86 / 35%);
 }
 
+.login__alert--notice {
+  background: rgb(255 255 255 / 10%);
+  color: rgb(255 255 255 / 85%);
+  border: 1px solid rgb(255 255 255 / 25%);
+}
+
 .login__brand {
   display: flex;
   align-items: center;

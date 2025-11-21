@@ -126,8 +126,12 @@ export default function Login() {
         setTimeout(() => navigate("/members"), 1500);
       }
     } catch (error) {
-      setStatus("error");
-      setMessage(error.message || "Erro ao processar. Tente novamente.");
+      const msg = error?.message || "Erro ao processar. Tente novamente.";
+      const isPending =
+        /fase de análise|não foi aprovado/i.test(String(msg)) ||
+        /Account not approved/i.test(String(msg));
+      setStatus(isPending ? "notice" : "error");
+      setMessage(msg);
     }
   };
 
@@ -219,7 +223,13 @@ export default function Login() {
           </header>
           {status !== "idle" && message && (
             <div
-              className={`login__alert ${status === "error" ? "login__alert--error" : "login__alert--success"}`}
+              className={`login__alert ${
+                status === "error"
+                  ? "login__alert--error"
+                  : status === "success"
+                    ? "login__alert--success"
+                    : "login__alert--notice"
+              }`}
               role="status"
               aria-live="polite"
             >
