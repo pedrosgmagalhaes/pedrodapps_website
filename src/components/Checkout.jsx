@@ -128,9 +128,10 @@ export default function Checkout() {
   }, [cep]);
 
   useEffect(() => {
-    if (boletoBarcodeRef.current && boletoCodigoBarras) {
+    const val = boletoCodigoBarras || boletoLinhaDigitavel;
+    if (boletoBarcodeRef.current && val) {
       try {
-        JsBarcode(boletoBarcodeRef.current, boletoCodigoBarras, {
+        JsBarcode(boletoBarcodeRef.current, String(val), {
           format: "CODE128",
           displayValue: false,
           height: 60,
@@ -140,7 +141,7 @@ export default function Checkout() {
         void 0;
       }
     }
-  }, [boletoCodigoBarras]);
+  }, [boletoCodigoBarras, boletoLinhaDigitavel]);
 
   useEffect(() => {
     if (!pixQrId) return;
@@ -833,7 +834,7 @@ export default function Checkout() {
                 aria-busy={status === "loading"}
               >
                 <h3 id="boleto-title" className="checkout__panel-title">
-                  Gerar Boleto
+                  Pagar boleto
                 </h3>
                 {status === "loading" && (
                   <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 12 }}>
@@ -849,7 +850,7 @@ export default function Checkout() {
                 )}
                 {(boletoLinhaDigitavel || boletoCodigoBarras) && (
                   <>
-                    {boletoCodigoBarras && (
+                    {(boletoCodigoBarras || boletoLinhaDigitavel) && (
                       <div className="checkout__pix-qr" aria-label="Código de barras do boleto">
                         <svg
                           ref={boletoBarcodeRef}
