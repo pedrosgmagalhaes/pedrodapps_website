@@ -25,16 +25,19 @@ export default function Checkout() {
   const courseSlug = query.get("course") || "builders-de-elite";
   const [ctx, setCtx] = useState(null);
   const [ctxLoading, setCtxLoading] = useState(true);
-  const approvedMethods = ctx?.payments?.approvedMethods || ["pix", "card"]; // fallback padrão
+  const approvedMethods = ctx?.payments?.approvedMethods || ["pix", "boleto", "card"]; // fallback inclui boleto
   const supportsMethod = (name) => {
     const list = approvedMethods || [];
-    return list.includes(name) || (name === 'card' && list.includes('stripe'));
+    return list.includes(name) || (name === "card" && list.includes("stripe"));
   };
-  const STRIPE_PK = ((import.meta?.env?.VITE_STRIPE_PUBLIC_KEY ?? (
-    typeof globalThis !== 'undefined' && typeof globalThis['__APP_VITE_STRIPE_PUBLIC_KEY__'] === 'string'
-      ? globalThis['__APP_VITE_STRIPE_PUBLIC_KEY__']
-      : ""
-  )) || "").trim();
+  const STRIPE_PK = (
+    (import.meta?.env?.VITE_STRIPE_PUBLIC_KEY ??
+      (typeof globalThis !== "undefined" &&
+      typeof globalThis["__APP_VITE_STRIPE_PUBLIC_KEY__"] === "string"
+        ? globalThis["__APP_VITE_STRIPE_PUBLIC_KEY__"]
+        : "")) ||
+    ""
+  ).trim();
   const stripePromise = STRIPE_PK ? loadStripe(STRIPE_PK) : null;
   const utm = React.useMemo(() => {
     const q = new URLSearchParams(location.search);
@@ -104,25 +107,35 @@ export default function Checkout() {
   // Stripe Embedded Checkout
   const fetchClientSecret = React.useCallback(async () => {
     try {
-      const trimmedEmail = (buyerEmail || '').trim();
+      const trimmedEmail = (buyerEmail || "").trim();
       const priceCents = ctx?.product?.totalCents ?? ctx?.course?.priceCents ?? null;
-      const price = priceCents ? (priceCents / 100) : null;
-      const priceId = ctx?.product?.priceId || ctx?.course?.priceId || ctx?.product?.stripe_price_id || null;
+      const price = priceCents ? priceCents / 100 : null;
+      const priceId =
+        ctx?.product?.priceId || ctx?.course?.priceId || ctx?.product?.stripe_price_id || null;
       const body = {
         course: courseSlug,
         product: productParam,
         quantity: 1,
-        mode: 'payment',
-        receiptEmail: trimmedEmail && /[^\s@]+@[^\s@]+\.[^\s@]+/.test(trimmedEmail) ? trimmedEmail : undefined,
+        mode: "payment",
+        receiptEmail:
+          trimmedEmail && /[^\s@]+@[^\s@]+\.[^\s@]+/.test(trimmedEmail) ? trimmedEmail : undefined,
         marketing: utm,
       };
-      if (priceId) body.priceId = priceId; else if (price !== null) body.price = price;
+      if (priceId) body.priceId = priceId;
+      else if (price !== null) body.price = price;
       const headers = {};
-      if (priceId) headers['x-price-id'] = priceId; else if (price !== null) headers['x-price'] = String(price);
-      const res = await API.post('/api/payments/create-checkout-session', body, { method: 'POST', headers });
+      if (priceId) headers["x-price-id"] = priceId;
+      else if (price !== null) headers["x-price"] = String(price);
+      const res = await API.post("/api/payments/create-checkout-session", body, {
+        method: "POST",
+        headers,
+      });
       if (res && res.clientSecret) return res.clientSecret;
       // fallback alias
-      const res2 = await API.post('/api/payments/checkout/session', body, { method: 'POST', headers });
+      const res2 = await API.post("/api/payments/checkout/session", body, {
+        method: "POST",
+        headers,
+      });
       if (res2 && res2.clientSecret) return res2.clientSecret;
       return null;
     } catch {
@@ -130,8 +143,10 @@ export default function Checkout() {
     }
   }, [buyerEmail, courseSlug, productParam, utm, ctx]);
   const PRICE_BRL = ctx?.product?.totalCents
-    ? (ctx.product.totalCents / 100)
-    : (ctx?.course?.priceCents ? (ctx.course.priceCents / 100) : null);
+    ? ctx.product.totalCents / 100
+    : ctx?.course?.priceCents
+      ? ctx.course.priceCents / 100
+      : null;
 
   // Persistir metadados de checkout para análises e integração com backend
   useEffect(() => {
@@ -145,14 +160,16 @@ export default function Checkout() {
           setCtx(res);
           // Ajusta método inicial com base em recomendação + métodos aprovados
           const recommended = res?.payments?.recommended;
-          const approved = Array.isArray(res?.payments?.approvedMethods) ? res.payments.approvedMethods : [];
+          const approved = Array.isArray(res?.payments?.approvedMethods)
+            ? res.payments.approvedMethods
+            : [];
           let nextMethod = method;
           if (approved.length > 0) {
             if (recommended && approved.includes(recommended)) {
-              nextMethod = recommended === 'stripe' ? 'card' : recommended; // normaliza 'stripe' → 'card' na UI
+              nextMethod = recommended === "stripe" ? "card" : recommended; // normaliza 'stripe' → 'card' na UI
             } else {
               const first = approved[0];
-              nextMethod = first === 'stripe' ? 'card' : first;
+              nextMethod = first === "stripe" ? "card" : first;
             }
           }
           setMethod(nextMethod);
@@ -164,7 +181,7 @@ export default function Checkout() {
       try {
         const meta = {
           product: productParam,
-          product_name: (ctx?.product?.name || ctx?.course?.title || null),
+          product_name: ctx?.product?.name || ctx?.course?.title || null,
           product_price_brl: PRICE_BRL,
           course: courseSlug,
           marketing: ctx?.marketing || utm,
@@ -176,7 +193,7 @@ export default function Checkout() {
         };
         localStorage.setItem("checkout_meta", JSON.stringify(meta));
         // Telemetry: pageview
-        await emitCheckoutEvent({ courseSlug, eventType: 'pageview', metadata: meta });
+        await emitCheckoutEvent({ courseSlug, eventType: "pageview", metadata: meta });
       } catch {
         // Ignora falhas de acesso
       }
@@ -264,19 +281,21 @@ export default function Checkout() {
   const handleCryptoConfirm = async () => {
     if (!validateCommon()) return;
     if (!cryptoAddress || !cryptoAmount) {
-      setStatus('error');
-      setMessage('Gere a carteira e o QR Code antes de confirmar o pagamento.');
+      setStatus("error");
+      setMessage("Gere a carteira e o QR Code antes de confirmar o pagamento.");
       return;
     }
     try {
-      setStatus('loading');
-      setMessage('');
+      setStatus("loading");
+      setMessage("");
       await new Promise((r) => setTimeout(r, 1200));
-      setStatus('success');
-      setMessage('Pagamento em análise na blockchain. Vamos confirmar assim que a transação for detectada.');
+      setStatus("success");
+      setMessage(
+        "Pagamento em análise na blockchain. Vamos confirmar assim que a transação for detectada."
+      );
     } catch {
-      setStatus('error');
-      setMessage('Erro ao verificar pagamento. Tente novamente.');
+      setStatus("error");
+      setMessage("Erro ao verificar pagamento. Tente novamente.");
     }
   };
 
@@ -341,7 +360,11 @@ export default function Checkout() {
           <img src={pedrodappsIcon} alt="Pedro dApps" className="checkout__brand-logo" />
         </div>
 
-        <div className="checkout__card reveal-on-scroll is-visible" role="form" aria-describedby="checkout-desc">
+        <div
+          className="checkout__card reveal-on-scroll is-visible"
+          role="form"
+          aria-describedby="checkout-desc"
+        >
           <header className="checkout__header">
             <h2 id="checkout-title" className="checkout__title">
               Faça parte
@@ -361,9 +384,17 @@ export default function Checkout() {
             </div>
           )}
 
-          <div className="checkout__summary reveal-on-scroll is-visible" style={{ position: 'relative', minHeight: 96 }}>
+          <div
+            className="checkout__summary reveal-on-scroll is-visible"
+            style={{ position: "relative", minHeight: 96 }}
+          >
             {ctxLoading && (
-              <div className="checkout__spinner" role="status" aria-live="polite" aria-label="Carregando contexto">
+              <div
+                className="checkout__spinner"
+                role="status"
+                aria-live="polite"
+                aria-label="Carregando contexto"
+              >
                 <div className="checkout__spinner-circle" />
               </div>
             )}
@@ -373,124 +404,174 @@ export default function Checkout() {
             </div>
             <div className="checkout__summary-row">
               <span>Total</span>
-              <strong>{ctx?.product?.displayTotal || (ctx?.course?.currency && PRICE_BRL !== null ? new Intl.NumberFormat("pt-BR", { style: "currency", currency: ctx.course.currency }).format(PRICE_BRL) : "—")}</strong>
+              <strong>
+                {ctx?.product?.displayTotal ||
+                  (ctx?.course?.currency && PRICE_BRL !== null
+                    ? new Intl.NumberFormat("pt-BR", {
+                        style: "currency",
+                        currency: ctx.course.currency,
+                      }).format(PRICE_BRL)
+                    : "—")}
+              </strong>
+            </div>
           </div>
-        </div>
 
-          <div className="checkout__methods reveal-on-scroll is-visible" role="tablist" aria-label="Métodos de pagamento" style={{ position: 'relative', minHeight: 54 }}>
+          <div
+            className="checkout__methods reveal-on-scroll is-visible"
+            role="tablist"
+            aria-label="Métodos de pagamento"
+            style={{ position: "relative", minHeight: 54 }}
+          >
             {ctxLoading && (
-              <div className="checkout__spinner" role="status" aria-live="polite" aria-label="Carregando métodos">
+              <div
+                className="checkout__spinner"
+                role="status"
+                aria-live="polite"
+                aria-label="Carregando métodos"
+              >
                 <div className="checkout__spinner-circle" />
               </div>
             )}
-            {supportsMethod('pix') && (
-            <button
-              type="button"
-              className={`checkout__tab ${method === "pix" ? "is-active" : ""}`}
-              disabled={ctxLoading}
-              aria-disabled={ctxLoading}
-              onClick={async () => {
-                setMethod("pix");
-                await emitCheckoutEvent({ courseSlug, eventType: 'method_change', paymentMethod: 'pix', ctaId: 'tab-pix', metadata: { component: 'methods' } });
-              }}
-              role="tab"
-              aria-selected={method === "pix"}
-            >
-              <img src={pixIcon} className="checkout__tab-icon" alt="" aria-hidden="true" />
-              <span>PIX</span>
-            </button>
+            {supportsMethod("pix") && (
+              <button
+                type="button"
+                className={`checkout__tab ${method === "pix" ? "is-active" : ""}`}
+                disabled={ctxLoading}
+                aria-disabled={ctxLoading}
+                onClick={async () => {
+                  setMethod("pix");
+                  await emitCheckoutEvent({
+                    courseSlug,
+                    eventType: "method_change",
+                    paymentMethod: "pix",
+                    ctaId: "tab-pix",
+                    metadata: { component: "methods" },
+                  });
+                }}
+                role="tab"
+                aria-selected={method === "pix"}
+              >
+                <img src={pixIcon} className="checkout__tab-icon" alt="" aria-hidden="true" />
+                <span>PIX</span>
+              </button>
             )}
-            {supportsMethod('boleto') && (
-            <button
-              type="button"
-              className={`checkout__tab ${method === "boleto" ? "is-active" : ""}`}
-              disabled={ctxLoading}
-              aria-disabled={ctxLoading}
-              onClick={async () => {
-                setMethod("boleto");
-                await emitCheckoutEvent({ courseSlug, eventType: 'method_change', paymentMethod: undefined, ctaId: 'tab-boleto', metadata: { component: 'methods' } });
-              }}
-              role="tab"
-              aria-selected={method === "boleto"}
-            >
-              <FaBarcode className="checkout__tab-icon" aria-hidden="true" />
-              <span>Boleto</span>
-            </button>
+            {supportsMethod("boleto") && (
+              <button
+                type="button"
+                className={`checkout__tab ${method === "boleto" ? "is-active" : ""}`}
+                disabled={ctxLoading}
+                aria-disabled={ctxLoading}
+                onClick={async () => {
+                  setMethod("boleto");
+                  await emitCheckoutEvent({
+                    courseSlug,
+                    eventType: "method_change",
+                    paymentMethod: undefined,
+                    ctaId: "tab-boleto",
+                    metadata: { component: "methods" },
+                  });
+                }}
+                role="tab"
+                aria-selected={method === "boleto"}
+              >
+                <FaBarcode className="checkout__tab-icon" aria-hidden="true" />
+                <span>Boleto</span>
+              </button>
             )}
-            {supportsMethod('card') && (
-            <button
-              type="button"
-              className={`checkout__tab ${method === "card" ? "is-active" : ""}`}
-              disabled={ctxLoading}
-              aria-disabled={ctxLoading}
-              onClick={async () => {
-                setMethod("card");
-                await emitCheckoutEvent({ courseSlug, eventType: 'method_change', paymentMethod: 'stripe', ctaId: 'tab-card', metadata: { component: 'methods' } });
-              }}
-              role="tab"
-              aria-selected={method === "card"}
-            aria-label="Stripe">
-              <img src={stripeWordmark} className="checkout__tab-icon" alt="Stripe" style={{ width: '96px', height: 'auto' }} />
-            </button>
+            {supportsMethod("card") && (
+              <button
+                type="button"
+                className={`checkout__tab ${method === "card" ? "is-active" : ""}`}
+                disabled={ctxLoading}
+                aria-disabled={ctxLoading}
+                onClick={async () => {
+                  setMethod("card");
+                  await emitCheckoutEvent({
+                    courseSlug,
+                    eventType: "method_change",
+                    paymentMethod: "stripe",
+                    ctaId: "tab-card",
+                    metadata: { component: "methods" },
+                  });
+                }}
+                role="tab"
+                aria-selected={method === "card"}
+                aria-label="Stripe"
+              >
+                <img
+                  src={stripeWordmark}
+                  className="checkout__tab-icon"
+                  alt="Stripe"
+                  style={{ width: "46px", height: "auto" }}
+                />
+              </button>
             )}
-            {supportsMethod('crypto') && (
-            <button
-              type="button"
-              className={`checkout__tab ${method === "crypto" ? "is-active" : ""}`}
-              disabled={ctxLoading}
-              aria-disabled={ctxLoading}
-              onClick={async () => {
-                setMethod("crypto");
-                await emitCheckoutEvent({ courseSlug, eventType: 'method_change', paymentMethod: undefined, ctaId: 'tab-crypto', metadata: { component: 'methods' } });
-              }}
-              role="tab"
-              aria-selected={method === "crypto"}
-            >
-              <FaBitcoin className="checkout__tab-icon" aria-hidden="true" />
-              <span>Criptomoedas</span>
-            </button>
+            {supportsMethod("crypto") && (
+              <button
+                type="button"
+                className={`checkout__tab ${method === "crypto" ? "is-active" : ""}`}
+                disabled={ctxLoading}
+                aria-disabled={ctxLoading}
+                onClick={async () => {
+                  setMethod("crypto");
+                  await emitCheckoutEvent({
+                    courseSlug,
+                    eventType: "method_change",
+                    paymentMethod: undefined,
+                    ctaId: "tab-crypto",
+                    metadata: { component: "methods" },
+                  });
+                }}
+                role="tab"
+                aria-selected={method === "crypto"}
+              >
+                <FaBitcoin className="checkout__tab-icon" aria-hidden="true" />
+                <span>Criptomoedas</span>
+              </button>
             )}
           </div>
 
           <form className="checkout__form" onSubmit={(e) => e.preventDefault()}>
             {method !== "card" && (
-            <>
-            <div className="checkout__field">
-              <label htmlFor="buyer-name" className="checkout__label">
-                Nome completo
-              </label>
-              <input
-                id="buyer-name"
-                className="checkout__input"
-                type="text"
-                placeholder="Seu nome"
-                value={buyerName}
-                onChange={(e) => setBuyerName(e.target.value)}
-              />
-            </div>
-            <div className="checkout__field">
-              <label htmlFor="buyer-email" className="checkout__label">
-                E-mail
-              </label>
-              <input
-                id="buyer-email"
-                className="checkout__input"
-                type="email"
-                placeholder="seu@email.com"
-                value={buyerEmail}
-                onChange={(e) => setBuyerEmail(e.target.value)}
-              />
-            </div>
-            </>
+              <>
+                <div className="checkout__field">
+                  <label htmlFor="buyer-name" className="checkout__label">
+                    Nome completo
+                  </label>
+                  <input
+                    id="buyer-name"
+                    className="checkout__input"
+                    type="text"
+                    placeholder="Seu nome"
+                    value={buyerName}
+                    onChange={(e) => setBuyerName(e.target.value)}
+                  />
+                </div>
+                <div className="checkout__field">
+                  <label htmlFor="buyer-email" className="checkout__label">
+                    E-mail
+                  </label>
+                  <input
+                    id="buyer-email"
+                    className="checkout__input"
+                    type="email"
+                    placeholder="seu@email.com"
+                    value={buyerEmail}
+                    onChange={(e) => setBuyerEmail(e.target.value)}
+                  />
+                </div>
+              </>
             )}
 
-            {approvedMethods.includes('pix') && method === "pix" && (
+            {approvedMethods.includes("pix") && method === "pix" && (
               <div className="checkout__panel" aria-labelledby="pix-title">
                 <h3 id="pix-title" className="checkout__panel-title">
                   Pagamento via PIX
                 </h3>
                 <div className="checkout__field">
-                  <label htmlFor="pix-doc" className="checkout__label">CPF/CNPJ</label>
+                  <label htmlFor="pix-doc" className="checkout__label">
+                    CPF/CNPJ
+                  </label>
                   <input
                     id="pix-doc"
                     className="checkout__input"
@@ -518,7 +599,12 @@ export default function Checkout() {
                       setMessage("Informe um CPF/CNPJ válido.");
                       return;
                     }
-                    await emitCheckoutEvent({ courseSlug, eventType: 'cta_click', ctaId: 'pix-generate-qr', metadata: { component: 'pix' } });
+                    await emitCheckoutEvent({
+                      courseSlug,
+                      eventType: "cta_click",
+                      ctaId: "pix-generate-qr",
+                      metadata: { component: "pix" },
+                    });
                     try {
                       setStatus("loading");
                       setMessage("");
@@ -540,10 +626,25 @@ export default function Checkout() {
                     className="btn checkout__btn checkout__btn--secondary"
                     disabled={status === "loading"}
                     onClick={async () => {
-                      await emitCheckoutEvent({ courseSlug, eventType: 'cta_click', ctaId: 'pix-confirm', metadata: { component: 'pix' } });
-                      await emitCheckoutEvent({ courseSlug, eventType: 'purchase_start', paymentMethod: 'pix', metadata: { component: 'pix' } });
+                      await emitCheckoutEvent({
+                        courseSlug,
+                        eventType: "cta_click",
+                        ctaId: "pix-confirm",
+                        metadata: { component: "pix" },
+                      });
+                      await emitCheckoutEvent({
+                        courseSlug,
+                        eventType: "purchase_start",
+                        paymentMethod: "pix",
+                        metadata: { component: "pix" },
+                      });
                       await handlePixPay();
-                      await emitCheckoutEvent({ courseSlug, eventType: 'purchase_confirm', paymentMethod: 'pix', metadata: { component: 'pix' } });
+                      await emitCheckoutEvent({
+                        courseSlug,
+                        eventType: "purchase_confirm",
+                        paymentMethod: "pix",
+                        metadata: { component: "pix" },
+                      });
                     }}
                   >
                     {status === "loading" ? "Iniciando..." : "Confirmar pagamento PIX"}
@@ -552,13 +653,15 @@ export default function Checkout() {
               </div>
             )}
 
-            {approvedMethods.includes('boleto') && method === "boleto" && (
+            {approvedMethods.includes("boleto") && method === "boleto" && (
               <div className="checkout__panel" aria-labelledby="boleto-title">
                 <h3 id="boleto-title" className="checkout__panel-title">
                   Gerar Boleto
                 </h3>
                 <div className="checkout__field">
-                  <label htmlFor="buyer-doc" className="checkout__label">CPF/CNPJ</label>
+                  <label htmlFor="buyer-doc" className="checkout__label">
+                    CPF/CNPJ
+                  </label>
                   <input
                     id="buyer-doc"
                     className="checkout__input"
@@ -576,10 +679,23 @@ export default function Checkout() {
                   className="btn btn-primary checkout__btn"
                   disabled={status === "loading"}
                   onClick={async () => {
-                    await emitCheckoutEvent({ courseSlug, eventType: 'cta_click', ctaId: 'boleto-generate', metadata: { component: 'boleto' } });
-                    await emitCheckoutEvent({ courseSlug, eventType: 'purchase_start', metadata: { component: 'boleto' } });
+                    await emitCheckoutEvent({
+                      courseSlug,
+                      eventType: "cta_click",
+                      ctaId: "boleto-generate",
+                      metadata: { component: "boleto" },
+                    });
+                    await emitCheckoutEvent({
+                      courseSlug,
+                      eventType: "purchase_start",
+                      metadata: { component: "boleto" },
+                    });
                     await handleBoleto();
-                    await emitCheckoutEvent({ courseSlug, eventType: 'purchase_confirm', metadata: { component: 'boleto' } });
+                    await emitCheckoutEvent({
+                      courseSlug,
+                      eventType: "purchase_confirm",
+                      metadata: { component: "boleto" },
+                    });
                   }}
                 >
                   {status === "loading" ? "Gerando..." : "Gerar boleto"}
@@ -587,9 +703,11 @@ export default function Checkout() {
               </div>
             )}
 
-            {supportsMethod('card') && method === "card" && (
+            {supportsMethod("card") && method === "card" && (
               <div className="checkout__panel" aria-labelledby="card-title">
-                <h3 id="card-title" className="checkout__panel-title">Stripe</h3>
+                <h3 id="card-title" className="checkout__panel-title">
+                  Stripe
+                </h3>
                 <div className="checkout__stripe" aria-label="Processado pela Stripe">
                   <span className="checkout__stripe-powered">Processado por</span>
                   <span className="checkout__stripe-badge">
@@ -600,17 +718,22 @@ export default function Checkout() {
                 </div>
                 {stripePromise ? (
                   <EmbeddedCheckoutProvider stripe={stripePromise} options={{ fetchClientSecret }}>
-                    <div className="checkout__embedded" style={{ position: 'relative', minHeight: '320px' }}>
+                    <div
+                      className="checkout__embedded"
+                      style={{ position: "relative", minHeight: "320px" }}
+                    >
                       <EmbeddedCheckout />
                     </div>
                   </EmbeddedCheckoutProvider>
                 ) : (
-                  <div className="checkout__panel-desc">Stripe não configurado. Defina VITE_STRIPE_PUBLIC_KEY para habilitar.</div>
+                  <div className="checkout__panel-desc">
+                    Stripe não configurado. Defina VITE_STRIPE_PUBLIC_KEY para habilitar.
+                  </div>
                 )}
               </div>
             )}
 
-            {approvedMethods.includes('crypto') && method === "crypto" && (
+            {approvedMethods.includes("crypto") && method === "crypto" && (
               <div className="checkout__panel" aria-labelledby="crypto-title">
                 <h3 id="crypto-title" className="checkout__panel-title">
                   Pagar com Criptomoedas
@@ -654,7 +777,12 @@ export default function Checkout() {
                   className="btn btn-primary checkout__btn"
                   disabled={status === "loading"}
                   onClick={async () => {
-                    await emitCheckoutEvent({ courseSlug, eventType: 'cta_click', ctaId: 'crypto-generate', metadata: { component: 'crypto', currency: cryptoCurrency } });
+                    await emitCheckoutEvent({
+                      courseSlug,
+                      eventType: "cta_click",
+                      ctaId: "crypto-generate",
+                      metadata: { component: "crypto", currency: cryptoCurrency },
+                    });
                     await handleGenerateCryptoWallet();
                   }}
                 >
@@ -684,14 +812,23 @@ export default function Checkout() {
                   <button
                     type="button"
                     className="btn checkout__btn checkout__btn--secondary"
-                    disabled={status === 'loading'}
+                    disabled={status === "loading"}
                     onClick={async () => {
-                      await emitCheckoutEvent({ courseSlug, eventType: 'cta_click', ctaId: 'crypto-confirm', metadata: { component: 'crypto', currency: cryptoCurrency } });
-                      await emitCheckoutEvent({ courseSlug, eventType: 'purchase_confirm', metadata: { component: 'crypto', currency: cryptoCurrency } });
+                      await emitCheckoutEvent({
+                        courseSlug,
+                        eventType: "cta_click",
+                        ctaId: "crypto-confirm",
+                        metadata: { component: "crypto", currency: cryptoCurrency },
+                      });
+                      await emitCheckoutEvent({
+                        courseSlug,
+                        eventType: "purchase_confirm",
+                        metadata: { component: "crypto", currency: cryptoCurrency },
+                      });
                       await handleCryptoConfirm();
                     }}
                   >
-                    {status === 'loading' ? 'Verificando...' : 'Realizei o pagamento'}
+                    {status === "loading" ? "Verificando..." : "Realizei o pagamento"}
                   </button>
                 )}
               </div>
@@ -705,7 +842,8 @@ export default function Checkout() {
                   Política de Privacidade.
                 </a>
               </small>
-              <small>{" "}
+              <small>
+                {" "}
                 Uso responsável de automação: teste em ambiente controlado, defina limites e
                 monitore execuções. Leia os{" "}
                 <a href="/servicos" aria-label="Abrir Termos de Serviço">

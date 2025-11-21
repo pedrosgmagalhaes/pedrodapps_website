@@ -23,7 +23,7 @@ export const getBaseURL = () => {
   const explicit = import.meta?.env?.VITE_API_BASE_URL;
   if (runtime) return runtime;
   if (explicit) return explicit;
-  return isLocalhost() ? "http://localhost:3002" : "https://api.pedrodapps.com";
+  return isLocalhost() ? "http://localhost:3000" : "https://api.pedrodapps.com";
 };
 
 async function jsonFetch(path, options = {}) {
