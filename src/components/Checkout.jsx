@@ -39,6 +39,14 @@ export default function Checkout() {
     ""
   ).trim();
   const stripePromise = STRIPE_PK ? loadStripe(STRIPE_PK) : null;
+  const PAYMENTS_BASE = (
+    (import.meta?.env?.VITE_PAYMENTS_BASE_URL ??
+      (typeof globalThis !== "undefined" &&
+      typeof globalThis["__APP_PAYMENTS_BASE_URL__"] === "string"
+        ? globalThis["__APP_PAYMENTS_BASE_URL__"]
+        : "")) ||
+    "http://localhost:3002"
+  ).trim();
   const utm = React.useMemo(() => {
     const q = new URLSearchParams(location.search);
     return {
@@ -112,6 +120,8 @@ export default function Checkout() {
       const price = priceCents ? priceCents / 100 : null;
       const priceId =
         ctx?.product?.priceId || ctx?.course?.priceId || ctx?.product?.stripe_price_id || null;
+      const currency = (ctx?.product?.currency || ctx?.course?.currency || "brl").toLowerCase();
+      const name = ctx?.product?.name || ctx?.course?.title || "Produto";
       const body = {
         course: courseSlug,
         product: productParam,
@@ -122,26 +132,28 @@ export default function Checkout() {
         marketing: utm,
       };
       if (priceId) body.priceId = priceId;
-      else if (price !== null) body.price = price;
+      else if (price !== null) { body.price = price; body.currency = currency; body.name = name; }
       const headers = {};
       if (priceId) headers["x-price-id"] = priceId;
       else if (price !== null) headers["x-price"] = String(price);
       const res = await API.post("/api/payments/create-checkout-session", body, {
         method: "POST",
         headers,
+        baseUrl: PAYMENTS_BASE,
       });
       if (res && res.clientSecret) return res.clientSecret;
       // fallback alias
       const res2 = await API.post("/api/payments/checkout/session", body, {
         method: "POST",
         headers,
+        baseUrl: PAYMENTS_BASE,
       });
       if (res2 && res2.clientSecret) return res2.clientSecret;
       return null;
     } catch {
       return null;
     }
-  }, [buyerEmail, courseSlug, productParam, utm, ctx]);
+  }, [buyerEmail, courseSlug, productParam, utm, ctx, PAYMENTS_BASE]);
   const PRICE_BRL = ctx?.product?.totalCents
     ? ctx.product.totalCents / 100
     : ctx?.course?.priceCents

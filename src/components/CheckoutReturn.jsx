@@ -14,7 +14,7 @@ export default function CheckoutReturn() {
         const q = new URLSearchParams(location.search);
         const sessionId = q.get("session_id");
         if (!sessionId) return;
-        const data = await API.get(`/api/payments/session-status?session_id=${encodeURIComponent(sessionId)}`, { method: "GET" });
+        const data = await API.get(`/api/payments/session-status?session_id=${encodeURIComponent(sessionId)}`, { method: "GET", baseUrl: PAYMENTS_BASE });
         if (data) {
           setStatus(data.status || null);
           setCustomerEmail(data.customer_email || "");
@@ -50,3 +50,11 @@ export default function CheckoutReturn() {
 
   return null;
 }
+const PAYMENTS_BASE = (
+  (import.meta?.env?.VITE_PAYMENTS_BASE_URL ??
+    (typeof globalThis !== "undefined" &&
+    typeof globalThis["__APP_PAYMENTS_BASE_URL__"] === "string"
+      ? globalThis["__APP_PAYMENTS_BASE_URL__"]
+      : "")) ||
+  "http://localhost:3002"
+).trim();
