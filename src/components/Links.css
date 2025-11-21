@@ -2,7 +2,7 @@
   min-height: 100vh;
   display: grid;
   place-items: center;
-  background: linear-gradient(180deg, rgba(10, 10, 13, 1) 0%, rgba(12, 12, 18, 1) 100%);
+  background: linear-gradient(180deg, rgb(10 10 13 / 100%) 0%, rgb(12 12 18 / 100%) 100%);
   color: #e9e9f1;
   width: 100%;
   overflow-x: hidden; /* evita overflow horizontal em mobile */
@@ -16,11 +16,11 @@
 
 .links__card {
   backdrop-filter: blur(12px);
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgb(255 255 255 / 6%);
+  border: 1px solid rgb(255 255 255 / 12%);
   border-radius: 16px;
   padding: 28px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+  box-shadow: 0 10px 30px rgb(0 0 0 / 35%);
   max-width: 100%;
 }
 
@@ -66,6 +66,7 @@
 .links__section {
   margin-top: 8px;
 }
+
 .links__section-title {
   font-size: 0.9rem;
   font-weight: 600;
@@ -82,8 +83,8 @@
   width: 100%;
   padding: 14px 16px;
   border-radius: 12px;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgb(255 255 255 / 8%);
+  border: 1px solid rgb(255 255 255 / 14%);
   color: #f2f2fa;
   text-decoration: none;
   text-align: left;
@@ -95,10 +96,10 @@
 
 .links__item:hover {
   transform: translateY(-2px);
-  background: rgba(255, 255, 255, 0.12);
+  background: rgb(255 255 255 / 12%);
   box-shadow:
-    0 10px 18px rgba(0, 0, 0, 0.35),
-    0 0 0 2px rgba(152, 95, 255, 0.25) inset;
+    0 10px 18px rgb(0 0 0 / 35%),
+    0 0 0 2px rgb(152 95 255 / 25%) inset;
 }
 
 .links__item:active {
@@ -115,8 +116,7 @@
 .links__label {
   display: grid;
   gap: 2px;
-  align-items: start;
-  justify-items: start;
+  place-items: start start;
   overflow-wrap: anywhere;
 }
 
@@ -124,14 +124,12 @@
   font-weight: 600;
   font-size: 1rem;
   overflow-wrap: anywhere;
-  word-break: break-word;
 }
 
 .links__label-sub {
   font-size: 0.88rem;
   color: #cfcfe6;
   overflow-wrap: anywhere;
-  word-break: break-word; /* quebra URLs longas (ex.: whatsapp) */
 }
 
 .links__label-super {
@@ -150,14 +148,13 @@
 
 .links__footer-text {
   margin: 0;
-  margin-top: 12px;
   line-height: 1.5;
   text-align: justify;
   font-size: 14px;
   margin-top: 8vh;
 }
 
-@media (max-width: 480px) {
+@media (width <= 480px) {
   .links__footer-text {
     font-size: 12px;
     margin-top: 4vh;
@@ -167,12 +164,12 @@
 .links__footer a {
   color: #d7d7eb;
   text-decoration: none;
-  border-bottom: 1px dashed rgba(215, 215, 235, 0.3);
+  border-bottom: 1px dashed rgb(215 215 235 / 30%);
 }
 
 .links__footer a:hover {
-  color: #ffffff;
-  border-bottom-color: rgba(255, 255, 255, 0.45);
+  color: #fff;
+  border-bottom-color: rgb(255 255 255 / 45%);
 }
 
 /* Store buttons (Pixely Wallet) */
@@ -188,16 +185,18 @@
   align-items: center;
   gap: 8px;
   padding: 8px 12px;
-  border: 1px solid rgba(255, 255, 255, 0.18);
+  border: 1px solid rgb(255 255 255 / 18%);
   border-radius: 8px;
   color: inherit;
   text-decoration: none;
-  transition: background 0.2s ease, border-color 0.2s ease;
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease;
 }
 
 .links__store-button:hover {
-  background: rgba(255, 255, 255, 0.06);
-  border-color: rgba(255, 255, 255, 0.3);
+  background: rgb(255 255 255 / 6%);
+  border-color: rgb(255 255 255 / 30%);
 }
 
 .links__store-icon {
@@ -209,10 +208,11 @@
   font-size: 0.95em;
 }
 
-@media (max-width: 480px) {
+@media (width <= 480px) {
   .links__card {
     padding: 20px;
   }
+
   .links__title {
     font-size: 1.25rem;
   }
@@ -228,20 +228,28 @@
   padding: 18px 16px;
   margin-bottom: 20px;
   border-radius: 14px;
-  background:
-    linear-gradient(90deg, rgba(34, 197, 94, 0.20), rgba(12, 84, 44, 0.18));
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.35), inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+  background: linear-gradient(90deg, rgb(34 197 94 / 20%), rgb(12 84 44 / 18%));
+  border: 1px solid rgb(255 255 255 / 14%);
+  box-shadow:
+    0 12px 28px rgb(0 0 0 / 35%),
+    inset 0 0 0 1px rgb(255 255 255 / 8%);
   text-align: left;
   animation: highlight-glow 6s ease-in-out infinite;
 }
 
 @keyframes highlight-glow {
-  0%, 100% {
-    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.35), inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+  0%,
+  100% {
+    box-shadow:
+      0 12px 28px rgb(0 0 0 / 35%),
+      inset 0 0 0 1px rgb(255 255 255 / 8%);
   }
+
   50% {
-    box-shadow: 0 16px 36px rgba(34, 197, 94, 0.28), 0 0 22px rgba(34, 197, 94, 0.22), inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+    box-shadow:
+      0 16px 36px rgb(34 197 94 / 28%),
+      0 0 22px rgb(34 197 94 / 22%),
+      inset 0 0 0 1px rgb(255 255 255 / 10%);
   }
 }
 
@@ -251,7 +259,7 @@
   max-width: 680px;
   border-radius: 12px;
   object-fit: contain;
-  filter: drop-shadow(0 2px 12px rgba(34, 197, 94, 0.35));
+  filter: drop-shadow(0 2px 12px rgb(34 197 94 / 35%));
 }
 
 .links__highlight-content {
@@ -279,8 +287,7 @@
 .links__highlight-actions {
   display: flex;
   gap: 10px;
-  flex-wrap: nowrap;
-  flex-direction: column;
+  flex-flow: column nowrap;
   align-items: stretch;
   margin-top: 4px;
 }
@@ -293,47 +300,55 @@
   border-radius: 10px;
   font-weight: 700;
   text-decoration: none;
-  color: #ffffff;
-  background: rgba(34, 197, 94, 0.85);
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  transition: transform 0.18s ease, background 0.18s ease, box-shadow 0.18s ease;
+  color: #fff;
+  background: rgb(34 197 94 / 85%);
+  border: 1px solid rgb(255 255 255 / 14%);
+  transition:
+    transform 0.18s ease,
+    background 0.18s ease,
+    box-shadow 0.18s ease;
   width: 100%;
 }
 
 .links__highlight-btn:hover {
   transform: translateY(-1px);
-  background: rgba(34, 197, 94, 0.95);
-  box-shadow: 0 8px 18px rgba(34, 197, 94, 0.32);
+  background: rgb(34 197 94 / 95%);
+  box-shadow: 0 8px 18px rgb(34 197 94 / 32%);
 }
 
 .links__highlight-btn--secondary {
-  background: rgba(255, 255, 255, 0.14);
+  background: rgb(255 255 255 / 14%);
 }
 
 .links__highlight-btn--secondary:hover {
-  background: rgba(255, 255, 255, 0.22);
+  background: rgb(255 255 255 / 22%);
 }
 
-@media (max-width: 480px) {
+@media (width <= 480px) {
   .links__highlight {
     gap: 12px;
     padding: 16px 14px;
     text-align: center;
   }
+
   .links__highlight-hero {
     width: 95%;
     max-width: 100%;
   }
+
   .links__highlight-content {
     justify-items: center;
   }
+
   .links__highlight-title {
     font-size: 1.1rem;
   }
+
   .links__highlight-subtitle {
     font-size: 0.9rem;
   }
 }
+
 /* Bloco de marca Pixely */
 .links__brand {
   display: grid;
@@ -346,7 +361,7 @@
   max-width: 360px;
   height: auto;
   object-fit: contain;
-  filter: drop-shadow(0 2px 8px rgba(255, 255, 255, 0.18));
+  filter: drop-shadow(0 2px 8px rgb(255 255 255 / 18%));
 }
 
 /* Tamanho fixo do logo da Pixely no card isolado */
@@ -355,7 +370,7 @@
   max-width: none;
 }
 
-@media (max-width: 480px) {
+@media (width <= 480px) {
   .links__brand-logo {
     width: 150px;
     max-width: 300px;

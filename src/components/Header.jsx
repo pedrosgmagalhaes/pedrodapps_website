@@ -20,17 +20,32 @@ const Header = () => {
   const buildCheckoutUrl = () => {
     const base = new URLSearchParams({ course: "builders-de-elite", product: "plan-anual" });
     const src = new URLSearchParams(location.search);
-    ["utm_source","utm_medium","utm_campaign","utm_content","utm_term","ref","origin","gclid","fbclid","lang"].forEach((k) => {
+    [
+      "utm_source",
+      "utm_medium",
+      "utm_campaign",
+      "utm_content",
+      "utm_term",
+      "ref",
+      "origin",
+      "gclid",
+      "fbclid",
+      "lang",
+    ].forEach((k) => {
       const v = src.get(k);
       if (v) base.set(k, v);
     });
     const extra = collectContextParams();
-    Object.entries(extra).forEach(([k, v]) => { if (v !== undefined && v !== null && String(v).length > 0) base.set(k, String(v)); });
+    Object.entries(extra).forEach(([k, v]) => {
+      if (v !== undefined && v !== null && String(v).length > 0) base.set(k, String(v));
+    });
     const checkoutBase = (
       (import.meta?.env?.VITE_CHECKOUT_BASE_URL ??
-        (typeof globalThis !== "undefined" && typeof globalThis["__APP_CHECKOUT_BASE_URL__"] === "string"
+        (typeof globalThis !== "undefined" &&
+        typeof globalThis["__APP_CHECKOUT_BASE_URL__"] === "string"
           ? globalThis["__APP_CHECKOUT_BASE_URL__"]
-          : "")) || `${window.location.origin}/checkout`
+          : "")) ||
+      `${window.location.origin}/checkout`
     ).trim();
     return `${checkoutBase}?${base.toString()}`;
   };

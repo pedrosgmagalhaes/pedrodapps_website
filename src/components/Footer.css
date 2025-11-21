@@ -1,6 +1,6 @@
 .footer {
   background: #13121c;
-  color: rgba(255, 255, 255, 0.88);
+  color: rgb(255 255 255 / 88%);
   padding: 32px 0;
 }
 
@@ -21,9 +21,12 @@
   margin-top: 8px;
   font-size: 14px;
   line-height: 1.6;
-  color: rgba(255, 255, 255, 0.72);
+  color: rgb(255 255 255 / 72%);
 }
-.footer__copy strong { color: #fff; }
+
+.footer__copy strong {
+  color: #fff;
+}
 
 /* Nova linha para direitos autorais */
 .footer__rights {
@@ -37,31 +40,34 @@
   display: block;
   margin-top: 6px;
   font-size: 13px;
-  color: rgba(255, 255, 255, 0.72);
+  color: rgb(255 255 255 / 72%);
 }
+
 .footer__links a {
-  color: rgba(255, 255, 255, 0.88);
+  color: rgb(255 255 255 / 88%);
   text-decoration: none;
   font-weight: 700;
 }
+
 .footer__links a:hover {
   color: #fff;
   text-decoration: underline;
 }
+
 .footer__separator {
   margin: 0 8px;
-  color: rgba(255, 255, 255, 0.44);
+  color: rgb(255 255 255 / 44%);
 }
 
 .footer__divider {
   width: 1px;
   height: 44px;
-  background: rgba(255,255,255,0.24);
+  background: rgb(255 255 255 / 24%);
 }
 
 .footer__partners-title {
   font-size: 14px;
-  color: rgba(255, 255, 255, 0.72);
+  color: rgb(255 255 255 / 72%);
   margin-bottom: 6px;
 }
 
@@ -73,18 +79,23 @@
   padding: 0;
   list-style: none;
 }
+
 .footer__partners a {
   color: #fff;
   text-decoration: none;
   opacity: 0.92;
 }
-.footer__partners a:hover { opacity: 1; }
+
+.footer__partners a:hover {
+  opacity: 1;
+}
 
 .footer__social {
   display: flex;
   align-items: center;
   gap: 8px;
 }
+
 .social {
   width: 28px;
   height: 28px;
@@ -93,12 +104,13 @@
   justify-content: center;
   border-radius: 6px;
   font-weight: 700;
-  background: rgba(255,255,255,0.14);
+  background: rgb(255 255 255 / 14%);
   color: #fff;
   text-decoration: none;
 }
+
 .social:hover {
-  background: rgba(255,255,255,0.22);
+  background: rgb(255 255 255 / 22%);
 }
 
 /* tamanho e cor dos ícones sociais */
@@ -106,28 +118,36 @@
   color: #fff;
 }
 
-@media (max-width: 768px) {
+@media (width <= 768px) {
   .footer__container {
     grid-template-columns: 1fr;
     gap: 20px;
   }
-  .footer__divider { display: none; }
-  .footer__logo img { height: 34px; }
+
+  .footer__divider {
+    display: none;
+  }
+
+  .footer__logo img {
+    height: 34px;
+  }
 }
+
 /* Texto legal por extenso no rodapé */
 .footer__legal {
   display: block;
   margin-top: 8px;
-  color: rgba(255, 255, 255, 0.72);
+  color: rgb(255 255 255 / 72%);
   font-size: 13px;
   line-height: 1.6;
 }
 
 .footer__legal a {
-  color: rgba(255, 255, 255, 0.88);
+  color: rgb(255 255 255 / 88%);
   text-decoration: none;
   font-weight: 700;
 }
+
 .footer__legal a:hover {
   color: #fff;
   text-decoration: underline;
@@ -137,15 +157,17 @@
 .footer__disclaimer {
   display: block;
   margin-top: 6px;
-  color: rgba(255, 255, 255, 0.68);
+  color: rgb(255 255 255 / 68%);
   font-size: 12px;
   line-height: 1.6;
 }
+
 .footer__disclaimer a {
-  color: rgba(255, 255, 255, 0.85);
+  color: rgb(255 255 255 / 85%);
   text-decoration: none;
   font-weight: 700;
 }
+
 .footer__disclaimer a:hover {
   color: #fff;
   text-decoration: underline;
@@ -155,17 +177,20 @@
 .footer__bottom {
   margin-top: 16px;
 }
+
 .footer__bottom-text {
   text-align: center;
   font-size: 12px;
   line-height: 1.6;
-  color: rgba(255, 255, 255, 0.68);
+  color: rgb(255 255 255 / 68%);
 }
+
 .footer__bottom-text a {
-  color: rgba(255, 255, 255, 0.85);
+  color: rgb(255 255 255 / 85%);
   text-decoration: none;
   font-weight: 700;
 }
+
 .footer__bottom-text a:hover {
   color: #fff;
   text-decoration: underline;

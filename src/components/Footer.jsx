@@ -67,14 +67,20 @@ const Footer = () => {
         </p>
         <p className="footer__legal">
           Esta página constitui <strong>ambiente externo</strong>, não pertencente nem operado por
-          <strong> Meta Platforms, Inc. (Facebook/Instagram)</strong> ou <strong>YouTube/Google</strong>.
-          Ao clicar nos links disponibilizados, você será redirecionado para <strong>websites de terceiros</strong>,
-          <strong> fora do aplicativo</strong>. <strong>Não nos responsabilizamos</strong> pelo conteúdo, pelas
-          práticas de privacidade ou pela segurança desses domínios externos. <strong>Ao prosseguir</strong>,
-          você declara ciência e concordância com nossos {" "}
-          <a href="/servicos" aria-label="Abrir Termos de Serviço"><strong>Termos de Serviço</strong></a>
-          {" "}e {" "}
-          <a href="/privacidade" aria-label="Abrir Política de Privacidade"><strong>Política de Privacidade</strong></a>.
+          <strong> Meta Platforms, Inc. (Facebook/Instagram)</strong> ou{" "}
+          <strong>YouTube/Google</strong>. Ao clicar nos links disponibilizados, você será
+          redirecionado para <strong>websites de terceiros</strong>,
+          <strong> fora do aplicativo</strong>. <strong>Não nos responsabilizamos</strong> pelo
+          conteúdo, pelas práticas de privacidade ou pela segurança desses domínios externos.{" "}
+          <strong>Ao prosseguir</strong>, você declara ciência e concordância com nossos{" "}
+          <a href="/servicos" aria-label="Abrir Termos de Serviço">
+            <strong>Termos de Serviço</strong>
+          </a>{" "}
+          e{" "}
+          <a href="/privacidade" aria-label="Abrir Política de Privacidade">
+            <strong>Política de Privacidade</strong>
+          </a>
+          .
         </p>
       </div>
     </footer>

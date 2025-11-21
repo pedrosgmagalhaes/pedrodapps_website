@@ -7,20 +7,54 @@
   place-items: center;
 }
 
-.checkout__container { display: grid; place-items: center; }
-.checkout__brand { display: flex; align-items: center; justify-content: center; margin-bottom: 16px; }
-.checkout__brand-logo { width: 72px; height: auto; filter: brightness(1.05) contrast(1.05); }
+.checkout__container {
+  display: grid;
+  place-items: center;
+}
+
+.checkout__brand {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+
+.checkout__brand-logo {
+  width: 72px;
+  height: auto;
+  filter: brightness(1.05) contrast(1.05);
+}
 
 /* Powered by Pixley */
-.checkout__powered { display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 40px; margin-top: 40px; }
-.checkout__powered-text { font-size: 12px; color: rgba(255,255,255,0.75); }
-.checkout__powered-link { display: inline-flex; align-items: center; }
-.checkout__powered-logo { height: 18px; width: auto; filter: brightness(1.05) contrast(1.05); }
+.checkout__powered {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 40px;
+  margin-top: 40px;
+}
+
+.checkout__powered-text {
+  font-size: 12px;
+  color: rgb(255 255 255 / 75%);
+}
+
+.checkout__powered-link {
+  display: inline-flex;
+  align-items: center;
+}
+
+.checkout__powered-logo {
+  height: 18px;
+  width: auto;
+  filter: brightness(1.05) contrast(1.05);
+}
 
 .checkout__card {
   width: 100%;
   max-width: 640px;
-  background: rgba(34, 36, 58, 0.82);
+  background: rgb(34 36 58 / 82%);
   border: 1px solid transparent;
   border-radius: var(--border-radius-lg);
   box-shadow: 0 12px 28px rgb(0 0 0 / 35%);
@@ -28,24 +62,75 @@
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   background-image:
-    linear-gradient(rgba(34, 36, 58, 0.82), rgba(34, 36, 58, 0.82)),
-    linear-gradient(135deg, rgba(123, 227, 61, 0.35), rgba(119, 71, 255, 0.28));
+    linear-gradient(rgb(34 36 58 / 82%), rgb(34 36 58 / 82%)),
+    linear-gradient(135deg, rgb(123 227 61 / 35%), rgb(119 71 255 / 28%));
   background-origin: border-box;
   background-clip: padding-box, border-box;
 }
 
-.checkout__header { margin-bottom: 16px; }
-.checkout__header--center { text-align: center; }
-.checkout__status { display: flex; align-items: center; justify-content: center; gap: 8px; color: var(--accent-primary); margin-bottom: 6px; }
-.checkout__status-icon { width: 28px; height: 28px; display: inline-block; }
+.checkout__header {
+  margin-bottom: 16px;
+}
+
+.checkout__header--center {
+  text-align: center;
+}
+
+.checkout__status {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: var(--accent-primary);
+  margin-bottom: 6px;
+}
+
+.checkout__status-icon {
+  width: 28px;
+  height: 28px;
+  display: inline-block;
+}
 
 /* Stripe branding (card checkout) */
-.checkout__stripe { display: flex; align-items: center; gap: 10px; margin-top: 6px; }
-.checkout__stripe-badge { display: inline-flex; align-items: center; gap: 8px; }
-.checkout__stripe-wordmark { background: #635BFF; color: #fff; font-weight: 800; border-radius: 999px; padding: 6px 10px; font-size: 13px; letter-spacing: 0.2px; box-shadow: 0 6px 14px rgba(99,91,255,0.25); }
-.checkout__stripe-wordmark { display: inline-flex; align-items: center; gap: 6px; line-height: 1; }
-.checkout__stripe-wordmark svg { width: 16px; height: 16px; display: block; }
-.checkout__stripe-logo { height: 14px; width: auto; display: block; }
+.checkout__stripe {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 6px;
+}
+
+.checkout__stripe-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.checkout__stripe-wordmark {
+  background: #635bff;
+  color: #fff;
+  font-weight: 800;
+  border-radius: 999px;
+  padding: 6px 10px;
+  font-size: 13px;
+  letter-spacing: 0.2px;
+  box-shadow: 0 6px 14px rgb(99 91 255 / 25%);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  line-height: 1;
+}
+
+.checkout__stripe-wordmark svg {
+  width: 16px;
+  height: 16px;
+  display: block;
+}
+
+.checkout__stripe-logo {
+  height: 14px;
+  width: auto;
+  display: block;
+}
 
 /* Spinner overlay for Stripe PaymentElement while loading */
 .checkout__spinner {
@@ -57,16 +142,20 @@
   z-index: 2;
   pointer-events: none;
 }
+
 .checkout__spinner-circle {
   width: 28px;
   height: 28px;
-  border: 3px solid rgba(255, 255, 255, 0.35);
-  border-top-color: #635BFF;
+  border: 3px solid rgb(255 255 255 / 35%);
+  border-top-color: #635bff;
   border-radius: 50%;
   animation: checkout-spin 0.9s linear infinite;
 }
+
 @keyframes checkout-spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 /* Desabilitar interações em tabs enquanto carrega contexto */
@@ -75,97 +164,378 @@
   cursor: not-allowed;
   pointer-events: none;
 }
-.checkout__stripe-powered { font-size: 12px; color: rgba(255,255,255,0.8); }
-.checkout__stripe-btn { background: #635BFF; color: #fff; box-shadow: 0 10px 20px rgba(99,91,255,0.32); border-radius: 9999px; height: 52px; padding: 12px 20px; display: inline-flex; align-items: center; justify-content: center; gap: 10px; border: none; }
-.checkout__stripe-btn:hover { filter: brightness(1.05); box-shadow: 0 12px 24px rgba(99,91,255,0.38); transform: translateY(-1px); }
-/* Espaçamento e centralização do botão do Stripe */
-.checkout__stripe-actions { display: flex; justify-content: center; }
-.checkout__stripe-btn { margin-top: 12px; }
-.stripe-btn__logo { height: 18px; width: auto; display: block; filter: brightness(100%); }
-.stripe-btn__text { color: #ffffff; font-weight: 600; font-size: 14px; letter-spacing: 0.2px; }
+
+.checkout__stripe-powered {
+  font-size: 12px;
+  color: rgb(255 255 255 / 80%);
+}
+
+.checkout__stripe-btn {
+  margin-top: 12px;
+}
+
+.checkout__stripe-btn:hover {
+  filter: brightness(1.05);
+  box-shadow: 0 12px 24px rgb(99 91 255 / 38%);
+  transform: translateY(-1px);
+}
+
+.checkout__stripe-actions {
+  display: flex;
+  justify-content: center;
+}
+
+.stripe-btn__logo {
+  height: 18px;
+  width: auto;
+  display: block;
+  filter: brightness(100%);
+}
+
+.stripe-btn__text {
+  color: #fff;
+  font-weight: 600;
+  font-size: 14px;
+  letter-spacing: 0.2px;
+}
 
 /* Forçar cores oficiais da Stripe quando combinado com classe base de botão */
-.checkout__btn.checkout__stripe-btn { background: #635BFF; color: #fff; box-shadow: 0 10px 20px rgba(99,91,255,0.32); }
-.checkout__btn.checkout__stripe-btn:hover { filter: brightness(1.05); box-shadow: 0 12px 24px rgba(99,91,255,0.38); transform: translateY(-1px); }
-.checkout__title { font-size: 24px; font-weight: 800; margin: 0 0 6px 0; color: var(--neutral-white); }
-.checkout__subtitle { font-size: 14px; color: rgba(255, 255, 255, 0.8); margin: 0; }
+.checkout__btn.checkout__stripe-btn {
+  background: #635bff;
+  color: #fff;
+  box-shadow: 0 10px 20px rgb(99 91 255 / 32%);
+}
 
-.checkout__alert { margin-bottom: 12px; padding: 10px 12px; border-radius: var(--border-radius-md); font-size: 13px; }
-.checkout__alert--success { background: rgb(123 227 61 / 12%); color: #c7ffc0; border: 1px solid rgb(123 227 61 / 35%); }
-.checkout__alert--error { background: rgb(255 86 86 / 12%); color: #ffd6d6; border: 1px solid rgb(255 86 86 / 35%); }
+.checkout__btn.checkout__stripe-btn:hover {
+  filter: brightness(1.05);
+  box-shadow: 0 12px 24px rgb(99 91 255 / 38%);
+  transform: translateY(-1px);
+}
 
-.checkout__summary { border: 1px solid rgba(255,255,255,0.12); border-radius: var(--border-radius-md); padding: 12px; margin-bottom: 16px; background: rgba(0,0,0,0.06); }
-.checkout__summary-row { display: flex; align-items: center; justify-content: space-between; font-size: 14px; }
-.checkout__summary-row + .checkout__summary-row { margin-top: 6px; }
+.checkout__title {
+  font-size: 24px;
+  font-weight: 800;
+  margin: 0 0 6px;
+  color: var(--neutral-white);
+}
 
-.checkout__methods { display: flex; gap: 8px; margin-bottom: 16px; }
-.checkout__tab { display: inline-flex; align-items: center; gap: 8px; padding: 10px 14px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.18); background: transparent; color: #fff; cursor: pointer; transition: border-color 0.2s ease, background 0.2s ease; }
-.checkout__tab.is-active { border-color: var(--accent-primary); background: rgba(123,227,61,0.12); color: #c7ffc0; }
-.checkout__tab-icon { width: 18px; height: 18px; display: inline-block; }
-.checkout__tab:disabled { opacity: 0.6; cursor: not-allowed; filter: grayscale(0.2); }
+.checkout__subtitle {
+  font-size: 14px;
+  color: rgb(255 255 255 / 80%);
+  margin: 0;
+}
 
-.checkout__form { display: grid; gap: 14px; }
-.checkout__field { display: grid; gap: 6px; }
-.checkout__label { font-size: 12px; color: rgba(255,255,255,0.85); }
-.checkout__input { background: #1c1e2f; color: var(--neutral-white); border: 1px solid rgba(255, 255, 255, 0.16); border-radius: var(--border-radius-md); padding: 12px; outline: none; transition: border-color 160ms ease, box-shadow 160ms ease; }
-.checkout__input::placeholder { color: rgba(255,255,255,0.55); }
-.checkout__input:focus { border-color: var(--accent-primary); box-shadow: 0 0 0 3px rgba(123, 227, 61, 0.25), 0 10px 24px rgb(0 0 0 / 25%); }
+.checkout__alert {
+  margin-bottom: 12px;
+  padding: 10px 12px;
+  border-radius: var(--border-radius-md);
+  font-size: 13px;
+}
 
-.checkout__panel { border-top: 1px solid rgba(255,255,255,0.12); padding-top: 8px; display: grid; gap: 12px; }
-.checkout__panel-title { font-size: 16px; font-weight: 700; margin: 0; }
-.checkout__panel-desc { font-size: 13px; color: rgba(255,255,255,0.75); margin: 0; }
-.checkout__pix-key { display: flex; align-items: center; justify-content: space-between; gap: 12px; background: #1c1e2f; border: 1px solid rgba(255,255,255,0.16); border-radius: var(--border-radius-md); padding: 10px 12px; }
-.checkout__pix-qr { display: grid; place-items: center; padding: 12px; background: rgba(0,0,0,0.06); border: 1px dashed rgba(255,255,255,0.18); border-radius: var(--border-radius-md); }
-.checkout__pix-qr-img { width: 240px; height: 240px; image-rendering: pixelated; }
-.checkout__grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.checkout__alert--success {
+  background: rgb(123 227 61 / 12%);
+  color: #c7ffc0;
+  border: 1px solid rgb(123 227 61 / 35%);
+}
 
-.checkout__btn { min-width: 180px; background: var(--accent-primary); color: #000; box-shadow: 0 8px 20px rgba(123, 227, 61, 0.20); transition: transform 160ms ease, box-shadow 160ms ease; }
-.checkout__btn:hover { transform: translateY(-2px); box-shadow: 0 12px 28px rgba(123, 227, 61, 0.28); }
-.checkout__btn:disabled { background: #2a2d44; color: rgba(255,255,255,0.78); box-shadow: none; opacity: 1; cursor: not-allowed; transform: none; }
+.checkout__alert--error {
+  background: rgb(255 86 86 / 12%);
+  color: #ffd6d6;
+  border: 1px solid rgb(255 86 86 / 35%);
+}
+
+.checkout__summary {
+  border: 1px solid rgb(255 255 255 / 12%);
+  border-radius: var(--border-radius-md);
+  padding: 12px;
+  margin-bottom: 16px;
+  background: rgb(0 0 0 / 6%);
+}
+
+.checkout__summary-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 14px;
+}
+
+.checkout__summary-row + .checkout__summary-row {
+  margin-top: 6px;
+}
+
+.checkout__methods {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.checkout__tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border-radius: 12px;
+  border: 1px solid rgb(255 255 255 / 18%);
+  background: transparent;
+  color: #fff;
+  cursor: pointer;
+  transition:
+    border-color 0.2s ease,
+    background 0.2s ease;
+}
+
+.checkout__tab.is-active {
+  border-color: var(--accent-primary);
+  background: rgb(123 227 61 / 12%);
+  color: #c7ffc0;
+}
+
+.checkout__tab-icon {
+  width: 18px;
+  height: 18px;
+  display: inline-block;
+}
+
+.checkout__tab:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  filter: grayscale(0.2);
+}
+
+.checkout__form {
+  display: grid;
+  gap: 14px;
+}
+
+.checkout__field {
+  display: grid;
+  gap: 6px;
+}
+
+.checkout__label {
+  font-size: 12px;
+  color: rgb(255 255 255 / 85%);
+}
+
+.checkout__input {
+  background: #1c1e2f;
+  color: var(--neutral-white);
+  border: 1px solid rgb(255 255 255 / 16%);
+  border-radius: var(--border-radius-md);
+  padding: 12px;
+  outline: none;
+  transition:
+    border-color 160ms ease,
+    box-shadow 160ms ease;
+}
+
+.checkout__input::placeholder {
+  color: rgb(255 255 255 / 55%);
+}
+
+.checkout__input:focus {
+  border-color: var(--accent-primary);
+  box-shadow:
+    0 0 0 3px rgb(123 227 61 / 25%),
+    0 10px 24px rgb(0 0 0 / 25%);
+}
+
+.checkout__panel {
+  border-top: 1px solid rgb(255 255 255 / 12%);
+  padding-top: 8px;
+  display: grid;
+  gap: 12px;
+}
+
+.checkout__panel-title {
+  font-size: 16px;
+  font-weight: 700;
+  margin: 0;
+}
+
+.checkout__panel-desc {
+  font-size: 13px;
+  color: rgb(255 255 255 / 75%);
+  margin: 0;
+}
+
+.checkout__pix-key {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  background: #1c1e2f;
+  border: 1px solid rgb(255 255 255 / 16%);
+  border-radius: var(--border-radius-md);
+  padding: 10px 12px;
+}
+
+.checkout__pix-qr {
+  display: grid;
+  place-items: center;
+  padding: 12px;
+  background: rgb(0 0 0 / 6%);
+  border: 1px dashed rgb(255 255 255 / 18%);
+  border-radius: var(--border-radius-md);
+}
+
+.checkout__pix-qr-img {
+  width: 240px;
+  height: 240px;
+  image-rendering: pixelated;
+}
+
+.checkout__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.checkout__btn {
+  min-width: 180px;
+  background: var(--accent-primary);
+  color: #000;
+  box-shadow: 0 8px 20px rgb(123 227 61 / 20%);
+  transition:
+    transform 160ms ease,
+    box-shadow 160ms ease;
+}
+
+.checkout__btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px rgb(123 227 61 / 28%);
+}
+
+.checkout__btn:disabled {
+  background: #2a2d44;
+  color: rgb(255 255 255 / 78%);
+  box-shadow: none;
+  opacity: 1;
+  cursor: not-allowed;
+  transform: none;
+}
 
 /* Estilo secundário para diferenciar o botão Confirmar PIX */
-.checkout__btn--secondary { background: #7b8ba1; color: #fff; box-shadow: 0 6px 12px rgba(0,0,0,0.25); }
-.checkout__btn--secondary:hover { transform: translateY(-2px); filter: brightness(1.06); box-shadow: 0 10px 20px rgba(0,0,0,0.32); }
+.checkout__btn--secondary {
+  background: #7b8ba1;
+  color: #fff;
+  box-shadow: 0 6px 12px rgb(0 0 0 / 25%);
+}
 
-.checkout__footnote { margin-top: 8px; color: rgba(255,255,255,0.68); font-size: 12px; }
-.checkout__footnote a { color: rgba(255,255,255,0.85); text-decoration: none; font-weight: 700; }
-.checkout__footnote a:hover { color: #fff; text-decoration: underline; }
+.checkout__btn--secondary:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.06);
+  box-shadow: 0 10px 20px rgb(0 0 0 / 32%);
+}
+
+.checkout__footnote {
+  margin-top: 8px;
+  color: rgb(255 255 255 / 68%);
+  font-size: 12px;
+}
+
+.checkout__footnote a {
+  color: rgb(255 255 255 / 85%);
+  text-decoration: none;
+  font-weight: 700;
+}
+
+.checkout__footnote a:hover {
+  color: #fff;
+  text-decoration: underline;
+}
 
 /* Nota discreta de uso responsável de automação */
 .checkout__automation-note {
   margin-top: 6px;
-  color: rgba(255,255,255,0.66);
+  color: rgb(255 255 255 / 66%);
   font-size: 12px;
 }
+
 .checkout__automation-note a {
-  color: rgba(255,255,255,0.85);
+  color: rgb(255 255 255 / 85%);
   text-decoration: none;
   font-weight: 700;
 }
-.checkout__automation-note a:hover { color: #fff; text-decoration: underline; }
 
-@media (max-width: 600px) {
-  .checkout__grid { grid-template-columns: 1fr; }
-}
-.checkout__crypto-controls { display: flex; gap: 8px; margin: 8px 0 12px; }
-.checkout__crypto-qr { display: grid; place-items: center; padding: 12px; background: rgba(0,0,0,0.06); border: 1px dashed rgba(255,255,255,0.18); border-radius: var(--border-radius-md); margin-top: 8px; }
-.checkout__crypto-amount { margin-top: 8px; font-size: 14px; color: rgba(255,255,255,0.9); }
-.checkout__crypto-address { margin-top: 6px; display: grid; gap: 4px; font-size: 13px; color: rgba(255,255,255,0.85); }
-.checkout__crypto-address code { background: #1c1e2f; border: 1px solid rgba(255,255,255,0.16); border-radius: var(--border-radius-sm); padding: 6px 8px; font-family: ui-monospace, Menlo, Consolas, monospace; }
-
-/* Responsividade dos métodos de pagamento */
-@media (max-width: 600px) {
-  .checkout__methods { flex-wrap: wrap; justify-content: center; gap: 10px; }
-  .checkout__tab { flex: 1 1 calc(50% - 10px); justify-content: center; min-height: 44px; padding: 12px 10px; }
-  .checkout__tab-icon { width: 20px; height: 20px; }
+.checkout__automation-note a:hover {
+  color: #fff;
+  text-decoration: underline;
 }
 
-@media (max-width: 360px) {
-  .checkout__methods { flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch; gap: 8px; }
-  .checkout__tab { flex: 0 0 auto; }
+@media (width <= 600px) {
+  .checkout__grid {
+    grid-template-columns: 1fr;
+  }
 }
-.checkout__crypto-controls { display: flex; gap: 8px; margin: 8px 0 12px; }
-.checkout__crypto-qr { display: grid; place-items: center; padding: 12px; background: rgba(0,0,0,0.06); border: 1px dashed rgba(255,255,255,0.18); border-radius: var(--border-radius-md); margin-top: 8px; }
-.checkout__crypto-amount { margin-top: 8px; font-size: 14px; color: rgba(255,255,255,0.9); }
-.checkout__crypto-address { margin-top: 6px; display: grid; gap: 4px; font-size: 13px; color: rgba(255,255,255,0.85); }
-.checkout__crypto-address code { background: #1c1e2f; border: 1px solid rgba(255,255,255,0.16); border-radius: var(--border-radius-sm); padding: 6px 8px; font-family: ui-monospace, Menlo, Consolas, monospace; }
+
+@media (width <= 600px) {
+  .checkout__methods {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+  }
+
+  .checkout__tab {
+    flex: 1 1 calc(50% - 10px);
+    justify-content: center;
+    min-height: 44px;
+    padding: 12px 10px;
+  }
+
+  .checkout__tab-icon {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+@media (width <= 360px) {
+  .checkout__methods {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    gap: 8px;
+  }
+
+  .checkout__tab {
+    flex: 0 0 auto;
+  }
+}
+
+.checkout__crypto-controls {
+  display: flex;
+  gap: 8px;
+  margin: 8px 0 12px;
+}
+
+.checkout__crypto-qr {
+  display: grid;
+  place-items: center;
+  padding: 12px;
+  background: rgb(0 0 0 / 6%);
+  border: 1px dashed rgb(255 255 255 / 18%);
+  border-radius: var(--border-radius-md);
+  margin-top: 8px;
+}
+
+.checkout__crypto-amount {
+  margin-top: 8px;
+  font-size: 14px;
+  color: rgb(255 255 255 / 90%);
+}
+
+.checkout__crypto-address {
+  margin-top: 6px;
+  display: grid;
+  gap: 4px;
+  font-size: 13px;
+  color: rgb(255 255 255 / 85%);
+}
+
+.checkout__crypto-address code {
+  background: #1c1e2f;
+  border: 1px solid rgb(255 255 255 / 16%);
+  border-radius: var(--border-radius-sm);
+  padding: 6px 8px;
+  font-family: ui-monospace, Menlo, Consolas, monospace;
+}

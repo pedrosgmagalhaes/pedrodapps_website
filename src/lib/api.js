@@ -16,9 +16,11 @@ const isLocalhost = () => {
 export const getBaseURL = () => {
   const runtime = (() => {
     try {
-      const v = globalThis && globalThis['__APP_API_BASE_URL__'];
-      return typeof v === 'string' && v.length > 0 ? v : null;
-    } catch { return null; }
+      const v = globalThis && globalThis["__APP_API_BASE_URL__"];
+      return typeof v === "string" && v.length > 0 ? v : null;
+    } catch {
+      return null;
+    }
   })();
   const explicit = import.meta?.env?.VITE_API_BASE_URL;
   if (runtime) return runtime;
@@ -57,7 +59,11 @@ async function jsonFetch(path, options = {}) {
   } catch (err) {
     const msg = String(err?.message || err || "");
     // Normaliza falhas de rede em um código simples para a UI tratar
-    if (msg.includes("Failed to fetch") || msg.includes("NetworkError") || msg.includes("TypeError")) {
+    if (
+      msg.includes("Failed to fetch") ||
+      msg.includes("NetworkError") ||
+      msg.includes("TypeError")
+    ) {
       return { error: "network_error", status: 0, data: null };
     }
     return { error: "unknown_error", status: 0, data: msg };
@@ -93,25 +99,27 @@ export const API = {
       const url = qp.toString()
         ? `/api/courses/${encodeURIComponent(slug)}/checkout/context?${qp.toString()}`
         : `/api/courses/${encodeURIComponent(slug)}/checkout/context`;
-      const acceptLanguage = typeof navigator !== 'undefined'
-        ? navigator.language || (navigator.languages && navigator.languages[0]) || 'pt'
-        : 'pt';
+      const acceptLanguage =
+        typeof navigator !== "undefined"
+          ? navigator.language || (navigator.languages && navigator.languages[0]) || "pt"
+          : "pt";
       return jsonFetch(url, {
         ...opts,
         method: "GET",
         token: getToken(),
-        headers: { ...(opts.headers || {}), 'Accept-Language': acceptLanguage },
+        headers: { ...(opts.headers || {}), "Accept-Language": acceptLanguage },
       });
     },
     checkoutStripe: (slug, body = {}, opts = {}) => {
-      const acceptLanguage = typeof navigator !== 'undefined'
-        ? navigator.language || (navigator.languages && navigator.languages[0]) || 'pt'
-        : 'pt';
+      const acceptLanguage =
+        typeof navigator !== "undefined"
+          ? navigator.language || (navigator.languages && navigator.languages[0]) || "pt"
+          : "pt";
       return jsonFetch(`/api/courses/${encodeURIComponent(slug)}/checkout/stripe`, {
         ...opts,
         method: "POST",
         token: getToken(),
-        headers: { ...(opts.headers || {}), 'Accept-Language': acceptLanguage },
+        headers: { ...(opts.headers || {}), "Accept-Language": acceptLanguage },
         body,
       });
     },
@@ -124,12 +132,14 @@ export const API = {
     },
     modules: {
       get: (slug, opts = {}) => jsonFetch(`/edu/modules/${slug}`, { ...opts, method: "GET" }),
-      getLessons: (slug, opts = {}) => jsonFetch(`/edu/modules/${slug}/lessons`, { ...opts, method: "GET" }),
+      getLessons: (slug, opts = {}) =>
+        jsonFetch(`/edu/modules/${slug}/lessons`, { ...opts, method: "GET" }),
     },
     lessons: {
       get: (slug, opts = {}) => jsonFetch(`/edu/lessons/${slug}`, { ...opts, method: "GET" }),
       questions: {
-        list: (slug, opts = {}) => jsonFetch(`/edu/lessons/${slug}/questions`, { ...opts, method: "GET" }),
+        list: (slug, opts = {}) =>
+          jsonFetch(`/edu/lessons/${slug}/questions`, { ...opts, method: "GET" }),
         create: (slug, { title, content }, opts = {}) =>
           jsonFetch(`/edu/lessons/${slug}/questions`, {
             ...opts,
@@ -139,15 +149,18 @@ export const API = {
       },
     },
     questions: {
-      thread: (threadId, opts = {}) => jsonFetch(`/edu/questions/${threadId}`, { ...opts, method: "GET" }),
+      thread: (threadId, opts = {}) =>
+        jsonFetch(`/edu/questions/${threadId}`, { ...opts, method: "GET" }),
       reply: (threadId, content, parent_post_id = null, opts = {}) =>
         jsonFetch(`/edu/questions/${threadId}/replies`, {
           ...opts,
           method: "POST",
           body: parent_post_id ? { content, parent_post_id } : { content },
         }),
-      like: (threadId, opts = {}) => jsonFetch(`/edu/questions/${threadId}/like`, { ...opts, method: "POST" }),
-      unlike: (threadId, opts = {}) => jsonFetch(`/edu/questions/${threadId}/like`, { ...opts, method: "DELETE" }),
+      like: (threadId, opts = {}) =>
+        jsonFetch(`/edu/questions/${threadId}/like`, { ...opts, method: "POST" }),
+      unlike: (threadId, opts = {}) =>
+        jsonFetch(`/edu/questions/${threadId}/like`, { ...opts, method: "DELETE" }),
     },
   },
   // Admin endpoints
@@ -166,13 +179,17 @@ export const API = {
       jsonFetch("/api/auth/login", {
         ...opts,
         method: "POST",
-        body: turnstileToken ? { email, password, cf_turnstile_token: turnstileToken } : { email, password },
+        body: turnstileToken
+          ? { email, password, cf_turnstile_token: turnstileToken }
+          : { email, password },
       }),
     register: (email, password, name, turnstileToken = null, opts = {}) =>
       jsonFetch("/api/auth/register", {
         ...opts,
         method: "POST",
-        body: turnstileToken ? { email, password, name, cf_turnstile_token: turnstileToken } : { email, password, name },
+        body: turnstileToken
+          ? { email, password, name, cf_turnstile_token: turnstileToken }
+          : { email, password, name },
       }),
     forgotPassword: (email, turnstileToken = null, opts = {}) =>
       jsonFetch("/api/auth/forgot-password", {

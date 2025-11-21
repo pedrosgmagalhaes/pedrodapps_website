@@ -5,13 +5,12 @@ import WelcomeTerminal from "./WelcomeTerminal";
 import BotDownloadInfo from "./BotDownloadInfo";
 import SupportFeed from "./SupportFeed";
 import { API } from "../lib/api";
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from "react-i18next";
 
 export default function Home() {
   const [progress] = useState(80);
   const [open, setOpen] = useState({ lessons: true, bots: true, honeypot: false });
   const [lessonOpenMap, setLessonOpenMap] = useState({});
-  const [botVideo, setBotVideo] = useState(false);
   const [activePanel, setActivePanel] = useState("welcome"); // welcome | honeypot_download | lesson_video | lesson_download | lesson_support
   const [showGate, setShowGate] = useState(false);
   const [nowTs, setNowTs] = useState(Date.now());
@@ -70,7 +69,9 @@ export default function Home() {
         console.error("Erro ao carregar curso:", err);
       }
     })();
-    return () => { mounted = false; };
+    return () => {
+      mounted = false;
+    };
   }, []);
 
   // Abrir colapse da lição via query string (sem navegação externa)
@@ -102,14 +103,16 @@ export default function Home() {
         if (!mounted) return;
         setLessonDetail(res?.lesson || null);
         setLessonStatus("idle");
-      } catch (err) {
+      } catch {
         if (!mounted) return;
         setLessonStatus("error");
         setLessonDetail(null);
       }
     }
     loadDetail();
-    return () => { mounted = false; };
+    return () => {
+      mounted = false;
+    };
   }, [activeLesson, activePanel]);
 
   const formatLeft = (ms) => {
@@ -150,14 +153,23 @@ export default function Home() {
         <header className="home__header">
           <div className="home__brand" role="heading" aria-level={1}>
             <h1 id="home-title" className="home__brand-title">
-              <a href="/members/home" aria-label="Voltar para a Home">{course?.title || "Builders de Elite"}</a>
+              <a href="/members/home" aria-label="Voltar para a Home">
+                {course?.title || "Builders de Elite"}
+              </a>
             </h1>
           </div>
         </header>
         <div className="home__layout">
           <aside className="home__sidebar" aria-label="Sidebar navigation">
             <div className="home__sidebar-group">
-              <button className="home__sidebar-heading" type="button" onClick={() => toggle("lessons")} aria-expanded={open.lessons}>Aulas</button>
+              <button
+                className="home__sidebar-heading"
+                type="button"
+                onClick={() => toggle("lessons")}
+                aria-expanded={open.lessons}
+              >
+                Aulas
+              </button>
               <div className={`home__collapse ${open.lessons ? "is-open" : ""}`}>
                 <div className="home__sidebar-list">
                   {course?.lessons && course.lessons.length > 0 ? (
@@ -173,7 +185,9 @@ export default function Home() {
                             aria-expanded={!!lessonOpenMap[lesson.slug]}
                             aria-controls={`lesson-${lesson.slug}-collapse`}
                           >
-                            <span className="icon"><FaPlay /></span>
+                            <span className="icon">
+                              <FaPlay />
+                            </span>
                             <span>{lesson.title}</span>
                           </button>
                           <div
@@ -188,10 +202,17 @@ export default function Home() {
                                     key={feat}
                                     className="home__sidebar-item"
                                     type="button"
-                                    onClick={() => handleGatedAction(() => { setActiveLesson(lesson.slug); setActivePanel(featurePanels[feat]); })}
+                                    onClick={() =>
+                                      handleGatedAction(() => {
+                                        setActiveLesson(lesson.slug);
+                                        setActivePanel(featurePanels[feat]);
+                                      })
+                                    }
                                     aria-controls="home-content"
                                   >
-                                    <span className="icon"><Icon /></span>
+                                    <span className="icon">
+                                      <Icon />
+                                    </span>
                                     <span>{t(`features.${feat}`)}</span>
                                   </button>
                                 );
@@ -202,7 +223,9 @@ export default function Home() {
                       ))
                   ) : (
                     <div className="home__sidebar-item" aria-disabled="true">
-                      <span className="icon"><FaPlay /></span>
+                      <span className="icon">
+                        <FaPlay />
+                      </span>
                       <span>Carregando...</span>
                     </div>
                   )}
@@ -239,12 +262,16 @@ export default function Home() {
                   <div className="home__bot-video-caption">Carregando…</div>
                 )}
                 {lessonStatus === "error" && (
-                  <div className="home__bot-video-caption">Não foi possível carregar os detalhes da aula.</div>
+                  <div className="home__bot-video-caption">
+                    Não foi possível carregar os detalhes da aula.
+                  </div>
                 )}
                 {lessonStatus === "idle" && (
                   <div className="home__bot-video-caption">
                     {lessonDetail?.video_url ? (
-                      <a href={lessonDetail.video_url} target="_blank" rel="noopener noreferrer">Abrir vídeo</a>
+                      <a href={lessonDetail.video_url} target="_blank" rel="noopener noreferrer">
+                        Abrir vídeo
+                      </a>
                     ) : (
                       "Em breve ficará disponível."
                     )}
@@ -270,20 +297,22 @@ export default function Home() {
             {activePanel === "lesson_support" && <SupportFeed />}
 
             {activePanel === "lesson_terminal" && (
-              <div className="home__bot-video" role="region" aria-label={t('features.terminal')}>
+              <div className="home__bot-video" role="region" aria-label={t("features.terminal")}>
                 <div className="home__bot-video-caption">
-                  {lessonStatus === "loading" && (
-                    <div>{t('loading')}</div>
-                  )}
-                  {lessonStatus === "error" && (
-                    <div>{t('error_loading_lesson')}</div>
-                  )}
+                  {lessonStatus === "loading" && <div>{t("loading")}</div>}
+                  {lessonStatus === "error" && <div>{t("error_loading_lesson")}</div>}
                   {lessonStatus === "idle" && (
                     <>
                       {lessonDetail?.terminal_url ? (
-                        <a href={lessonDetail.terminal_url} target="_blank" rel="noopener noreferrer">{t('open_terminal')}</a>
+                        <a
+                          href={lessonDetail.terminal_url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          {t("open_terminal")}
+                        </a>
                       ) : (
-                        t('terminal_coming_soon')
+                        t("terminal_coming_soon")
                       )}
                     </>
                   )}
@@ -292,20 +321,16 @@ export default function Home() {
             )}
 
             {activePanel === "lesson_text" && (
-              <div className="home__bot-video" role="region" aria-label={t('features.textContent')}>
+              <div className="home__bot-video" role="region" aria-label={t("features.textContent")}>
                 <div className="home__bot-video-caption">
-                  {lessonStatus === "loading" && (
-                    <div>{t('loading')}</div>
-                  )}
-                  {lessonStatus === "error" && (
-                    <div>{t('error_loading_lesson')}</div>
-                  )}
+                  {lessonStatus === "loading" && <div>{t("loading")}</div>}
+                  {lessonStatus === "error" && <div>{t("error_loading_lesson")}</div>}
                   {lessonStatus === "idle" && (
                     <>
                       {lessonDetail?.content ? (
                         <p>{lessonDetail.content}</p>
                       ) : (
-                        t('text_content_coming_soon')
+                        t("text_content_coming_soon")
                       )}
                     </>
                   )}
@@ -359,14 +384,16 @@ export default function Home() {
             <p id="gate-desc" style={{ marginTop: 12, marginBottom: 8, opacity: 0.95 }}>
               Este módulo ficará disponível amanhã às 20:00.
             </p>
-            <div style={{
-              marginTop: 8,
-              fontFamily:
-                "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, \"Liberation Mono\", \"Courier New\", monospace",
-              fontSize: 20,
-              letterSpacing: 0.5,
-              color: "var(--accent-primary)",
-            }}>
+            <div
+              style={{
+                marginTop: 8,
+                fontFamily:
+                  'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
+                fontSize: 20,
+                letterSpacing: 0.5,
+                color: "var(--accent-primary)",
+              }}
+            >
               {formatLeft(timeLeft)}
             </div>
             <div style={{ display: "flex", gap: 12, marginTop: 20 }}>

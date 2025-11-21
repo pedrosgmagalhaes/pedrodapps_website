@@ -116,7 +116,9 @@ export function collectContextParams() {
     let entry_url = "";
     try {
       entry_url = localStorage.getItem("entry_url") || "";
-    } catch { void 0; }
+    } catch {
+      void 0;
+    }
     return {
       ...out,
       device,

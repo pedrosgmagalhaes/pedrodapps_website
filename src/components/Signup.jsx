@@ -5,12 +5,15 @@ import pedrodappsIcon from "../assets/pedrodapps_icon.png";
 import { registerWithPassword } from "../lib/auth";
 import { useNavigate } from "react-router-dom";
 import LanguageSelector from "./LanguageSelector";
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from "react-i18next";
 import TurnstileWidget from "./TurnstileWidget";
 
 export default function Signup() {
   const { t } = useTranslation();
-  const TURNSTILE_ENABLED = typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.VITE_TURNSTILE_ENABLED === 'true';
+  const TURNSTILE_ENABLED =
+    typeof import.meta !== "undefined" &&
+    import.meta.env &&
+    import.meta.env.VITE_TURNSTILE_ENABLED === "true";
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
@@ -38,7 +41,7 @@ export default function Signup() {
         setMessage("Complete a verificação de segurança.");
         return;
       }
-      const user = await registerWithPassword(email, password, name, TURNSTILE_ENABLED ? turnstileToken : null);
+      await registerWithPassword(email, password, name, TURNSTILE_ENABLED ? turnstileToken : null);
       setStatus("success");
       setMessage("Cadastro realizado com sucesso! Redirecionando para login...");
       setTimeout(() => navigate("/login"), 2000);
@@ -58,58 +61,76 @@ export default function Signup() {
 
         <div className="login__card">
           <header className="login__header">
-            <h2 id="signup-title" className="login__title">{t('signup.title')}</h2>
-            <p id="signup-desc" className="login__subtitle">{t('signup.subtitle')}</p>
+            <h2 id="signup-title" className="login__title">
+              {t("signup.title")}
+            </h2>
+            <p id="signup-desc" className="login__subtitle">
+              {t("signup.subtitle")}
+            </p>
           </header>
           {status !== "idle" && message && (
-            <div className={`login__alert ${status === "error" ? "login__alert--error" : "login__alert--success"}`} role="status" aria-live="polite">
+            <div
+              className={`login__alert ${status === "error" ? "login__alert--error" : "login__alert--success"}`}
+              role="status"
+              aria-live="polite"
+            >
               {message}
             </div>
           )}
 
           <form className="login__form" onSubmit={handleSubmit}>
             <div className="login__field">
-              <label htmlFor="name" className="login__label">{t('signup.name')}</label>
+              <label htmlFor="name" className="login__label">
+                {t("signup.name")}
+              </label>
               <input
                 id="name"
                 type="text"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 className={`login__input ${status === "error" && !isValidName(name) ? "login__input--invalid" : ""}`}
-                placeholder={t('signup.namePlaceholder')}
+                placeholder={t("signup.namePlaceholder")}
                 required
                 aria-invalid={status === "error" && !isValidName(name) ? "true" : "false"}
               />
             </div>
             <div className="login__field">
-              <label htmlFor="email" className="login__label">{t('login.email')}</label>
+              <label htmlFor="email" className="login__label">
+                {t("login.email")}
+              </label>
               <input
                 id="email"
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 className={`login__input ${status === "error" && !isValidEmail(email) ? "login__input--invalid" : ""}`}
-                placeholder={t('login.emailPlaceholder')}
+                placeholder={t("login.emailPlaceholder")}
                 required
                 aria-invalid={status === "error" && !isValidEmail(email) ? "true" : "false"}
               />
             </div>
             <div className="login__field">
-              <label htmlFor="password" className="login__label">{t('login.password')}</label>
+              <label htmlFor="password" className="login__label">
+                {t("login.password")}
+              </label>
               <input
                 id="password"
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 className={`login__input ${status === "error" && !isValidPassword(password) ? "login__input--invalid" : ""}`}
-                placeholder={t('signup.passwordPlaceholder')}
+                placeholder={t("signup.passwordPlaceholder")}
                 required
                 aria-invalid={status === "error" && !isValidPassword(password) ? "true" : "false"}
               />
             </div>
             <div className="login__actions">
-              <button type="submit" className="btn btn-primary login__btn" disabled={status === "loading"}>
-                {status === "loading" ? t('signup.button') + '...' : t('signup.button')}
+              <button
+                type="submit"
+                className="btn btn-primary login__btn"
+                disabled={status === "loading"}
+              >
+                {status === "loading" ? t("signup.button") + "..." : t("signup.button")}
               </button>
             </div>
             {TURNSTILE_ENABLED && (
@@ -119,16 +140,12 @@ export default function Signup() {
             )}
           </form>
 
-          {/** Social login desativado por enquanto */}
-          {false && (
-            <div className="login__oauth" aria-label="Cadastro com provedores">
-              {/* <GoogleLogin onSuccess={(user) => navigate("/")} /> */}
-            </div>
-          )}
-
           <div className="login__footer">
             <p className="login__footer-text">
-              Já tem conta? <a href="/login" className="login__link">Login</a>
+              Já tem conta?{" "}
+              <a href="/login" className="login__link">
+                Login
+              </a>
             </p>
           </div>
         </div>

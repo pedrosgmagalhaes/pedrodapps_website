@@ -1,5 +1,12 @@
 import React, { useState } from "react";
-import { FaDownload, FaInfoCircle, FaListUl, FaCogs, FaExclamationTriangle, FaCheckCircle } from "react-icons/fa";
+import {
+  FaDownload,
+  FaInfoCircle,
+  FaListUl,
+  FaCogs,
+  FaExclamationTriangle,
+  FaCheckCircle,
+} from "react-icons/fa";
 
 export default function BotDownloadInfo({
   title = "Honeypot & Rug Pull Detector — Download",
@@ -35,48 +42,67 @@ export default function BotDownloadInfo({
   return (
     <section className="botinfo" aria-labelledby="botinfo-title">
       <header className="botinfo__header">
-        <h2 id="botinfo-title" className="botinfo__title">{title}</h2>
+        <h2 id="botinfo-title" className="botinfo__title">
+          {title}
+        </h2>
         <div className="botinfo__meta">
           <span className="botinfo__version">Versão: {version}</span>
           {changelogUrl && (
-            <a className="botinfo__link" href={changelogUrl} target="_blank" rel="noreferrer">Changelog</a>
+            <a className="botinfo__link" href={changelogUrl} target="_blank" rel="noreferrer">
+              Changelog
+            </a>
           )}
         </div>
       </header>
 
       <div className="botinfo__grid">
         <div className="botinfo__card">
-          <div className="botinfo__card-title"><FaInfoCircle aria-hidden="true" /> Versões e Atualizações</div>
+          <div className="botinfo__card-title">
+            <FaInfoCircle aria-hidden="true" /> Versões e Atualizações
+          </div>
           <p className="botinfo__text">
             Este bot segue versionamento semântico (MAJOR.MINOR.PATCH). Atualizações podem incluir
-            correções, melhorias de heurísticas e suporte a novas redes. Consulte o changelog quando disponível.
+            correções, melhorias de heurísticas e suporte a novas redes. Consulte o changelog quando
+            disponível.
           </p>
         </div>
 
         <div className="botinfo__card">
-          <div className="botinfo__card-title"><FaCogs aria-hidden="true" /> Como funciona</div>
+          <div className="botinfo__card-title">
+            <FaCogs aria-hidden="true" /> Como funciona
+          </div>
           <ul className="botinfo__list" role="list">
             {howItWorks.map((item, idx) => (
-              <li key={idx} className="botinfo__list-item">{item}</li>
+              <li key={idx} className="botinfo__list-item">
+                {item}
+              </li>
             ))}
           </ul>
         </div>
 
         <div className="botinfo__card">
-          <div className="botinfo__card-title"><FaListUl aria-hidden="true" /> Requisitos</div>
+          <div className="botinfo__card-title">
+            <FaListUl aria-hidden="true" /> Requisitos
+          </div>
           <ul className="botinfo__list" role="list">
             {requirements.map((req, idx) => (
-              <li key={idx} className="botinfo__list-item">{req}</li>
+              <li key={idx} className="botinfo__list-item">
+                {req}
+              </li>
             ))}
           </ul>
         </div>
 
         {notes?.length ? (
           <div className="botinfo__card">
-            <div className="botinfo__card-title"><FaInfoCircle aria-hidden="true" /> Observações</div>
+            <div className="botinfo__card-title">
+              <FaInfoCircle aria-hidden="true" /> Observações
+            </div>
             <ul className="botinfo__list" role="list">
               {notes.map((n, idx) => (
-                <li key={idx} className="botinfo__list-item">{n}</li>
+                <li key={idx} className="botinfo__list-item">
+                  {n}
+                </li>
               ))}
             </ul>
           </div>
@@ -86,12 +112,14 @@ export default function BotDownloadInfo({
       <div className="botinfo__disclaimer" role="note" aria-label="Aviso legal">
         <FaExclamationTriangle aria-hidden="true" />
         <div>
-          <strong>Aviso Legal:</strong> Este aplicativo é disponibilizado "no estado em que se encontra" e destina-se
-          exclusivamente a fins educacionais. Ao realizar o download, o usuário declara estar ciente de que: (i) o uso
-          é de sua exclusiva responsabilidade; (ii) recomenda-se utilização segura, preferencialmente em ambiente de
-          testes e com valores reduzidos; (iii) não são oferecidas garantias, expressas ou implícitas, quanto à
-          adequação, desempenho, disponibilidade ou resultados; e (iv) os autores não se responsabilizam por perdas,
-          danos, fraudes, interrupções ou quaisquer prejuízos decorrentes do uso.
+          <strong>Aviso Legal:</strong> Este aplicativo é disponibilizado "no estado em que se
+          encontra" e destina-se exclusivamente a fins educacionais. Ao realizar o download, o
+          usuário declara estar ciente de que: (i) o uso é de sua exclusiva responsabilidade; (ii)
+          recomenda-se utilização segura, preferencialmente em ambiente de testes e com valores
+          reduzidos; (iii) não são oferecidas garantias, expressas ou implícitas, quanto à
+          adequação, desempenho, disponibilidade ou resultados; e (iv) os autores não se
+          responsabilizam por perdas, danos, fraudes, interrupções ou quaisquer prejuízos
+          decorrentes do uso.
         </div>
       </div>
 
@@ -107,8 +135,9 @@ export default function BotDownloadInfo({
           />
         </span>
         <span className="botinfo__terms-label">
-          Declaro que li, compreendi e <span className="botinfo__terms-accept">ACEITO</span> integralmente o aviso legal acima. Concordo em
-          utilizar o aplicativo com cautela, preferencialmente em ambiente de testes e com valores reduzidos.
+          Declaro que li, compreendi e <span className="botinfo__terms-accept">ACEITO</span>{" "}
+          integralmente o aviso legal acima. Concordo em utilizar o aplicativo com cautela,
+          preferencialmente em ambiente de testes e com valores reduzidos.
         </span>
       </label>
 

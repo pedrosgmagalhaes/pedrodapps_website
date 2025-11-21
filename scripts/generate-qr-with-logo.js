@@ -34,11 +34,15 @@ async function main() {
 
   // Prepara o logo
   const logoWidth = Math.round(size * logoScale);
-  const logoPng = await sharp(logoPath).resize(logoWidth, logoWidth, { fit: "contain" }).png().toBuffer();
+  const logoPng = await sharp(logoPath)
+    .resize(logoWidth, logoWidth, { fit: "contain" })
+    .png()
+    .toBuffer();
 
   // Fundo branco arredondado para melhorar a legibilidade do QR
   const backdropSize = logoWidth + logoBorder * 2;
-  const backdropSvg = `<svg width="${backdropSize}" height="${backdropSize}" xmlns="http://www.w3.org/2000/svg">` +
+  const backdropSvg =
+    `<svg width="${backdropSize}" height="${backdropSize}" xmlns="http://www.w3.org/2000/svg">` +
     `<rect x="0" y="0" width="${backdropSize}" height="${backdropSize}" rx="${logoRadius}" ry="${logoRadius}" fill="#ffffff"/>` +
     `</svg>`;
   const backdropPng = await sharp(Buffer.from(backdropSvg)).png().toBuffer();

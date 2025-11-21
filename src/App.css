@@ -8,9 +8,13 @@ main {
   z-index: 1;
 }
 
-img, svg, video, canvas, iframe {
-    max-width: unset;
-    height: unset;
+img,
+svg,
+video,
+canvas,
+iframe {
+  max-width: unset;
+  height: unset;
 }
 
 /* Layout específico para páginas de políticas: sem padding adicional no main */

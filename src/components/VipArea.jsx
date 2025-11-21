@@ -62,18 +62,33 @@ export default function VipArea() {
   const buildCheckoutUrl = () => {
     const base = new URLSearchParams({ course: "builders-de-elite", product: "plan-anual" });
     const src = new URLSearchParams(location.search);
-    ["utm_source","utm_medium","utm_campaign","utm_content","utm_term","ref","origin","gclid","fbclid","lang"].forEach((k) => {
+    [
+      "utm_source",
+      "utm_medium",
+      "utm_campaign",
+      "utm_content",
+      "utm_term",
+      "ref",
+      "origin",
+      "gclid",
+      "fbclid",
+      "lang",
+    ].forEach((k) => {
       const v = src.get(k);
       if (v) base.set(k, v);
     });
     const checkoutBase = (
       (import.meta?.env?.VITE_CHECKOUT_BASE_URL ??
-        (typeof globalThis !== "undefined" && typeof globalThis["__APP_CHECKOUT_BASE_URL__"] === "string"
+        (typeof globalThis !== "undefined" &&
+        typeof globalThis["__APP_CHECKOUT_BASE_URL__"] === "string"
           ? globalThis["__APP_CHECKOUT_BASE_URL__"]
-          : "")) || `${window.location.origin}/checkout`
+          : "")) ||
+      `${window.location.origin}/checkout`
     ).trim();
     const extra = collectContextParams();
-    Object.entries(extra).forEach(([k, v]) => { if (v !== undefined && v !== null && String(v).length > 0) base.set(k, String(v)); });
+    Object.entries(extra).forEach(([k, v]) => {
+      if (v !== undefined && v !== null && String(v).length > 0) base.set(k, String(v));
+    });
     return `${checkoutBase}?${base.toString()}`;
   };
   return (
@@ -105,15 +120,17 @@ export default function VipArea() {
               <img src={pixleyLogo} alt="Pixley" className="vip__pixley-logo" />
               <div className="vip__pixley-content">
                 <p className="vip__pixley-text">
-                  Ao entrar, você ganha uma conta <strong>Premium</strong> na Pixley Wallet com benefícios
-                  exclusivos:
+                  Ao entrar, você ganha uma conta <strong>Premium</strong> na Pixley Wallet com
+                  benefícios exclusivos:
                 </p>
                 <ul className="vip__pixley-benefits">
                   <li className="vip__pixley-benefit">
                     <span className="vip__item-icon" aria-hidden="true">
                       <img src={checkNavy} alt="" />
                     </span>
-                    <span className="vip__pixley-benefit-text">Descontos nas tarifas e operações</span>
+                    <span className="vip__pixley-benefit-text">
+                      Descontos nas tarifas e operações
+                    </span>
                   </li>
                   <li className="vip__pixley-benefit">
                     <span className="vip__item-icon" aria-hidden="true">
@@ -121,15 +138,17 @@ export default function VipArea() {
                     </span>
                     <span className="vip__pixley-benefit-text">
                       Cashbacks em <strong>USDT</strong>
-                      <img src={usdtIcon} alt="USDT" className="vip__inline-icon" />
-                      {" "}em serviços selecionados
+                      <img src={usdtIcon} alt="USDT" className="vip__inline-icon" /> em serviços
+                      selecionados
                     </span>
                   </li>
                   <li className="vip__pixley-benefit">
                     <span className="vip__item-icon" aria-hidden="true">
                       <img src={checkNavy} alt="" />
                     </span>
-                    <span className="vip__pixley-benefit-text">Atendimento exclusivo e prioritário</span>
+                    <span className="vip__pixley-benefit-text">
+                      Atendimento exclusivo e prioritário
+                    </span>
                   </li>
                 </ul>
                 <div className="vip__pixley-footnote">
@@ -182,7 +201,11 @@ export default function VipArea() {
                 <span className="vip-card__amount">487,58</span>
                 <span className="vip-card__period">por ano</span>
               </div>
-              <a href={buildCheckoutUrl()} className="vip-card__cta" aria-label="Quero comprar agora">
+              <a
+                href={buildCheckoutUrl()}
+                className="vip-card__cta"
+                aria-label="Quero comprar agora"
+              >
                 Quero comprar agora
               </a>
               <div className="vip-card__footnote">Pagamento seguro • Cartão</div>

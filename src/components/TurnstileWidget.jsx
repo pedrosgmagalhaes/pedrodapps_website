@@ -1,11 +1,11 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from "react";
 
 export default function TurnstileWidget({
   sitekey = import.meta.env.VITE_TURNSTILE_SITEKEY,
-  theme = 'dark',
-  size = 'normal',
+  theme = "dark",
+  size = "normal",
   onToken = () => {},
-  className = 'turnstile__container',
+  className = "turnstile__container",
 }) {
   const containerRef = useRef(null);
   const [widgetId, setWidgetId] = useState(null);
@@ -29,7 +29,11 @@ export default function TurnstileWidget({
             theme,
             size,
             callback: (token) => {
-              try { onToken(token); } catch (e) { void e; }
+              try {
+                onToken(token);
+              } catch (e) {
+                void e;
+              }
             },
           });
           setWidgetId(id);

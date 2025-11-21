@@ -1,5 +1,5 @@
 .news-ticker {
-  background: #24263B;
+  background: #24263b;
   color: var(--neutral-white);
   border-top: 1px solid rgb(255 255 255 / 8%);
   border-bottom: 1px solid rgb(255 255 255 / 8%);
@@ -41,7 +41,9 @@
   height: 10px;
   border-radius: 999px;
   background: var(--accent-primary); /* verde da marca para "ao vivo" */
-  box-shadow: 0 0 0 4px rgb(123 227 61 / 18%), 0 0 12px rgb(123 227 61 / 35%);
+  box-shadow:
+    0 0 0 4px rgb(123 227 61 / 18%),
+    0 0 12px rgb(123 227 61 / 35%);
 }
 
 .live-indicator::before,
@@ -86,6 +88,7 @@
   padding: 0;
   margin: -1px;
   overflow: hidden;
+
   /* Substitui propriedade deprecated 'clip' por 'clip-path' */
   clip-path: inset(50%);
   white-space: nowrap;
@@ -120,22 +123,14 @@
   left: 0;
 
   /* sombra lateral adaptada para combinar com o fundo #24263B */
-  background: linear-gradient(
-    to right,
-    rgb(36 38 59 / 100%) 0%,
-    rgb(36 38 59 / 0%) 100%
-  );
+  background: linear-gradient(to right, rgb(36 38 59 / 100%) 0%, rgb(36 38 59 / 0%) 100%);
 }
 
 .news-ticker__track::after {
   right: 0;
 
   /* sombra lateral adaptada para combinar com o fundo #24263B */
-  background: linear-gradient(
-    to left,
-    rgb(36 38 59 / 100%) 0%,
-    rgb(36 38 59 / 0%) 100%
-  );
+  background: linear-gradient(to left, rgb(36 38 59 / 100%) 0%, rgb(36 38 59 / 0%) 100%);
 }
 
 .news-ticker__list {
@@ -159,7 +154,9 @@
   color: var(--neutral-white);
   text-decoration: none;
   opacity: 0.9;
-  transition: color 0.2s ease, opacity 0.2s ease;
+  transition:
+    color 0.2s ease,
+    opacity 0.2s ease;
 }
 
 .news-ticker__link:hover {
@@ -198,7 +195,7 @@
 }
 
 .news-ticker__change.up {
-  color: #7BE33D; /* verde da paleta */
+  color: #7be33d; /* verde da paleta */
 }
 
 .news-ticker__change.down {
@@ -237,8 +234,9 @@
 
 /* Responsivo: ajustar velocidade em telas menores */
 @media (width < 768px) {
-  .news-ticker__list {
+  .news-ticker .news-ticker__list {
     animation-duration: 32s;
+    gap: var(--spacing-md);
   }
 
   /* Reduzir altura e tipografia no mobile */
@@ -260,7 +258,9 @@
   .live-indicator {
     width: 8px;
     height: 8px;
-    box-shadow: 0 0 0 3px rgb(123 227 61 / 18%), 0 0 8px rgb(123 227 61 / 30%);
+    box-shadow:
+      0 0 0 3px rgb(123 227 61 / 18%),
+      0 0 8px rgb(123 227 61 / 30%);
   }
 
   .news-ticker__icon-img {
@@ -276,9 +276,5 @@
   .news-ticker__change {
     font-size: 10px;
     padding: 0 6px;
-  }
-
-  .news-ticker__list {
-    gap: var(--spacing-md);
   }
 }

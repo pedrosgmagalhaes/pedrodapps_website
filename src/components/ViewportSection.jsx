@@ -2,7 +2,12 @@ import React, { useEffect, useRef, useState } from "react";
 
 // Renderiza children somente quando o wrapper entra na viewport.
 // Evita montar componentes pesados até serem necessários.
-export default function ViewportSection({ children, threshold = 0.15, rootMargin = "0px 0px -10% 0px", minHeight = 180 }) {
+export default function ViewportSection({
+  children,
+  threshold = 0.15,
+  rootMargin = "0px 0px -10% 0px",
+  minHeight = 180,
+}) {
   const ref = useRef(null);
   const [isVisible, setIsVisible] = useState(false);
 

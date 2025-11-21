@@ -29,7 +29,9 @@ export default function ScriptsShowcase() {
         <ul className="scripts__grid">
           {SCRIPTS.map((text, i) => (
             <li className="scripts__item" key={i}>
-              <span className="scripts__bullet" aria-hidden="true">{i + 1}</span>
+              <span className="scripts__bullet" aria-hidden="true">
+                {i + 1}
+              </span>
               <span className="scripts__text">{text}</span>
             </li>
           ))}

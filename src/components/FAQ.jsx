@@ -1,6 +1,6 @@
 import React from "react";
 import "./FAQ.css";
-import pixleyMobile from "../assets/pixley_app.png"; 
+import pixleyMobile from "../assets/pixley_app.png";
 import { FaChevronDown } from "react-icons/fa";
 
 const faqs = [
@@ -45,7 +45,9 @@ export default function FAQ() {
       <div className="container faq__container">
         <div className="faq__left">
           <header className="faq__header">
-            <span className="faq__badge" aria-hidden="true">FAQ</span>
+            <span className="faq__badge" aria-hidden="true">
+              FAQ
+            </span>
             <h2 className="faq__title">
               Perguntas <span className="faq__title--accent">Frequentes</span>
             </h2>
@@ -54,7 +56,9 @@ export default function FAQ() {
           <ul className="faq__list">
             {faqs.map((item, idx) => (
               <li className={`faq__item ${openIndex === idx ? "faq__item--open" : ""}`} key={idx}>
-                <span className="faq__bullet" aria-hidden="true">{idx + 1}</span>
+                <span className="faq__bullet" aria-hidden="true">
+                  {idx + 1}
+                </span>
                 <div className="faq__content">
                   <button
                     className="faq__question-btn"

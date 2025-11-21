@@ -97,7 +97,18 @@ const location = useLocation();
 const buildCheckoutUrl = () => {
   const base = new URLSearchParams({ course: "builders-de-elite", product: "plan-anual" });
   const src = new URLSearchParams(location.search);
-  ["utm_source","utm_medium","utm_campaign","utm_content","utm_term","ref","origin","gclid","fbclid","lang"].forEach((k) => {
+  [
+    "utm_source",
+    "utm_medium",
+    "utm_campaign",
+    "utm_content",
+    "utm_term",
+    "ref",
+    "origin",
+    "gclid",
+    "fbclid",
+    "lang",
+  ].forEach((k) => {
     const v = src.get(k);
     if (v) base.set(k, v);
   });
@@ -126,4 +137,3 @@ const buildCheckoutUrl = () => {
 
 - Preço exibindo `—`:
   - Falta de `ctx.product.totalCents` ou `ctx.course.priceCents` do backend. Verifique o endpoint de contexto.
-

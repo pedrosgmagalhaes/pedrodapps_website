@@ -59,7 +59,7 @@ Este documento descreve o conjunto de cores utilizado no projeto, com base nos t
 
 ### Paleta "Concrete"
 
-- 
+-
 - `--concrete-lightest: #fdfdfd`
 - `--concrete-lighter: #fcfcfc`
 - `--concrete-light: #f8f8f8`

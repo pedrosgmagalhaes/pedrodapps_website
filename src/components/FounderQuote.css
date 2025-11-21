@@ -130,6 +130,7 @@
   height: clamp(360px, 72vh, 640px); /* mais altura */
   width: auto;
   will-change: transform, filter;
+
   /* manter apenas a sombra, sem coloração no retrato */
   filter: drop-shadow(0 16px 30px rgb(0 0 0 / 35%));
 }
@@ -153,10 +154,12 @@
 }
 
 @keyframes ledPulse {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 0.22;
     transform: scale(0.98);
   }
+
   50% {
     opacity: 0.55;
     transform: scale(1.03);

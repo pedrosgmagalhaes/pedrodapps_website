@@ -25,9 +25,11 @@
   0% {
     transform: translateY(0);
   }
+
   50% {
     transform: translateY(-2px);
   }
+
   100% {
     transform: translateY(0);
   }
@@ -356,7 +358,6 @@
 .login__oauth {
   margin-top: 16px;
   display: grid;
-  gap: 12px;
   grid-template-columns: 1fr;
   gap: 8px;
   margin-left: 5px;
@@ -381,7 +382,7 @@
     transform 160ms ease,
     box-shadow 160ms ease;
   border-radius: var(--border-radius-sm); /* raio menor para combinar com Google */
-  font-size: var(--font-size-base); /* texto menor (~14px) como o Google */;
+  font-size: var(--font-size-base); /* texto menor (~14px) como o Google */
   min-height: 44px; /* altura igual ao Google size=large */
   padding: 10px var(--spacing-lg); /* vertical próximo ao Google */
 }
@@ -502,13 +503,16 @@
   .login__card {
     padding: 18px;
   }
+
   .login__title {
     font-size: 20px;
   }
+
   .login__link {
     font-size: 11px;
   }
 }
+
 .login__input-wrapper--email .login__input {
   width: 100%;
   padding-left: 40px; /* aproximar o texto do ícone de envelope */
@@ -572,7 +576,7 @@
 }
 
 .login__modal-text {
-  margin: 0 0 12px 0;
+  margin: 0 0 12px;
   color: var(--text-primary);
   font-size: 14px;
 }
@@ -622,6 +626,7 @@
     padding: 8px 12px;
   }
 }
+
 .login__checking {
   display: inline-flex;
   align-items: center;
@@ -633,12 +638,17 @@
   width: 16px;
   height: 16px;
   border-radius: 50%;
-  border: 2px solid rgba(255,255,255,0.25);
+  border: 2px solid rgb(255 255 255 / 25%);
   border-top-color: var(--accent-primary);
   animation: loginSpinnerRotate 0.8s linear infinite;
 }
 
 @keyframes loginSpinnerRotate {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
 }

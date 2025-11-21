@@ -6,7 +6,9 @@ export default function Videos() {
     <section className="resources" id="videos" aria-labelledby="videos-title">
       <div className="resources__container">
         <header className="resources__header">
-          <h2 id="videos-title" className="resources__title">Videos</h2>
+          <h2 id="videos-title" className="resources__title">
+            Videos
+          </h2>
           <p className="resources__subtitle">Recorded content and lessons for Builders de Elite.</p>
         </header>
 

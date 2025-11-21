@@ -8,7 +8,11 @@ export default function GoogleLogin({ onSuccess, onError }) {
   const [missingClientId, setMissingClientId] = useState(false);
 
   useEffect(() => {
-    const clientId = import.meta?.env?.VITE_GOOGLE_CLIENT_ID || (typeof __APP_VITE_GOOGLE_CLIENT_ID__ !== "undefined" ? __APP_VITE_GOOGLE_CLIENT_ID__ : undefined);
+    const clientId =
+      import.meta?.env?.VITE_GOOGLE_CLIENT_ID ||
+      (typeof __APP_VITE_GOOGLE_CLIENT_ID__ !== "undefined"
+        ? __APP_VITE_GOOGLE_CLIENT_ID__
+        : undefined);
     if (!clientId) {
       if (import.meta?.env?.DEV) {
         console.warn("VITE_GOOGLE_CLIENT_ID não definido. Google Login desativado.");
@@ -53,10 +57,11 @@ export default function GoogleLogin({ onSuccess, onError }) {
           if (btnRef.current?.style) {
             btnRef.current.style.width = "100%";
           }
-          const rect = typeof btnRef.current?.getBoundingClientRect === "function"
-            ? btnRef.current.getBoundingClientRect()
-            : null;
-          const width = rect ? Math.floor(rect.width) : (btnRef.current?.offsetWidth || 320);
+          const rect =
+            typeof btnRef.current?.getBoundingClientRect === "function"
+              ? btnRef.current.getBoundingClientRect()
+              : null;
+          const width = rect ? Math.floor(rect.width) : btnRef.current?.offsetWidth || 320;
           if (import.meta?.env?.DEV && typeof console !== "undefined" && console.log) {
             console.log("[GoogleLogin] Renderizando botão com largura:", width);
           }
@@ -75,12 +80,29 @@ export default function GoogleLogin({ onSuccess, onError }) {
         if (window.google?.accounts?.id?.prompt) {
           window.google.accounts.id.prompt((notification) => {
             try {
-              const type = typeof notification?.getMomentType === "function" ? notification.getMomentType() : null;
-              const notDisplayed = typeof notification?.getNotDisplayedReason === "function" ? notification.getNotDisplayedReason() : null;
-              const skipped = typeof notification?.getSkippedReason === "function" ? notification.getSkippedReason() : null;
-              const dismissed = typeof notification?.getDismissedReason === "function" ? notification.getDismissedReason() : null;
+              const type =
+                typeof notification?.getMomentType === "function"
+                  ? notification.getMomentType()
+                  : null;
+              const notDisplayed =
+                typeof notification?.getNotDisplayedReason === "function"
+                  ? notification.getNotDisplayedReason()
+                  : null;
+              const skipped =
+                typeof notification?.getSkippedReason === "function"
+                  ? notification.getSkippedReason()
+                  : null;
+              const dismissed =
+                typeof notification?.getDismissedReason === "function"
+                  ? notification.getDismissedReason()
+                  : null;
               if (import.meta?.env?.DEV && typeof console !== "undefined" && console.debug) {
-                console.debug("[GoogleLogin] One Tap moment:", { type, notDisplayed, skipped, dismissed });
+                console.debug("[GoogleLogin] One Tap moment:", {
+                  type,
+                  notDisplayed,
+                  skipped,
+                  dismissed,
+                });
               }
             } catch {
               // Ignora falhas em ambientes sem FedCM ou em navegadores antigos
@@ -106,17 +128,20 @@ export default function GoogleLogin({ onSuccess, onError }) {
 
   if (missingClientId && import.meta?.env?.DEV) {
     return (
-      <div style={{
-        width: "100%",
-        maxWidth: 420,
-        margin: "8px 0",
-        textAlign: "center",
-        color: "rgb(255 255 255 / 65%)",
-        fontWeight: 300,
-        fontSize: 12,
-        lineHeight: 1.6,
-      }}>
-        Configure <code>VITE_GOOGLE_CLIENT_ID</code> em <code>.env.local</code> e reinicie o servidor para habilitar o login com Google.
+      <div
+        style={{
+          width: "100%",
+          maxWidth: 420,
+          margin: "8px 0",
+          textAlign: "center",
+          color: "rgb(255 255 255 / 65%)",
+          fontWeight: 300,
+          fontSize: 12,
+          lineHeight: 1.6,
+        }}
+      >
+        Configure <code>VITE_GOOGLE_CLIENT_ID</code> em <code>.env.local</code> e reinicie o
+        servidor para habilitar o login com Google.
       </div>
     );
   }

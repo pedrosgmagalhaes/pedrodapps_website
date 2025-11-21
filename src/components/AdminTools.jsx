@@ -46,21 +46,30 @@ export default function AdminTools() {
         </label>
         <label>
           <div>Admin Token</div>
-          <input type="text" value={adminToken} onChange={(e) => setAdminToken(e.target.value)} required />
+          <input
+            type="text"
+            value={adminToken}
+            onChange={(e) => setAdminToken(e.target.value)}
+            required
+          />
         </label>
         <div style={{ display: "flex", gap: "0.5rem" }}>
           <button type="submit" className="btn btn-primary" disabled={loading}>
             {loading ? "Enviando..." : "Enviar"}
           </button>
-          <button type="button" onClick={() => { setResult(null); setError(null); }}>
+          <button
+            type="button"
+            onClick={() => {
+              setResult(null);
+              setError(null);
+            }}
+          >
             Limpar resultado
           </button>
         </div>
       </form>
 
-      {error && (
-        <div style={{ marginTop: "1rem", color: "#b00020" }}>Erro: {error}</div>
-      )}
+      {error && <div style={{ marginTop: "1rem", color: "#b00020" }}>Erro: {error}</div>}
 
       {result && (
         <div style={{ marginTop: "1rem" }}>

@@ -1,7 +1,15 @@
 import React, { useMemo, useEffect, useState } from "react";
 import { API } from "../../lib/api";
 import "./Bots.css";
-import { FaPlay, FaDownload, FaLifeRing, FaCheckCircle, FaTimesCircle, FaExclamationTriangle, FaShieldAlt } from "react-icons/fa";
+import {
+  FaPlay,
+  FaDownload,
+  FaLifeRing,
+  FaCheckCircle,
+  FaTimesCircle,
+  FaExclamationTriangle,
+  FaShieldAlt,
+} from "react-icons/fa";
 import { useLocation } from "react-router-dom";
 import { collectContextParams } from "../../lib/checkoutTelemetry";
 
@@ -10,18 +18,33 @@ export default function HoneypotDetector() {
   const buildCheckoutUrl = () => {
     const base = new URLSearchParams({ course: "builders-de-elite", product: "plan-anual" });
     const src = new URLSearchParams(location.search);
-    ["utm_source","utm_medium","utm_campaign","utm_content","utm_term","ref","origin","gclid","fbclid","lang"].forEach((k) => {
+    [
+      "utm_source",
+      "utm_medium",
+      "utm_campaign",
+      "utm_content",
+      "utm_term",
+      "ref",
+      "origin",
+      "gclid",
+      "fbclid",
+      "lang",
+    ].forEach((k) => {
       const v = src.get(k);
       if (v) base.set(k, v);
     });
     const checkoutBase = (
       (import.meta?.env?.VITE_CHECKOUT_BASE_URL ??
-        (typeof globalThis !== "undefined" && typeof globalThis["__APP_CHECKOUT_BASE_URL__"] === "string"
+        (typeof globalThis !== "undefined" &&
+        typeof globalThis["__APP_CHECKOUT_BASE_URL__"] === "string"
           ? globalThis["__APP_CHECKOUT_BASE_URL__"]
-          : "")) || `${window.location.origin}/checkout`
+          : "")) ||
+      `${window.location.origin}/checkout`
     ).trim();
     const extra = collectContextParams();
-    Object.entries(extra).forEach(([k, v]) => { if (v !== undefined && v !== null && String(v).length > 0) base.set(k, String(v)); });
+    Object.entries(extra).forEach(([k, v]) => {
+      if (v !== undefined && v !== null && String(v).length > 0) base.set(k, String(v));
+    });
     return `${checkoutBase}?${base.toString()}`;
   };
   const [address, setAddress] = useState("");
@@ -55,9 +78,7 @@ export default function HoneypotDetector() {
       if (!res?.error) {
         setModuleInfo(res?.module || res);
         const materials = res?.module?.materials || res?.materials || [];
-        const candidate = Array.isArray(materials)
-          ? materials.find((m) => m?.url)
-          : null;
+        const candidate = Array.isArray(materials) ? materials.find((m) => m?.url) : null;
         setDownloadUrl(candidate?.url || "");
       }
     }
@@ -122,34 +143,58 @@ export default function HoneypotDetector() {
       <div className="bot__container">
         <div className="bot__layout">
           <aside className="bot__sidebar" aria-label="Bot resources">
-            <div className="bot__title" id="bot-title">{headerTitle}</div>
+            <div className="bot__title" id="bot-title">
+              {headerTitle}
+            </div>
             <div className="bot__sidebar-list">
-              <a className="bot__sidebar-item" href="/lessons" onClick={(e) => handleGateClick(e, () => { window.location.href = "/lessons"; })}>
-                <span className="icon"><FaPlay /></span>
+              <a
+                className="bot__sidebar-item"
+                href="/lessons"
+                onClick={(e) =>
+                  handleGateClick(e, () => {
+                    window.location.href = "/lessons";
+                  })
+                }
+              >
+                <span className="icon">
+                  <FaPlay />
+                </span>
                 <span>Video Lesson</span>
                 <span className="action">Open</span>
               </a>
               {isBeforeRelease() ? (
-                <button className="bot__sidebar-item" type="button" onClick={(e) => handleGateClick(e)}>
-                  <span className="icon"><FaDownload /></span>
+                <button
+                  className="bot__sidebar-item"
+                  type="button"
+                  onClick={(e) => handleGateClick(e)}
+                >
+                  <span className="icon">
+                    <FaDownload />
+                  </span>
                   <span>Download Bot</span>
                   <span className="action">Em breve</span>
                 </button>
               ) : moduleInfo?.locked ? (
                 <a className="bot__sidebar-item" href={buildCheckoutUrl()}>
-                  <span className="icon"><FaDownload /></span>
+                  <span className="icon">
+                    <FaDownload />
+                  </span>
                   <span>Download Bot</span>
                   <span className="action">Assinar</span>
                 </a>
               ) : downloadUrl ? (
                 <a className="bot__sidebar-item" href={downloadUrl} download>
-                  <span className="icon"><FaDownload /></span>
+                  <span className="icon">
+                    <FaDownload />
+                  </span>
                   <span>Download Bot</span>
                   <span className="action">Download</span>
                 </a>
               ) : null}
               <a className="bot__sidebar-item" href="/links">
-                <span className="icon"><FaLifeRing /></span>
+                <span className="icon">
+                  <FaLifeRing />
+                </span>
                 <span>Support</span>
                 <span className="action">Open</span>
               </a>
@@ -160,21 +205,52 @@ export default function HoneypotDetector() {
             <div className="bot__content-header">
               <div className="bot__content-title">Simulator</div>
               <div className="bot__actions">
-                <button className="bot__btn" type="button" onClick={runAnalysis}>Run</button>
+                <button className="bot__btn" type="button" onClick={runAnalysis}>
+                  Run
+                </button>
               </div>
             </div>
 
             <div className="bot__body">
-              <form className="bot__form" onSubmit={(e) => { e.preventDefault(); runAnalysis(); }}>
-                <input className="bot__input" type="text" placeholder="Token address (0x...)" value={address} onChange={(e) => setAddress(e.target.value)} aria-label="Token address" />
-                <select className="bot__select" value={network} onChange={(e) => setNetwork(e.target.value)} aria-label="Network">
+              <form
+                className="bot__form"
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  runAnalysis();
+                }}
+              >
+                <input
+                  className="bot__input"
+                  type="text"
+                  placeholder="Token address (0x...)"
+                  value={address}
+                  onChange={(e) => setAddress(e.target.value)}
+                  aria-label="Token address"
+                />
+                <select
+                  className="bot__select"
+                  value={network}
+                  onChange={(e) => setNetwork(e.target.value)}
+                  aria-label="Network"
+                >
                   <option>Ethereum</option>
                   <option>BSC</option>
                   <option>Polygon</option>
                   <option>Arbitrum</option>
                 </select>
-                <input className="bot__input" type="number" min="0" max="100" step="1" value={slippage} onChange={(e) => setSlippage(Number(e.target.value))} aria-label="Slippage (%)" />
-                <button className="bot__run" type="submit">Analyze</button>
+                <input
+                  className="bot__input"
+                  type="number"
+                  min="0"
+                  max="100"
+                  step="1"
+                  value={slippage}
+                  onChange={(e) => setSlippage(Number(e.target.value))}
+                  aria-label="Slippage (%)"
+                />
+                <button className="bot__run" type="submit">
+                  Analyze
+                </button>
               </form>
 
               {results && (
@@ -192,29 +268,54 @@ export default function HoneypotDetector() {
                         <strong>{results.network}</strong>
                       </div>
                       <div className="bot__result-item">
-                        {results.tradeAllowed ? <FaCheckCircle className="ok" /> : <FaTimesCircle className="err" />}
+                        {results.tradeAllowed ? (
+                          <FaCheckCircle className="ok" />
+                        ) : (
+                          <FaTimesCircle className="err" />
+                        )}
                         <span>Trade allowed</span>
                       </div>
                       <div className="bot__result-item">
-                        {(results.sellTax ?? 0) < 20 ? <FaCheckCircle className="ok" /> : <FaExclamationTriangle className="warn" />}
+                        {(results.sellTax ?? 0) < 20 ? (
+                          <FaCheckCircle className="ok" />
+                        ) : (
+                          <FaExclamationTriangle className="warn" />
+                        )}
                         <span>Estimated sell tax</span>
                         <strong>{String(results.sellTax)}%</strong>
                       </div>
                       <div className="bot__result-item">
-                        {results.transferOk ? <FaCheckCircle className="ok" /> : <FaTimesCircle className="err" />}
+                        {results.transferOk ? (
+                          <FaCheckCircle className="ok" />
+                        ) : (
+                          <FaTimesCircle className="err" />
+                        )}
                         <span>Transfer passes basic simulation</span>
                       </div>
                       <div className="bot__result-item">
-                        {results.blacklistFunctions ? <FaExclamationTriangle className="warn" /> : <FaCheckCircle className="ok" />}
+                        {results.blacklistFunctions ? (
+                          <FaExclamationTriangle className="warn" />
+                        ) : (
+                          <FaCheckCircle className="ok" />
+                        )}
                         <span>Blacklist/whitelist functions present</span>
                       </div>
                       <div className="bot__result-item">
-                        {results.ownerRenounced ? <FaCheckCircle className="ok" /> : <FaExclamationTriangle className="warn" />}
+                        {results.ownerRenounced ? (
+                          <FaCheckCircle className="ok" />
+                        ) : (
+                          <FaExclamationTriangle className="warn" />
+                        )}
                         <span>Owner renounced</span>
                       </div>
-                      {results.warnings?.length ? results.warnings.map((w, i) => (
-                        <div key={i} className="bot__result-item"><FaExclamationTriangle className="warn" /><span>{w}</span></div>
-                      )) : null}
+                      {results.warnings?.length
+                        ? results.warnings.map((w, i) => (
+                            <div key={i} className="bot__result-item">
+                              <FaExclamationTriangle className="warn" />
+                              <span>{w}</span>
+                            </div>
+                          ))
+                        : null}
                     </>
                   )}
                 </div>
@@ -262,7 +363,9 @@ export default function HoneypotDetector() {
             </div>
             {!isBeforeRelease() && (
               <div style={{ marginTop: 12 }}>
-                <button className="bot__btn" type="button" onClick={() => setShowGate(false)}>Entrar</button>
+                <button className="bot__btn" type="button" onClick={() => setShowGate(false)}>
+                  Entrar
+                </button>
               </div>
             )}
           </div>

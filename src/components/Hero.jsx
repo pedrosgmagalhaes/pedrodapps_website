@@ -10,8 +10,7 @@ const Hero = () => {
       <MatrixRain />
       <div className="container">
         <div className="hero__layout">
-          <div className="hero__content">
-          </div>
+          <div className="hero__content"></div>
         </div>
       </div>
     </section>

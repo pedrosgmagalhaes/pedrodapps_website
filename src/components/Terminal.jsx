@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { FaPlay, FaSpinner, FaCode } from "react-icons/fa";
+import { FaPlay, FaSpinner } from "react-icons/fa";
 import { runPython, installPackages } from "../lib/pythonRunner";
 
 export default function Terminal({
@@ -15,9 +15,7 @@ export default function Terminal({
   const [running, setRunning] = useState(false);
 
   const numberedCode = Array.isArray(codeLines)
-    ? codeLines
-        .map((line, idx) => `${String(idx + 1).padEnd(3, " ")}${line}`)
-        .join("\n")
+    ? codeLines.map((line, idx) => `${String(idx + 1).padEnd(3, " ")}${line}`).join("\n")
     : "";
 
   const run = () => {
@@ -27,11 +25,7 @@ export default function Terminal({
     const ts = new Date().toLocaleTimeString();
 
     setRunning(true);
-    setOutput((prev) => [
-      ...prev,
-      `[${ts}] ${promptLabel} ${effectiveCmd}`,
-      "Aguarde...",
-    ]);
+    setOutput((prev) => [...prev, `[${ts}] ${promptLabel} ${effectiveCmd}`, "Aguarde..."]);
     setCommand("");
 
     (async () => {
@@ -58,7 +52,9 @@ export default function Terminal({
               }
             } else {
               // Support "pip install <pkg>" via micropip
-              const pipMatch = /^pip\s+install\s+([A-Za-z0-9_.\-]+)(?:==([^\s]+))?/.exec(effectiveCmd);
+              const pipMatch = /^pip\s+install\s+([A-Za-z0-9_.-]+)(?:==([^\s]+))?/.exec(
+                effectiveCmd
+              );
               if (pipMatch) {
                 const pkg = pipMatch[1];
                 const ver = pipMatch[2];
@@ -70,52 +66,23 @@ export default function Terminal({
                   lines.push(`[erro] instalação falhou: ${res.error || "erro desconhecido"}`);
                 }
               } else {
-              switch (effectiveCmd) {
-                case "hello":
-                case 'print("Hello World")':
-                  lines.push("Hello World");
-                  lines.push("Bem-vindo ao grupo Builders de Elite!");
-                  lines.push(
-                    "use com moderação; fique atento às lives e à comunidade"
-                  );
-                  break;
-                default:
-                  lines.push(`[erro] comando desconhecido: ${effectiveCmd}`);
-                  lines.push(`disponível: 'hello' — tente digitar 'hello' ou 'print("Hello World")'`);
-                  break;
-              }
+                switch (effectiveCmd) {
+                  case "hello":
+                  case 'print("Hello World")':
+                    lines.push("Hello World");
+                    lines.push("Bem-vindo ao grupo Builders de Elite!");
+                    lines.push("use com moderação; fique atento às lives e à comunidade");
+                    break;
+                  default:
+                    lines.push(`[erro] comando desconhecido: ${effectiveCmd}`);
+                    lines.push(
+                      `disponível: 'hello' — tente digitar 'hello' ou 'print("Hello World")'`
+                    );
+                    break;
+                }
               }
             }
           }
-        }
-      } catch (err) {
-        lines = lines.concat([`[erro] ${String(err?.message || err)}`]);
-      }
-      setOutput((prev) => [...prev, ...lines]);
-      setRunning(false);
-    })();
-  };
-
-  // Remove runCodeBlock function and related button
-  const runCodeBlock = () => {
-    if (running) return;
-    const codeText = Array.isArray(codeLines) ? codeLines.join("\n") : String(codeLines || "");
-    const ts = new Date().toLocaleTimeString();
-    setRunning(true);
-    setOutput((prev) => [
-      ...prev,
-      `[${ts}] ${promptLabel} EXECUTAR CÓDIGO ACIMA`,
-      "Aguarde...",
-    ]);
-    (async () => {
-      let lines = [];
-      try {
-        const result = await runPython(codeText, 10000);
-        if (result.ok) {
-          const out = String(result.stdout || "").trimEnd();
-          lines = lines.concat(out ? out.split(/\n/) : ["(sem saída)"]);
-        } else {
-          lines = lines.concat([`[erro] ${result.error || "Falha ao executar código"}`]);
         }
       } catch (err) {
         lines = lines.concat([`[erro] ${String(err?.message || err)}`]);
@@ -162,11 +129,7 @@ export default function Terminal({
       </div>
 
       <div className="home__terminal-body">
-        <pre
-          className="home__code"
-          aria-label="Editor de código simulado"
-          aria-live="polite"
-        >
+        <pre className="home__code" aria-label="Editor de código simulado" aria-live="polite">
           {numberedCode}
           {output.length ? "\n" : ""}
           {output.map((line, i) => (

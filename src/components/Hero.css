@@ -1,11 +1,12 @@
 /* Seção Hero */
 .hero {
-  background-color: #100E04;
+  background-color: #100e04;
   padding: 160px 0 0; /* mais altura e espaçamento inferior */
   color: var(--text-primary);
   text-shadow: none; /* remove quaisquer sombras no bloco */
   position: relative; /* permite sobreposição decorativa à direita */
   overflow: hidden; /* garante que o overlay ocupe toda a seção sem gerar scroll */
+
   /* Imagem contida; cor sólida #100E04 preenche o restante */
   background-image: url("../assets/builderselite.png");
   background-size: contain;

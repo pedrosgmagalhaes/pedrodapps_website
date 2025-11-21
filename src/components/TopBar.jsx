@@ -19,8 +19,10 @@ export default function TopBar() {
       const target = e.target;
       if (open) {
         if (
-          menuRef.current && !menuRef.current.contains(target) &&
-          btnRef.current && !btnRef.current.contains(target)
+          menuRef.current &&
+          !menuRef.current.contains(target) &&
+          btnRef.current &&
+          !btnRef.current.contains(target)
         ) {
           setOpen(false);
         }
@@ -48,7 +50,9 @@ export default function TopBar() {
     <header className="topbar" role="banner">
       <div className="topbar__left">
         <img src={pedrodappsIcon} alt="Pedro dApps" className="topbar__brand" />
-        <span className="topbar__title" aria-hidden="true">Pedro dApps</span>
+        <span className="topbar__title" aria-hidden="true">
+          Pedro dApps
+        </span>
       </div>
       <div className="topbar__right" aria-label="User menu" role="navigation">
         <div className="topbar__language">

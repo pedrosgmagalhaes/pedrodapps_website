@@ -9,18 +9,33 @@ export default function Lessons() {
   const buildCheckoutUrl = () => {
     const base = new URLSearchParams({ course: "builders-de-elite", product: "plan-anual" });
     const src = new URLSearchParams(location.search);
-    ["utm_source","utm_medium","utm_campaign","utm_content","utm_term","ref","origin","gclid","fbclid","lang"].forEach((k) => {
+    [
+      "utm_source",
+      "utm_medium",
+      "utm_campaign",
+      "utm_content",
+      "utm_term",
+      "ref",
+      "origin",
+      "gclid",
+      "fbclid",
+      "lang",
+    ].forEach((k) => {
       const v = src.get(k);
       if (v) base.set(k, v);
     });
     const checkoutBase = (
       (import.meta?.env?.VITE_CHECKOUT_BASE_URL ??
-        (typeof globalThis !== "undefined" && typeof globalThis["__APP_CHECKOUT_BASE_URL__"] === "string"
+        (typeof globalThis !== "undefined" &&
+        typeof globalThis["__APP_CHECKOUT_BASE_URL__"] === "string"
           ? globalThis["__APP_CHECKOUT_BASE_URL__"]
-          : "")) || `${window.location.origin}/checkout`
+          : "")) ||
+      `${window.location.origin}/checkout`
     ).trim();
     const extra = collectContextParams();
-    Object.entries(extra).forEach(([k, v]) => { if (v !== undefined && v !== null && String(v).length > 0) base.set(k, String(v)); });
+    Object.entries(extra).forEach(([k, v]) => {
+      if (v !== undefined && v !== null && String(v).length > 0) base.set(k, String(v));
+    });
     return `${checkoutBase}?${base.toString()}`;
   };
   const [course, setCourse] = useState(null);
@@ -122,16 +137,28 @@ export default function Lessons() {
   async function toggleLike(threadId, liked) {
     if (!threadId) return;
     try {
-      setQuestions((prev) => prev.map((q) => (q.id === threadId ? { ...q, liked: !liked, likes: (q.likes || 0) + (liked ? -1 : 1) } : q)));
+      setQuestions((prev) =>
+        prev.map((q) =>
+          q.id === threadId ? { ...q, liked: !liked, likes: (q.likes || 0) + (liked ? -1 : 1) } : q
+        )
+      );
       const fn = liked ? API.edu.questions.unlike : API.edu.questions.like;
       const res = await fn(threadId);
       if (res?.error) {
         // revert on error
-        setQuestions((prev) => prev.map((q) => (q.id === threadId ? { ...q, liked, likes: (q.likes || 0) + (liked ? 1 : -1) } : q)));
+        setQuestions((prev) =>
+          prev.map((q) =>
+            q.id === threadId ? { ...q, liked, likes: (q.likes || 0) + (liked ? 1 : -1) } : q
+          )
+        );
       }
     } catch {
       // revert on exception
-      setQuestions((prev) => prev.map((q) => (q.id === threadId ? { ...q, liked, likes: (q.likes || 0) + (liked ? 1 : -1) } : q)));
+      setQuestions((prev) =>
+        prev.map((q) =>
+          q.id === threadId ? { ...q, liked, likes: (q.likes || 0) + (liked ? 1 : -1) } : q
+        )
+      );
     }
   }
 
@@ -139,15 +166,23 @@ export default function Lessons() {
     <section className="resources" id="lessons" aria-labelledby="lessons-title">
       <div className="resources__container">
         <header className="resources__header">
-          <h2 id="lessons-title" className="resources__title">{course?.title || "Aulas do curso"}</h2>
-          <p className="resources__subtitle">Conteúdo carregado do backend para o curso Builders de Elite.</p>
+          <h2 id="lessons-title" className="resources__title">
+            {course?.title || "Aulas do curso"}
+          </h2>
+          <p className="resources__subtitle">
+            Conteúdo carregado do backend para o curso Builders de Elite.
+          </p>
         </header>
 
         {status === "loading" && (
-          <div className="resources__subtitle" role="status" aria-live="polite">Carregando…</div>
+          <div className="resources__subtitle" role="status" aria-live="polite">
+            Carregando…
+          </div>
         )}
         {status === "error" && (
-          <div className="resources__subtitle" role="alert">Não foi possível carregar as aulas. Tente novamente.</div>
+          <div className="resources__subtitle" role="alert">
+            Não foi possível carregar as aulas. Tente novamente.
+          </div>
         )}
 
         <div className="resources__list" role="list">
@@ -155,9 +190,16 @@ export default function Lessons() {
             <div key={item.slug} className="resources__item" role="listitem">
               <span className="resources__item-title">{item.title}</span>
               {item.locked ? (
-                <a className="resources__action" href={buildCheckoutUrl()}>Assinar</a>
+                <a className="resources__action" href={buildCheckoutUrl()}>
+                  Assinar
+                </a>
               ) : (
-                <button className="resources__action" onClick={() => openLesson(item.slug, item.locked)}>Abrir</button>
+                <button
+                  className="resources__action"
+                  onClick={() => openLesson(item.slug, item.locked)}
+                >
+                  Abrir
+                </button>
               )}
             </div>
           ))}
@@ -170,32 +212,77 @@ export default function Lessons() {
                 <strong>{selected.title}</strong>
                 {selected.description && <span>{selected.description}</span>}
                 {selected.video_url && (
-                  <a className="resources__link" href={selected.video_url} target="_blank" rel="noopener noreferrer">Abrir vídeo</a>
+                  <a
+                    className="resources__link"
+                    href={selected.video_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Abrir vídeo
+                  </a>
                 )}
               </div>
             </div>
-            <div className="resources__item" role="region" aria-label="Perguntas e respostas" style={{ marginTop: 12 }}>
+            <div
+              className="resources__item"
+              role="region"
+              aria-label="Perguntas e respostas"
+              style={{ marginTop: 12 }}
+            >
               <div style={{ display: "grid", gap: 8 }}>
                 <strong>Perguntas e respostas</strong>
-                {qStatus === "loading" && <span className="resources__subtitle" role="status">Carregando Q&A…</span>}
-                {qStatus === "error" && <span className="resources__subtitle" role="alert">Não foi possível carregar o Q&A.</span>}
+                {qStatus === "loading" && (
+                  <span className="resources__subtitle" role="status">
+                    Carregando Q&A…
+                  </span>
+                )}
+                {qStatus === "error" && (
+                  <span className="resources__subtitle" role="alert">
+                    Não foi possível carregar o Q&A.
+                  </span>
+                )}
                 <div className="resources__list" role="list">
                   {questions.map((q) => (
                     <div key={q.id} className="resources__item" role="listitem">
-                      <span className="resources__item-title">{q.title || q.content || "Pergunta"}</span>
+                      <span className="resources__item-title">
+                        {q.title || q.content || "Pergunta"}
+                      </span>
                       <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
-                        <button className="resources__action" onClick={() => toggleLike(q.id, q.liked)} aria-pressed={!!q.liked}>
+                        <button
+                          className="resources__action"
+                          onClick={() => toggleLike(q.id, q.liked)}
+                          aria-pressed={!!q.liked}
+                        >
                           {q.liked ? "Descurtir" : "Curtir"}
                         </button>
-                        <span className="resources__subtitle" aria-label="Likes">{q.likes || 0}</span>
+                        <span className="resources__subtitle" aria-label="Likes">
+                          {q.likes || 0}
+                        </span>
                       </div>
                     </div>
                   ))}
                 </div>
-                <form onSubmit={createQuestion} style={{ display: "grid", gap: 8 }} aria-label="Criar pergunta">
-                  <input type="text" placeholder="Título (opcional)" value={newTitle} onChange={(e) => setNewTitle(e.target.value)} aria-label="Título da pergunta" />
-                  <textarea placeholder="Faça sua pergunta para a comunidade..." value={newContent} onChange={(e) => setNewContent(e.target.value)} aria-label="Conteúdo da pergunta" />
-                  <button className="resources__action" type="submit">Publicar</button>
+                <form
+                  onSubmit={createQuestion}
+                  style={{ display: "grid", gap: 8 }}
+                  aria-label="Criar pergunta"
+                >
+                  <input
+                    type="text"
+                    placeholder="Título (opcional)"
+                    value={newTitle}
+                    onChange={(e) => setNewTitle(e.target.value)}
+                    aria-label="Título da pergunta"
+                  />
+                  <textarea
+                    placeholder="Faça sua pergunta para a comunidade..."
+                    value={newContent}
+                    onChange={(e) => setNewContent(e.target.value)}
+                    aria-label="Conteúdo da pergunta"
+                  />
+                  <button className="resources__action" type="submit">
+                    Publicar
+                  </button>
                 </form>
               </div>
             </div>

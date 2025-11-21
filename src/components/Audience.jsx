@@ -18,7 +18,8 @@ export default function Audience() {
         <header className="audience__header">
           <h2 className="audience__title">Esse curso é para quem...</h2>
           <p className="audience__subtitle">
-            Quer transformar interesse em criptomoedas em um negócio de verdade, mesmo começando do zero.
+            Quer transformar interesse em criptomoedas em um negócio de verdade, mesmo começando do
+            zero.
           </p>
         </header>
 
@@ -35,11 +36,11 @@ export default function Audience() {
 
         <div className="audience__footer">
           <p className="audience__note">
-            Você terá <strong>acesso imediato</strong> ao GRUPO Builders de Elite e todo conteúdo exclusivo para dar o primeiro passo hoje mesmo.
+            Você terá <strong>acesso imediato</strong> ao GRUPO Builders de Elite e todo conteúdo
+            exclusivo para dar o primeiro passo hoje mesmo.
           </p>
         </div>
       </div>
     </section>
   );
 }
-

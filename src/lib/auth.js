@@ -42,8 +42,16 @@ export async function logout() {
   // Limpeza ampla de storages
   try {
     if (typeof window !== "undefined") {
-      try { window.localStorage?.clear?.(); } catch (e) { void e; }
-      try { window.sessionStorage?.clear?.(); } catch (e) { void e; }
+      try {
+        window.localStorage?.clear?.();
+      } catch (e) {
+        void e;
+      }
+      try {
+        window.sessionStorage?.clear?.();
+      } catch (e) {
+        void e;
+      }
     }
   } catch (e) {
     void e;
@@ -89,7 +97,9 @@ export async function logout() {
   try {
     if (typeof indexedDB !== "undefined" && typeof indexedDB.databases === "function") {
       const dbs = await indexedDB.databases();
-      await Promise.all((dbs || []).map((db) => (db?.name ? indexedDB.deleteDatabase(db.name) : Promise.resolve())));
+      await Promise.all(
+        (dbs || []).map((db) => (db?.name ? indexedDB.deleteDatabase(db.name) : Promise.resolve()))
+      );
     }
   } catch (e) {
     void e;
@@ -127,8 +137,8 @@ export async function loginWithGoogle(credential) {
       (code === "network_error"
         ? "Não foi possível conectar ao servidor. Verifique sua internet e tente novamente."
         : code === "unauthorized"
-        ? "Sua sessão não foi autorizada. Tente novamente."
-        : "Não foi possível entrar com Google. Tente novamente.");
+          ? "Sua sessão não foi autorizada. Tente novamente."
+          : "Não foi possível entrar com Google. Tente novamente.");
     throw new Error(friendly);
   }
   // Após sucesso, confirma sessão via /auth/me
@@ -165,7 +175,9 @@ export function requireAuth() {
 }
 // Login com e-mail e senha (sessão via cookie)
 export async function loginWithPassword(email, password, turnstileToken = null) {
-  const normalizedEmail = String(email || "").trim().toLowerCase();
+  const normalizedEmail = String(email || "")
+    .trim()
+    .toLowerCase();
 
   const res = await API.auth.login(normalizedEmail, password, turnstileToken);
   if (res?.error) {
@@ -177,10 +189,10 @@ export async function loginWithPassword(email, password, turnstileToken = null) 
       (status === 429
         ? "Conta temporariamente bloqueada por tentativas falhas. Aguarde e tente novamente."
         : code === "unauthorized"
-        ? "Credenciais inválidas."
-        : code === "network_error"
-        ? "Falha de conexão com o servidor. Verifique sua internet."
-        : "Não foi possível entrar. Tente novamente.");
+          ? "Credenciais inválidas."
+          : code === "network_error"
+            ? "Falha de conexão com o servidor. Verifique sua internet."
+            : "Não foi possível entrar. Tente novamente.");
     throw new Error(friendly);
   }
 
@@ -210,10 +222,10 @@ export async function registerWithPassword(email, password, name, turnstileToken
       (status === 400
         ? "E-mail já registrado."
         : status === 422
-        ? "Dados inválidos. Verifique e tente novamente."
-        : status === 500
-        ? "Erro inesperado no servidor."
-        : "Não foi possível realizar o cadastro.");
+          ? "Dados inválidos. Verifique e tente novamente."
+          : status === 500
+            ? "Erro inesperado no servidor."
+            : "Não foi possível realizar o cadastro.");
     throw new Error(friendly);
   }
   const accessToken = res?.accessToken;

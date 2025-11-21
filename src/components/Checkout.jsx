@@ -9,7 +9,6 @@ import usdcIcon from "../assets/icons/usdc.svg";
 import btcIcon from "../assets/icons/btc-orange.svg";
 
 import { FaBarcode, FaCreditCard, FaBitcoin } from "react-icons/fa";
-import stripeWordmark from "../assets/stripe_wordmark.svg";
 import { useLocation } from "react-router-dom";
 import { API } from "../lib/api";
 import { emitCheckoutEvent } from "../lib/checkoutTelemetry";
@@ -104,7 +103,7 @@ export default function Checkout() {
   const [cryptoAddress, setCryptoAddress] = useState("");
   const [cryptoQr, setCryptoQr] = useState("");
   // Stripe Embedded Checkout
-  
+
   const PRICE_BRL = ctx?.product?.totalCents
     ? ctx.product.totalCents / 100
     : ctx?.course?.priceCents
@@ -459,14 +458,10 @@ export default function Checkout() {
                 }}
                 role="tab"
                 aria-selected={method === "card"}
-                aria-label="Stripe"
+                aria-label="Cartão de Crédito"
               >
-                <img
-                  src={stripeWordmark}
-                  className="checkout__tab-icon"
-                  alt="Stripe"
-                  style={{ width: "46px", height: "auto" }}
-                />
+                <FaCreditCard className="checkout__tab-icon" aria-hidden="true" />
+                <span>Cartão de Crédito</span>
               </button>
             )}
             {supportsMethod("crypto") && (
@@ -669,7 +664,8 @@ export default function Checkout() {
             {supportsMethod("card") && method === "card" && (
               <div className="checkout__panel" aria-labelledby="card-title">
                 <p className="checkout__panel-desc">
-                  Você será redirecionado para a página de pagamento segura da Stripe para concluir a transação.
+                  Você será redirecionado para a página de pagamento segura da Stripe para concluir
+                  a transação.
                 </p>
                 <div className="checkout__stripe-actions">
                   <a
@@ -678,8 +674,19 @@ export default function Checkout() {
                     rel="noopener noreferrer"
                     className="btn checkout__btn checkout__stripe-btn"
                     onClick={async () => {
-                      await emitCheckoutEvent({ courseSlug, eventType: "cta_click", paymentMethod: "stripe", ctaId: "stripe-link", metadata: { component: "card" } });
-                      await emitCheckoutEvent({ courseSlug, eventType: "purchase_start", paymentMethod: "stripe", metadata: { component: "card" } });
+                      await emitCheckoutEvent({
+                        courseSlug,
+                        eventType: "cta_click",
+                        paymentMethod: "stripe",
+                        ctaId: "stripe-link",
+                        metadata: { component: "card" },
+                      });
+                      await emitCheckoutEvent({
+                        courseSlug,
+                        eventType: "purchase_start",
+                        paymentMethod: "stripe",
+                        metadata: { component: "card" },
+                      });
                     }}
                     aria-label="Checkout com Stripe"
                     title="Checkout com Stripe"
