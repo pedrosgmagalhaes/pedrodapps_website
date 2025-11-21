@@ -105,19 +105,25 @@ export default function Checkout() {
   const fetchClientSecret = React.useCallback(async () => {
     try {
       const trimmedEmail = (buyerEmail || '').trim();
+      const priceCents = ctx?.product?.totalCents ?? ctx?.course?.priceCents ?? null;
+      const price = priceCents ? (priceCents / 100) : null;
       const body = {
         course: courseSlug,
         product: productParam,
+        quantity: 1,
+        mode: 'payment',
         receiptEmail: trimmedEmail && /[^\s@]+@[^\s@]+\.[^\s@]+/.test(trimmedEmail) ? trimmedEmail : undefined,
         marketing: utm,
       };
-      const res = await API.post('/api/payments/checkout/session', body, { method: 'POST' });
+      const headers = {};
+      if (price !== null) headers['x-price'] = String(price);
+      const res = await API.post('/api/payments/create-checkout-session', body, { method: 'POST', headers });
       if (res && res.clientSecret) return res.clientSecret;
       return null;
     } catch {
       return null;
     }
-  }, [buyerEmail, courseSlug, productParam, utm]);
+  }, [buyerEmail, courseSlug, productParam, utm, ctx]);
   const PRICE_BRL = ctx?.product?.totalCents
     ? (ctx.product.totalCents / 100)
     : (ctx?.course?.priceCents ? (ctx.course.priceCents / 100) : null);
