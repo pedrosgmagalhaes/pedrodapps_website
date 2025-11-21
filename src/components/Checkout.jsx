@@ -668,17 +668,9 @@ export default function Checkout() {
 
             {supportsMethod("card") && method === "card" && (
               <div className="checkout__panel" aria-labelledby="card-title">
-                <h3 id="card-title" className="checkout__panel-title">
-                  Stripe
-                </h3>
-                <div className="checkout__stripe" aria-label="Processado pela Stripe">
-                  <span className="checkout__stripe-powered">Processado por</span>
-                  <span className="checkout__stripe-badge">
-                    <span className="checkout__stripe-wordmark">
-                      <img src={stripeWordmark} alt="Stripe" className="checkout__stripe-logo" />
-                    </span>
-                  </span>
-                </div>
+                <p className="checkout__panel-desc">
+                  Você será redirecionado para a página de pagamento segura da Stripe para concluir a transação.
+                </p>
                 <div className="checkout__stripe-actions">
                   <a
                     href={STRIPE_PAYMENT_LINK}
