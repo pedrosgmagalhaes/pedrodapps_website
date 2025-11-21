@@ -82,6 +82,7 @@
 .checkout__stripe-actions { display: flex; justify-content: center; }
 .checkout__stripe-btn { margin-top: 12px; }
 .stripe-btn__logo { height: 18px; width: auto; display: block; filter: brightness(100%); }
+.stripe-btn__text { color: #ffffff; font-weight: 600; font-size: 14px; letter-spacing: 0.2px; }
 .checkout__title { font-size: 24px; font-weight: 800; margin: 0 0 6px 0; color: var(--neutral-white); }
 .checkout__subtitle { font-size: 14px; color: rgba(255, 255, 255, 0.8); margin: 0; }
 
