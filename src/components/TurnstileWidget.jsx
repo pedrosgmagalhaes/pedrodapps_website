@@ -3,10 +3,16 @@ import React, { useEffect, useRef, useState } from "react";
 export default function TurnstileWidget({
   sitekey = import.meta.env.VITE_TURNSTILE_SITEKEY,
   theme = "dark",
-  size = "normal",
+  size = "flexible",
   onToken = () => {},
   className = "turnstile__container",
-  containerStyle = { display: "block", minHeight: 70, width: "100%" },
+  containerStyle = {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    minHeight: 70,
+    width: "100%",
+  },
 }) {
   const containerRef = useRef(null);
   const [widgetId, setWidgetId] = useState(null);
