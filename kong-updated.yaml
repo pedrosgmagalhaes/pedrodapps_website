@@ -34,6 +34,8 @@ services:
     url: http://172.17.0.1:3007
   - name: pedrodapps-website
     url: http://localhost:8084
+  - name: pedrodapps-api
+    url: http://172.17.0.1:8080
 
 routes:
   - name: pixley-route
@@ -46,6 +48,12 @@ routes:
       - pedrodapps.com
       - www.pedrodapps.com
       - localhost
+    paths:
+      - /
+  - name: pedrodapps-api-route
+    service: pedrodapps-api
+    hosts:
+      - api.pedrodapps.com
     paths:
       - /
 
@@ -81,6 +89,7 @@ plugins:
         - Authorization
         - x-api-key
         - x-secret-key
+        - x-turnstile-token
         - Origin
         - X-Requested-With
         - Cache-Control
