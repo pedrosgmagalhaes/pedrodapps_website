@@ -120,7 +120,7 @@ export default function Links() {
                     <span className="links__label-super">Pedro dApps</span>
                     <span className="links__label-title">Site oficial</span>
                     <span className="links__label-sub">
-                      Scripts, automaçÕes, hacks e tutoriais avançados de operacoses fi
+                      Scripts, automações e tutoriais avançados para operações financeiras.
                     </span>
                   </div>
                 </a>

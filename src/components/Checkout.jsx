@@ -331,7 +331,7 @@ export default function Checkout() {
         >
           <header className="checkout__header">
             <h2 id="checkout-title" className="checkout__title">
-              Faça parte
+              Finalize seu pedido
             </h2>
             <p id="checkout-desc" className="checkout__subtitle">
               Escolha seu meio de pagamento abaixo.
