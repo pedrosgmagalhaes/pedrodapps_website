@@ -105,6 +105,8 @@ export default function Checkout() {
     return p2 ? `${p1}-${p2}` : p1;
   };
   const [boletoLinhaDigitavel, setBoletoLinhaDigitavel] = useState("");
+  const [boletoVencimento, setBoletoVencimento] = useState("");
+  const [boletoValor, setBoletoValor] = useState("");
   useEffect(() => {
     const d = cep.replace(/\D/g, "");
     if (d.length === 8) {
@@ -464,6 +466,21 @@ export default function Checkout() {
             if (!barras) {
               const info = validarBoleto(ld, "LINHA_DIGITAVEL");
               barras = String(info?.codigoBarras || "");
+              if (info?.vencimento) {
+                try {
+                  const d = new Date(info.vencimento);
+                  const lang =
+                    (typeof navigator !== "undefined" &&
+                      (navigator.language || (navigator.languages && navigator.languages[0]))) ||
+                    "pt-BR";
+                  setBoletoVencimento(d.toLocaleDateString(lang));
+                } catch {
+                  setBoletoVencimento("");
+                }
+              }
+              if (typeof info?.valor !== "undefined" && info?.valor !== null) {
+                setBoletoValor(String(info.valor));
+              }
             }
           } catch {
             try {
@@ -911,6 +928,37 @@ export default function Checkout() {
                             <FaCopy aria-hidden="true" />
                           </button>
                         </div>
+                      </div>
+                    )}
+                    {(boletoVencimento || boletoValor) && (
+                      <div className="checkout__grid">
+                        {boletoVencimento && (
+                          <div className="checkout__field" aria-label="Vencimento">
+                            <label className="checkout__label">Vencimento</label>
+                            <input
+                              className="checkout__input"
+                              type="text"
+                              readOnly
+                              value={boletoVencimento}
+                              style={{ width: "100%" }}
+                            />
+                          </div>
+                        )}
+                        {boletoValor && (
+                          <div className="checkout__field" aria-label="Valor">
+                            <label className="checkout__label">Valor</label>
+                            <input
+                              className="checkout__input"
+                              type="text"
+                              readOnly
+                              value={new Intl.NumberFormat("pt-BR", {
+                                style: "currency",
+                                currency: "BRL",
+                              }).format(Number(boletoValor))}
+                              style={{ width: "100%" }}
+                            />
+                          </div>
+                        )}
                       </div>
                     )}
                   </>
