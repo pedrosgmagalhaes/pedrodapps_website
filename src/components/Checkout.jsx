@@ -785,7 +785,7 @@ export default function Checkout() {
           </form>
         </div>
 
-        <div className="checkout__powered reveal-on-scroll">
+        <div className="checkout__powered reveal-on-scroll is-visible">
           <span className="checkout__powered-text">Checkout by</span>
           <a
             href="https://pixley.app"
