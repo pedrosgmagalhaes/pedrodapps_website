@@ -105,6 +105,7 @@ export default function Checkout() {
     return p2 ? `${p1}-${p2}` : p1;
   };
   const [boletoLinhaDigitavel, setBoletoLinhaDigitavel] = useState("");
+  const [boletoLinhaDigitavelMasked, setBoletoLinhaDigitavelMasked] = useState("");
   const [boletoVencimento, setBoletoVencimento] = useState("");
   const [boletoValor, setBoletoValor] = useState("");
   useEffect(() => {
@@ -450,9 +451,8 @@ export default function Checkout() {
         const ld = String(ldCandidate);
         setBoletoLinhaDigitavel(ld);
         try {
-          const { validarBoleto, linhaDigitavel2CodBarras } = await import(
-            "@mrmgomes/boleto-utils"
-          );
+          const { validarBoleto, linhaDigitavel2CodBarras, codBarras2LinhaDigitavel } =
+            await import("@mrmgomes/boleto-utils");
           let barras =
             String(
               data?.codigoBarras ||
@@ -488,6 +488,12 @@ export default function Checkout() {
             } catch {
               void 0;
             }
+          }
+          try {
+            const masked = codBarras2LinhaDigitavel(barras || linhaDigitavel2CodBarras(ld), true);
+            if (masked) setBoletoLinhaDigitavelMasked(String(masked));
+          } catch {
+            setBoletoLinhaDigitavelMasked("");
           }
           if (barras) setBoletoCodigoBarras(barras);
         } catch {
@@ -898,7 +904,7 @@ export default function Checkout() {
                             className="checkout__input"
                             type="text"
                             readOnly
-                            value={boletoLinhaDigitavel}
+                            value={boletoLinhaDigitavelMasked || boletoLinhaDigitavel}
                             onFocus={(e) => e.currentTarget.select()}
                             style={{ width: "100%", paddingRight: 36 }}
                           />
@@ -907,7 +913,9 @@ export default function Checkout() {
                             aria-label="Copiar"
                             onClick={async () => {
                               try {
-                                await navigator.clipboard.writeText(boletoLinhaDigitavel);
+                                await navigator.clipboard.writeText(
+                                  boletoLinhaDigitavelMasked || boletoLinhaDigitavel
+                                );
                                 setMessage("Linha Digitável copiada.");
                               } catch {
                                 void 0;
