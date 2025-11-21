@@ -55,6 +55,7 @@ export default function Checkout() {
   // PIX
   const [pixQr, setPixQr] = useState("");
   const [pixPayload, setPixPayload] = useState("");
+  const [pixQrId, setPixQrId] = useState("");
 
   // Boleto
   const [doc, setDoc] = useState(""); // CPF/CNPJ (simplificado)
@@ -123,6 +124,45 @@ export default function Checkout() {
       })();
     }
   }, [cep]);
+
+  useEffect(() => {
+    if (!pixQrId) return;
+    let active = true;
+    let timer = null;
+    const poll = async () => {
+      const res = await API.courses.pixleyQrStatus(courseSlug, pixQrId);
+      if (res && !res.error) {
+        const st = String(res.status || "").toLowerCase();
+        const pst = String(res.pixStatus || "").toUpperCase();
+        if (
+          st === "paid" ||
+          st === "confirmed" ||
+          st === "succeeded" ||
+          pst === "PAID" ||
+          pst === "CONFIRMED"
+        ) {
+          setStatus("success");
+          setMessage("Pagamento via PIX confirmado.");
+          active = false;
+          return;
+        }
+        if (st === "expired" || st === "canceled" || st === "cancelled" || pst === "EXPIRED") {
+          setStatus("error");
+          setMessage("QR Code expirado. Gere novamente.");
+          active = false;
+          return;
+        }
+      }
+      if (active) {
+        timer = setTimeout(poll, 5000);
+      }
+    };
+    poll();
+    return () => {
+      active = false;
+      if (timer) clearTimeout(timer);
+    };
+  }, [pixQrId, courseSlug]);
 
   // Cartão (Stripe Elements substitui inputs locais)
 
@@ -671,6 +711,7 @@ export default function Checkout() {
                       } else {
                         throw new Error("invalid_response");
                       }
+                      setPixQrId(String(data?.qrCodeId || data?.id || ""));
                       setStatus("success");
                       setMessage("Confirmar pagamento PIX");
                     } catch {

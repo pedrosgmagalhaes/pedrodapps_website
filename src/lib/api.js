@@ -149,6 +149,21 @@ export const API = {
         body,
       });
     },
+    pixleyQrStatus: (slug, qrCodeId, opts = {}) => {
+      const acceptLanguage =
+        typeof navigator !== "undefined"
+          ? navigator.language || (navigator.languages && navigator.languages[0]) || "pt"
+          : "pt";
+      return jsonFetch(
+        `/api/courses/${encodeURIComponent(slug)}/checkout/pixley/qr/${encodeURIComponent(qrCodeId)}/status`,
+        {
+          ...opts,
+          method: "GET",
+          token: getToken(),
+          headers: { ...(opts.headers || {}), "Accept-Language": acceptLanguage },
+        }
+      );
+    },
     pixleyBoleto: (slug, body = {}, opts = {}) => {
       const acceptLanguage =
         typeof navigator !== "undefined"
