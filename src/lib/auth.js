@@ -185,7 +185,9 @@ export async function loginWithPassword(email, password, turnstileToken = null) 
     const status = res?.status;
     const backendMsg = res?.data?.error || res?.data?.message;
     const friendly =
-      backendMsg ||
+      (backendMsg && /Account not approved/i.test(String(backendMsg))
+        ? "Seu cadastro encontra-se em fase de análise e ainda não foi aprovado para acesso à área restrita. O docente/gestor responsável será comunicado para deliberação e eventual liberação, em conformidade com as diretrizes institucionais de elegibilidade e controle de acesso. Você será notificado oportunamente após a validação."
+        : backendMsg) ||
       (status === 429
         ? "Conta temporariamente bloqueada por tentativas falhas. Aguarde e tente novamente."
         : code === "unauthorized"
@@ -238,8 +240,7 @@ export async function registerWithPassword(email, password, name, turnstileToken
     jwt: accessToken || null,
     loggedAt: Date.now(),
   };
-  localStorage.setItem(AUTH_KEY, JSON.stringify(user));
-  return user;
+  return { pendingApproval: true, user };
 }
 
 // Atualiza sessão local consultando /auth/me

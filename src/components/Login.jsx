@@ -106,20 +106,25 @@ export default function Login() {
         if (!isValidPassword(password))
           throw new Error("Senha deve ter: 8+ caracteres, maiúscula, minúscula, número e símbolo.");
         if (password !== confirmPassword) throw new Error("As senhas não coincidem.");
-        await registerWithPassword(
+        const result = await registerWithPassword(
           email,
           password,
           name,
           TURNSTILE_ENABLED ? turnstileToken : null
         );
-        setMessage("Conta criada com sucesso! Redirecionando...");
+        void result;
+        setMessage(
+          "Cadastro enviado para avaliação. Em breve liberaremos seu acesso. Prepare seu e-mail para validação."
+        );
       } else {
         if (password.length < 6) throw new Error("A senha deve ter pelo menos 6 caracteres.");
         await loginWithPassword(email, password, TURNSTILE_ENABLED ? turnstileToken : null);
         setMessage("Login realizado com sucesso! Redirecionando...");
       }
       setStatus("success");
-      setTimeout(() => navigate("/members"), 1500);
+      if (emailExists === true) {
+        setTimeout(() => navigate("/members"), 1500);
+      }
     } catch (error) {
       setStatus("error");
       setMessage(error.message || "Erro ao processar. Tente novamente.");
@@ -177,6 +182,22 @@ export default function Login() {
 
   const showPasswordFields = emailExists !== null;
   const isSignupMode = emailExists === false;
+  const canLogin =
+    !isSignupMode &&
+    emailExists === true &&
+    isValidEmail(email) &&
+    password.trim().length >= 6 &&
+    (!TURNSTILE_ENABLED || !!turnstileToken);
+
+  const canSignup =
+    isSignupMode &&
+    isValidEmail(email) &&
+    isValidName(name) &&
+    isValidPassword(password) &&
+    password === confirmPassword &&
+    (!TURNSTILE_ENABLED || !!turnstileToken);
+
+  const canSubmit = canLogin || canSignup;
 
   return (
     <section className="login" id="login" aria-labelledby="login-title">
@@ -460,7 +481,7 @@ export default function Login() {
               <button
                 type="submit"
                 className="btn btn-primary login__btn"
-                disabled={status === "loading" || isCheckingEmail}
+                disabled={status === "loading" || isCheckingEmail || !canSubmit}
               >
                 {status === "loading"
                   ? isSignupMode
@@ -471,6 +492,16 @@ export default function Login() {
                     : t("login.button")}
               </button>
             </div>
+            {isSignupMode && status === "success" && (
+              <div className="login__post-signup" role="note" aria-live="polite">
+                <p className="login__hint">
+                  Seu cadastro foi recebido e aguarda aprovação por nossa equipe.
+                </p>
+                <button type="button" className="btn btn-secondary" disabled title="Em breve">
+                  Validar e-mail
+                </button>
+              </div>
+            )}
           </form>
 
           {/** Social login desativado por enquanto; controlado por env */}
