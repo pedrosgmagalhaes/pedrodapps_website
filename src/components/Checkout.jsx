@@ -681,8 +681,10 @@ export default function Checkout() {
                       await emitCheckoutEvent({ courseSlug, eventType: "cta_click", paymentMethod: "stripe", ctaId: "stripe-link", metadata: { component: "card" } });
                       await emitCheckoutEvent({ courseSlug, eventType: "purchase_start", paymentMethod: "stripe", metadata: { component: "card" } });
                     }}
+                    aria-label="Checkout com Stripe"
+                    title="Checkout com Stripe"
                   >
-                    Checkout com Stripe
+                    <img src={stripeWordmark} alt="" aria-hidden="true" className="stripe-btn__logo" />
                   </a>
                 </div>
               </div>
