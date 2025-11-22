@@ -101,6 +101,55 @@ export const API = {
         ),
       upcoming: (courseSlug, opts = {}) =>
         jsonFetch(`/api/courses/${encodeURIComponent(courseSlug)}/lessons/upcoming`, { ...opts, method: "GET" }),
+      comments: {
+        list: (courseSlug, lessonSlug, { parentCommentId = null, limit = 20, cursor = null } = {}, opts = {}) => {
+          const qs = new URLSearchParams();
+          if (parentCommentId) qs.set("parentCommentId", parentCommentId);
+          if (limit) qs.set("limit", String(limit));
+          if (cursor) qs.set("cursor", String(cursor));
+          const path = qs.toString()
+            ? `/api/courses/${encodeURIComponent(courseSlug)}/lessons/${encodeURIComponent(lessonSlug)}/comments?${qs.toString()}`
+            : `/api/courses/${encodeURIComponent(courseSlug)}/lessons/${encodeURIComponent(lessonSlug)}/comments`;
+          return jsonFetch(path, { ...opts, method: "GET" });
+        },
+        create: (courseSlug, lessonSlug, { content, parentCommentId = null }, opts = {}) =>
+          jsonFetch(`/api/courses/${encodeURIComponent(courseSlug)}/lessons/${encodeURIComponent(lessonSlug)}/comments`, {
+            ...opts,
+            method: "POST",
+            token: getToken(),
+            body: parentCommentId ? { content, parentCommentId } : { content },
+          }),
+        delete: (courseSlug, lessonSlug, commentId, opts = {}) =>
+          jsonFetch(`/api/courses/${encodeURIComponent(courseSlug)}/lessons/${encodeURIComponent(lessonSlug)}/comments/${encodeURIComponent(commentId)}`, {
+            ...opts,
+            method: "DELETE",
+            token: getToken(),
+          }),
+        reactions: {
+          add: (courseSlug, lessonSlug, commentId, type = "like", opts = {}) =>
+            jsonFetch(`/api/courses/${encodeURIComponent(courseSlug)}/lessons/${encodeURIComponent(lessonSlug)}/comments/reactions/${encodeURIComponent(commentId)}`, {
+              ...opts,
+              method: "POST",
+              token: getToken(),
+              body: { type },
+            }),
+          remove: (courseSlug, lessonSlug, commentId, type = "like", opts = {}) => {
+            const qs = new URLSearchParams({ type });
+            return jsonFetch(`/api/courses/${encodeURIComponent(courseSlug)}/lessons/${encodeURIComponent(lessonSlug)}/comments/reactions/${encodeURIComponent(commentId)}?${qs.toString()}`, {
+              ...opts,
+              method: "DELETE",
+              token: getToken(),
+            });
+          },
+        },
+        moderateStatus: (courseSlug, lessonSlug, commentId, status, opts = {}) =>
+          jsonFetch(`/api/courses/${encodeURIComponent(courseSlug)}/lessons/${encodeURIComponent(lessonSlug)}/comments/${encodeURIComponent(commentId)}/status`, {
+            ...opts,
+            method: "PATCH",
+            token: getToken(),
+            body: { status },
+          }),
+      },
     },
     checkoutContext: (slug, queryParams = {}, opts = {}) => {
       const qp = new URLSearchParams();

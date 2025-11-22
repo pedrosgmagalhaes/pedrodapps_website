@@ -313,7 +313,9 @@ export default function Home() {
               />
             )}
 
-            {activePanel === "lesson_support" && <SupportFeed />}
+            {activePanel === "lesson_support" && (
+              <SupportFeed courseSlug={courseSlug} lessonSlug={activeLesson} />
+            )}
 
             {activePanel === "lesson_terminal" && (
               <div className="home__bot-video" role="region" aria-label={t("features.terminal")}>
