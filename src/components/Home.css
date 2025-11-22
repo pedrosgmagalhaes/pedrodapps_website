@@ -30,11 +30,23 @@
   border-radius: 14px;
   padding: 16px 14px;
   z-index: 100; /* garantir sobreposição adequada */
+  display: flex;
+  flex-direction: column;
 }
 
 .home__sidebar-group {
   margin-bottom: 16px;
   margin-top: 50px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Faz o primeiro grupo (Aulas) ocupar toda a altura disponível */
+.home__sidebar-group:first-of-type { flex: 1; }
+.home__sidebar-group:first-of-type .home__collapse.is-open { max-height: none; }
+.home__sidebar-group:first-of-type .home__sidebar-list:not(.home__sublist) {
+  flex: 1;
+  overflow-y: auto;
 }
 
 .home__sidebar-heading {
