@@ -189,6 +189,12 @@
   color: rgb(255 255 255 / 55%);
 }
 
+/* Garante largura total do input em qualquer contexto */
+.login__input {
+  width: 100%;
+  box-sizing: border-box;
+}
+
 .login__input:focus {
   border-color: var(--accent-primary);
   box-shadow:
