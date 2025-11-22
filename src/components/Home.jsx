@@ -84,8 +84,9 @@ export default function Home() {
       try {
         const res = await API.edu.lessons.get(activeLesson);
         if (!mounted) return;
-        setLessonDetail(res?.lesson || null);
-        setLessonStatus("idle");
+        const lesson = res?.lesson ?? res ?? null; // suporta resposta direta ou encapsulada
+        setLessonDetail(lesson);
+        setLessonStatus("ready");
       } catch {
         if (!mounted) return;
         setLessonStatus("error");
@@ -248,10 +249,10 @@ export default function Home() {
                     Não foi possível carregar os detalhes da aula.
                   </div>
                 )}
-                {lessonStatus === "idle" && (
+                {lessonStatus === "ready" && (
                   <div className="home__bot-video-caption">
-                    {lessonDetail?.video_url ? (
-                      <a href={lessonDetail.video_url} target="_blank" rel="noopener noreferrer">
+                    {lessonDetail?.videoUrl || lessonDetail?.video_url ? (
+                      <a href={lessonDetail?.videoUrl || lessonDetail?.video_url} target="_blank" rel="noopener noreferrer">
                         Abrir vídeo
                       </a>
                     ) : (
@@ -264,9 +265,9 @@ export default function Home() {
 
             {activePanel === "lesson_download" && (
               <BotDownloadInfo
-                downloadUrl={lessonDetail?.download_url || "/vite.svg"}
+                downloadUrl={lessonDetail?.sourceCodeUrl || lessonDetail?.download_url || "/vite.svg"}
                 onDownload={() => {
-                  const url = lessonDetail?.download_url || "/vite.svg";
+                  const url = lessonDetail?.sourceCodeUrl || lessonDetail?.download_url || "/vite.svg";
                   window.open(url, "_blank", "noopener,noreferrer");
                 }}
               />
@@ -279,11 +280,11 @@ export default function Home() {
                 <div className="home__bot-video-caption">
                   {lessonStatus === "loading" && <div>{t("loading")}</div>}
                   {lessonStatus === "error" && <div>{t("error_loading_lesson")}</div>}
-                  {lessonStatus === "idle" && (
+                  {lessonStatus === "ready" && (
                     <>
-                      {lessonDetail?.terminal_url ? (
+                      {lessonDetail?.terminalUrl || lessonDetail?.terminal_url ? (
                         <a
-                          href={lessonDetail.terminal_url}
+                          href={lessonDetail?.terminalUrl || lessonDetail?.terminal_url}
                           target="_blank"
                           rel="noopener noreferrer"
                         >
@@ -303,10 +304,15 @@ export default function Home() {
                 <div className="home__bot-video-caption">
                   {lessonStatus === "loading" && <div>{t("loading")}</div>}
                   {lessonStatus === "error" && <div>{t("error_loading_lesson")}</div>}
-                  {lessonStatus === "idle" && (
+                  {lessonStatus === "ready" && (
                     <>
+                      {!lessonDetail?.isAvailable && lessonDetail?.availableFrom && (
+                        <div style={{ marginBottom: 12, color: '#6b7280' }}>
+                          Disponível em {new Intl.DateTimeFormat('pt-BR').format(new Date(lessonDetail.availableFrom))}
+                        </div>
+                      )}
                       {lessonDetail?.content ? (
-                        <p>{lessonDetail.content}</p>
+                        <div style={{ whiteSpace: 'pre-wrap', lineHeight: 1.6 }}>{lessonDetail.content}</div>
                       ) : (
                         t("text_content_coming_soon")
                       )}

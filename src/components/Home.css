@@ -6,24 +6,30 @@
 }
 
 .home__container {
-  width: min(1100px, 92vw);
-  margin: 0 auto;
+  /* Conteúdo deslocado para a direita para liberar a sidebar fixa à esquerda */
+  width: calc(100vw - 300px);
+  margin-left: 300px;
 }
 
 .home__layout {
   display: grid;
-  grid-template-columns: 280px 1fr;
+  grid-template-columns: 1fr; /* sidebar fica fixa fora do grid */
   gap: 20px;
   align-items: start;
 }
 
 .home__sidebar {
-  position: sticky;
-  top: 16px;
+  position: fixed;
+  left: 0;
+  top: 0;
+  height: 100vh; /* ocupa 100% do height da viewport */
+  width: 280px; /* largura da sidebar */
+  overflow-y: auto; /* rolagem interna quando necessário */
   background: rgb(var(--bg-primary-rgb) / 55%);
   border: 1px solid rgb(255 255 255 / 8%);
   border-radius: 14px;
   padding: 16px 14px;
+  z-index: 100; /* garantir sobreposição adequada */
 }
 
 .home__sidebar-group {
