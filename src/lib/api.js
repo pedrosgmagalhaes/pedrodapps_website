@@ -91,6 +91,15 @@ export const API = {
   // Courses catalog and checkout context (public)
   courses: {
     get: (slug, opts = {}) => jsonFetch(`/api/courses/${slug}`, { ...opts, method: "GET" }),
+    lessons: {
+      list: (courseSlug, opts = {}) =>
+        jsonFetch(`/api/courses/${encodeURIComponent(courseSlug)}/lessons`, { ...opts, method: "GET" }),
+      get: (courseSlug, lessonSlug, opts = {}) =>
+        jsonFetch(
+          `/api/courses/${encodeURIComponent(courseSlug)}/lessons/${encodeURIComponent(lessonSlug)}`,
+          { ...opts, method: "GET" }
+        ),
+    },
     checkoutContext: (slug, queryParams = {}, opts = {}) => {
       const qp = new URLSearchParams();
       Object.entries(queryParams || {}).forEach(([k, v]) => {

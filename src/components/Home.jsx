@@ -8,6 +8,7 @@ import { API } from "../lib/api";
 import { useTranslation } from "react-i18next";
 
 export default function Home() {
+  const courseSlug = "builders-de-elite";
   const [progress] = useState(80);
   const [open, setOpen] = useState({ lessons: true, bots: true, honeypot: false });
   const [lessonOpenMap, setLessonOpenMap] = useState({});
@@ -42,9 +43,15 @@ export default function Home() {
     (async () => {
       try {
         setCourseStatus("loading");
-        const data = await API.courses.get("builders-de-elite");
+        const data = await API.courses.get(courseSlug);
         if (mounted) {
-          setCourse(data);
+          // Se o curso não trouxer lições embutidas, busca a lista separadamente
+          if (!data?.lessons || !Array.isArray(data.lessons)) {
+            const lessons = await API.courses.lessons.list(courseSlug);
+            setCourse({ ...(data || {}), lessons: Array.isArray(lessons) ? lessons : [] });
+          } else {
+            setCourse(data);
+          }
           setCourseStatus("ready");
         }
       } catch (err) {
@@ -82,7 +89,7 @@ export default function Home() {
       }
       setLessonStatus("loading");
       try {
-        const res = await API.edu.lessons.get(activeLesson);
+        const res = await API.courses.lessons.get(courseSlug, activeLesson);
         if (!mounted) return;
         const lesson = res?.lesson ?? res ?? null; // suporta resposta direta ou encapsulada
         setLessonDetail(lesson);

@@ -40,7 +40,7 @@ export default function Lessons() {
   };
   const [course, setCourse] = useState(null);
   const [lessons, setLessons] = useState([]);
-  const [status, setStatus] = useState("idle"); // idle | loading | error
+  const [status, setStatus] = useState("idle"); // idle | loading | error | ready
   const [selected, setSelected] = useState(null);
   const [questions, setQuestions] = useState([]);
   const [qStatus, setQStatus] = useState("idle"); // idle | loading | error
@@ -51,18 +51,22 @@ export default function Lessons() {
     let mounted = true;
     async function loadCourse() {
       setStatus("loading");
-      const res = await API.courses.get("builders-de-elite");
+      const courseSlug = "builders-de-elite";
+      const res = await API.courses.get(courseSlug);
       if (!mounted) return;
       if (res?.error) {
         setStatus("error");
         setCourse(null);
         setLessons([]);
       } else {
-        setStatus("idle");
         setCourse(res);
-        const list = Array.isArray(res?.lessons) ? res.lessons.slice() : [];
+        // Se não vier lições embutidas, busca via endpoint dedicado
+        const list = Array.isArray(res?.lessons)
+          ? res.lessons.slice()
+          : (await API.courses.lessons.list(courseSlug)) || [];
         list.sort((a, b) => Number(a?.order ?? 0) - Number(b?.order ?? 0));
         setLessons(list);
+        setStatus("ready");
       }
     }
     loadCourse();
@@ -99,14 +103,14 @@ export default function Lessons() {
   async function openLesson(slug, locked) {
     if (locked) return;
     setStatus("loading");
-    const res = await API.edu.lessons.get(slug);
+    const res = await API.courses.lessons.get("builders-de-elite", slug);
     if (res?.error) {
       setStatus("error");
       setSelected(null);
       return;
     }
-    setSelected(res?.lesson || null);
-    setStatus("idle");
+    setSelected(res?.lesson ?? res ?? null);
+    setStatus("ready");
   }
 
   async function createQuestion(e) {
@@ -211,15 +215,19 @@ export default function Lessons() {
               <div style={{ display: "grid", gap: 8 }}>
                 <strong>{selected.title}</strong>
                 {selected.description && <span>{selected.description}</span>}
-                {selected.video_url && (
+                {selected.videoUrl || selected.video_url ? (
                   <a
                     className="resources__link"
-                    href={selected.video_url}
+                    href={selected.videoUrl || selected.video_url}
                     target="_blank"
                     rel="noopener noreferrer"
                   >
                     Abrir vídeo
                   </a>
+                ) : null}
+                {/* Conteúdo em texto, preservando quebras de linha */}
+                {selected.content && (
+                  <div style={{ whiteSpace: "pre-wrap", lineHeight: 1.6 }}>{selected.content}</div>
                 )}
               </div>
             </div>

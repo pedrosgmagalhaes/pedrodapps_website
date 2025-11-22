@@ -19,7 +19,7 @@
 }
 
 .home__sidebar {
-  position: fixed;
+  position: absolute;
   left: 0;
   top: 0;
   height: 100vh; /* ocupa 100% do height da viewport */
