@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import "./Resources.css";
 import { API, withAuth } from "../lib/api";
 import { useLocation } from "react-router-dom";
@@ -227,7 +229,11 @@ export default function Lessons() {
                 ) : null}
                 {/* Conteúdo em texto, preservando quebras de linha */}
                 {selected.content && (
-                  <div style={{ whiteSpace: "pre-wrap", lineHeight: 1.6 }}>{selected.content}</div>
+                  <div className="home__md">
+                    <ReactMarkdown remarkPlugins={[remarkGfm]} linkTarget="_blank">
+                      {selected.content}
+                    </ReactMarkdown>
+                  </div>
                 )}
               </div>
             </div>

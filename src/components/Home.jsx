@@ -6,6 +6,8 @@ import BotDownloadInfo from "./BotDownloadInfo";
 import SupportFeed from "./SupportFeed";
 import { API } from "../lib/api";
 import { useTranslation } from "react-i18next";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 
 export default function Home() {
   const courseSlug = "builders-de-elite";
@@ -318,11 +320,15 @@ export default function Home() {
                           Disponível em {new Intl.DateTimeFormat('pt-BR').format(new Date(lessonDetail.availableFrom))}
                         </div>
                       )}
-                      {lessonDetail?.content ? (
-                        <div style={{ whiteSpace: 'pre-wrap', lineHeight: 1.6 }}>{lessonDetail.content}</div>
-                      ) : (
-                        t("text_content_coming_soon")
-                      )}
+                    {lessonDetail?.content ? (
+                      <div className="home__md">
+                        <ReactMarkdown remarkPlugins={[remarkGfm]} linkTarget="_blank">
+                          {lessonDetail.content}
+                        </ReactMarkdown>
+                      </div>
+                    ) : (
+                      t("text_content_coming_soon")
+                    )}
                     </>
                   )}
                 </div>
