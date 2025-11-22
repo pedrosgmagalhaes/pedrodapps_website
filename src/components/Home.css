@@ -152,21 +152,68 @@
 
 /* Markdown styling dentro do conteúdo da aula */
 .home__md {
-  font-size: 13px;
-  line-height: 1.7;
-  color: #e7e7e7;
+  font-size: 14px;
+  line-height: 1.75;
+  color: rgb(231 231 231 / 92%);
 }
-.home__md h1, .home__md h2, .home__md h3 {
-  margin: 10px 0 6px;
+.home__md h1, .home__md h2, .home__md h3, .home__md h4 {
+  margin: 12px 0 8px;
   font-weight: 800;
+  color: #f5f7ff;
 }
-.home__md p { margin: 8px 0; }
-.home__md ul, .home__md ol { margin: 8px 0 8px 20px; }
-.home__md li { margin: 4px 0; }
+.home__md h1 { font-size: 22px; letter-spacing: 0.3px; }
+.home__md h2 { font-size: 18px; letter-spacing: 0.2px; }
+.home__md h3 { font-size: 16px; }
+.home__md h4 { font-size: 15px; }
+
+.home__md p { margin: 10px 0; }
+.home__md strong { font-weight: 800; color: #ffffff; }
+.home__md em { font-style: italic; opacity: 0.95; }
+
+.home__md ul, .home__md ol { margin: 10px 0 10px 22px; }
+.home__md ul { list-style: disc; }
+.home__md ol { list-style: decimal; }
+.home__md li { margin: 6px 0; }
+
 .home__md a { color: var(--accent-primary); text-decoration: none; }
-.home__md a:hover { text-decoration: underline; }
-.home__md code { background: rgb(255 255 255 / 6%); padding: 2px 6px; border-radius: 6px; }
-.home__md pre { background: rgb(255 255 255 / 6%); padding: 10px 12px; border-radius: 8px; overflow: auto; }
+.home__md a:hover { text-decoration: underline; filter: brightness(1.2); }
+
+.home__md blockquote {
+  margin: 10px 0;
+  padding: 10px 12px;
+  border-left: 3px solid var(--accent-primary);
+  background: rgb(255 255 255 / 5%);
+  border-radius: 10px;
+}
+
+.home__md hr {
+  border: none;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgb(255 255 255 / 20%), transparent);
+  margin: 14px 0;
+}
+
+.home__md table { width: 100%; border-collapse: collapse; margin: 12px 0; }
+.home__md th, .home__md td {
+  border: 1px solid rgb(255 255 255 / 10%);
+  padding: 8px 10px;
+}
+.home__md thead th { background: rgb(255 255 255 / 6%); font-weight: 700; }
+.home__md tbody tr:nth-child(odd) { background: rgb(255 255 255 / 3%); }
+
+.home__md code {
+  background: rgb(16 18 28 / 70%);
+  padding: 2px 6px;
+  border-radius: 6px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+}
+.home__md pre {
+  background: rgb(16 18 28 / 80%);
+  padding: 12px 14px;
+  border-radius: 10px;
+  overflow: auto;
+  border: 1px solid rgb(255 255 255 / 10%);
+}
 
 .home__content {
   min-height: 60vh;
