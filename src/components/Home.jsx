@@ -199,28 +199,40 @@ export default function Home() {
                             className={`home__collapse ${lessonOpenMap[lesson.slug] ? "is-open" : ""}`}
                           >
                             <div className="home__sidebar-list home__sublist">
-                              {lesson.availableFeatures?.map((feat) => {
-                                const Icon = featureIcons[feat] || FaPlay; // Default to FaPlay if no icon
-                                return (
-                                  <button
-                                    key={feat}
-                                    className="home__sidebar-item"
-                                    type="button"
-                                    onClick={() =>
-                                      handleGatedAction(() => {
-                                        setActiveLesson(lesson.slug);
-                                        setActivePanel(featurePanels[feat]);
-                                      })
-                                    }
-                                    aria-controls="home-content"
-                                  >
-                                    <span className="icon">
-                                      <Icon />
-                                    </span>
-                                    <span>{t(`features.${feat}`)}</span>
-                                  </button>
-                                );
-                              })}
+                              {(() => {
+                                const order = {
+                                  textContent: 0,
+                                  video: 1,
+                                  botDownload: 2,
+                                  support: 3,
+                                  terminal: 4,
+                                };
+                                const features = (lesson.availableFeatures || [])
+                                  .slice()
+                                  .sort((a, b) => (order[a] ?? 99) - (order[b] ?? 99));
+                                return features.map((feat) => {
+                                  const Icon = featureIcons[feat] || FaPlay; // Default to FaPlay if no icon
+                                  return (
+                                    <button
+                                      key={feat}
+                                      className="home__sidebar-item"
+                                      type="button"
+                                      onClick={() =>
+                                        handleGatedAction(() => {
+                                          setActiveLesson(lesson.slug);
+                                          setActivePanel(featurePanels[feat]);
+                                        })
+                                      }
+                                      aria-controls="home-content"
+                                    >
+                                      <span className="icon">
+                                        <Icon />
+                                      </span>
+                                      <span>{t(`features.${feat}`)}</span>
+                                    </button>
+                                  );
+                                });
+                              })()}
                             </div>
                           </div>
                         </div>
