@@ -15,6 +15,7 @@ export default function Home() {
   const [showGate, setShowGate] = useState(false);
   const [nowTs, setNowTs] = useState(Date.now());
   const [course, setCourse] = useState(null);
+  const [courseStatus, setCourseStatus] = useState("loading"); // loading | ready | error
   const [activeLesson, setActiveLesson] = useState(null);
   const [lessonDetail, setLessonDetail] = useState(null);
   const [lessonStatus, setLessonStatus] = useState("idle"); // idle | loading | error
@@ -63,10 +64,15 @@ export default function Home() {
     let mounted = true;
     (async () => {
       try {
+        setCourseStatus("loading");
         const data = await API.courses.get("builders-de-elite");
-        if (mounted) setCourse(data);
+        if (mounted) {
+          setCourse(data);
+          setCourseStatus("ready");
+        }
       } catch (err) {
         console.error("Erro ao carregar curso:", err);
+        if (mounted) setCourseStatus("error");
       }
     })();
     return () => {
@@ -172,7 +178,25 @@ export default function Home() {
               </button>
               <div className={`home__collapse ${open.lessons ? "is-open" : ""}`}>
                 <div className="home__sidebar-list">
-                  {course?.lessons && course.lessons.length > 0 ? (
+                  {courseStatus === "loading" ? (
+                    <>
+                      {[0,1,2].map((i) => (
+                        <div key={`skeleton-${i}`} className="home__sidebar-item" aria-disabled="true">
+                          <span className="icon">
+                            <FaPlay />
+                          </span>
+                          <span className="skeleton-line" style={{ width: i===0? '60%' : i===1? '48%' : '36%' }} />
+                        </div>
+                      ))}
+                    </>
+                  ) : courseStatus === "error" ? (
+                    <div className="home__sidebar-item" aria-disabled="true" role="status" aria-live="polite">
+                      <span className="icon">
+                        <FaPlay />
+                      </span>
+                      <span>Não foi possível carregar as aulas.</span>
+                    </div>
+                  ) : course?.lessons && course.lessons.length > 0 ? (
                     course.lessons
                       .slice()
                       .sort((a, b) => (a.order ?? 0) - (b.order ?? 0))

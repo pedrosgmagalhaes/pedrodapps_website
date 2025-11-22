@@ -221,6 +221,20 @@
   opacity: 0.75;
 }
 
+/* Skeleton loading for lessons list */
+.skeleton-line {
+  display: inline-block;
+  height: 12px;
+  border-radius: 8px;
+  background: linear-gradient(90deg, rgba(255,255,255,0.08) 25%, rgba(255,255,255,0.18) 50%, rgba(255,255,255,0.08) 75%);
+  background-size: 200% 100%;
+  animation: home-skeleton 1.2s ease-in-out infinite;
+}
+@keyframes home-skeleton {
+  0% { background-position: 200% 0; }
+  100% { background-position: 0 0; }
+}
+
 .home__terminal {
   margin-top: 12px;
   background: rgb(var(--bg-primary-rgb) / 55%);
