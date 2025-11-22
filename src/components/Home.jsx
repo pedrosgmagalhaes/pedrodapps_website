@@ -271,7 +271,13 @@ export default function Home() {
               <div className="home__bot-video" role="region" aria-label="Vídeo da aula">
                 <div className="home__bot-video-thumb" />
                 {lessonStatus === "loading" && (
-                  <div className="home__bot-video-caption">Carregando…</div>
+                  <div className="home__bot-video-caption">
+                    <div style={{ display: 'grid', gap: 10 }}>
+                      <span className="skeleton-line" style={{ width: '60%' }} />
+                      <span className="skeleton-line" style={{ width: '40%' }} />
+                      <span className="skeleton-line" style={{ width: '30%' }} />
+                    </div>
+                  </div>
                 )}
                 {lessonStatus === "error" && (
                   <div className="home__bot-video-caption">
@@ -312,7 +318,15 @@ export default function Home() {
             {activePanel === "lesson_terminal" && (
               <div className="home__bot-video" role="region" aria-label={t("features.terminal")}>
                 <div className="home__bot-video-caption">
-                  {lessonStatus === "loading" && <div>{t("loading")}</div>}
+                  {lessonStatus === "loading" && (
+                    <div>
+                      <div style={{ display: 'grid', gap: 10 }}>
+                        <span className="skeleton-line" style={{ width: '55%' }} />
+                        <span className="skeleton-line" style={{ width: '35%' }} />
+                        <span className="skeleton-line" style={{ width: '25%' }} />
+                      </div>
+                    </div>
+                  )}
                   {lessonStatus === "error" && <div>{t("error_loading_lesson")}</div>}
                   {lessonStatus === "ready" && (
                     <>
@@ -341,7 +355,16 @@ export default function Home() {
             {activePanel === "lesson_text" && (
               <div className="home__bot-video" role="region" aria-label={t("features.textContent")}>
                 <div className="home__bot-video-caption">
-                  {lessonStatus === "loading" && <div>{t("loading")}</div>}
+                  {lessonStatus === "loading" && (
+                    <div>
+                      <div style={{ display: 'grid', gap: 10 }}>
+                        <span className="skeleton-line" style={{ width: '70%' }} />
+                        <span className="skeleton-line" style={{ width: '65%' }} />
+                        <span className="skeleton-line" style={{ width: '50%' }} />
+                        <span className="skeleton-line" style={{ width: '40%' }} />
+                      </div>
+                    </div>
+                  )}
                   {lessonStatus === "error" && <div>{t("error_loading_lesson")}</div>}
                   {lessonStatus === "ready" && (
                     <>

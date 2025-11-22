@@ -3,43 +3,8 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import "./Resources.css";
 import { API, withAuth } from "../lib/api";
-import { useLocation } from "react-router-dom";
-import { collectContextParams } from "../lib/checkoutTelemetry";
 
 export default function Lessons() {
-  const location = useLocation();
-  const buildCheckoutUrl = () => {
-    const base = new URLSearchParams({ course: "builders-de-elite", product: "plan-anual" });
-    const src = new URLSearchParams(location.search);
-    [
-      "utm_source",
-      "utm_medium",
-      "utm_campaign",
-      "utm_content",
-      "utm_term",
-      "ref",
-      "origin",
-      "gclid",
-      "fbclid",
-      "lang",
-    ].forEach((k) => {
-      const v = src.get(k);
-      if (v) base.set(k, v);
-    });
-    const checkoutBase = (
-      (import.meta?.env?.VITE_CHECKOUT_BASE_URL ??
-        (typeof globalThis !== "undefined" &&
-        typeof globalThis["__APP_CHECKOUT_BASE_URL__"] === "string"
-          ? globalThis["__APP_CHECKOUT_BASE_URL__"]
-          : "")) ||
-      `${window.location.origin}/checkout`
-    ).trim();
-    const extra = collectContextParams();
-    Object.entries(extra).forEach(([k, v]) => {
-      if (v !== undefined && v !== null && String(v).length > 0) base.set(k, String(v));
-    });
-    return `${checkoutBase}?${base.toString()}`;
-  };
   const [course, setCourse] = useState(null);
   const [lessons, setLessons] = useState([]);
   const [status, setStatus] = useState("idle"); // idle | loading | error | ready
@@ -209,23 +174,39 @@ export default function Lessons() {
           {lessons.map((item) => (
             <div key={item.slug} className="resources__item" role="listitem">
               <span className="resources__item-title">{item.title}</span>
-              {item.locked ? (
-                <a className="resources__action" href={buildCheckoutUrl()}>
-                  Assinar
-                </a>
-              ) : (
+              {item.isAvailable ? (
                 <button
                   className="resources__action"
-                  onClick={() => openLesson(item.slug, item.locked)}
+                  onClick={() => openLesson(item.slug, false)}
                 >
                   Abrir
                 </button>
+              ) : (
+                <div style={{ display: 'grid', gap: 6, justifyItems: 'end' }}>
+                  <button className="resources__action is-disabled" disabled>
+                    Indisponível
+                  </button>
+                  {item.availableFrom && (
+                    <span className="resources__availability">
+                      Disponível em {new Intl.DateTimeFormat('pt-BR').format(new Date(item.availableFrom))}
+                    </span>
+                  )}
+                </div>
               )}
             </div>
           ))}
         </div>
-
-        {selected && (
+        {status === "loading" ? (
+          <div style={{ marginTop: 16 }} aria-live="polite" aria-label="Detalhe da aula">
+            <div className="resources__item" role="region" aria-label="Conteúdo da aula">
+              <div style={{ display: "grid", gap: 10 }}>
+                <span className="skeleton-line" style={{ width: '60%' }} />
+                <span className="skeleton-line" style={{ width: '45%' }} />
+                <span className="skeleton-line" style={{ width: '30%' }} />
+              </div>
+            </div>
+          </div>
+        ) : selected && (
           <div style={{ marginTop: 16 }} aria-live="polite" aria-label="Detalhe da aula">
             <div className="resources__item" role="region" aria-label="Conteúdo da aula">
               <div style={{ display: "grid", gap: 8 }}>
@@ -241,6 +222,11 @@ export default function Lessons() {
                     Abrir vídeo
                   </a>
                 ) : null}
+                {!selected.isAvailable && selected.availableFrom && (
+                  <span className="resources__availability">
+                    Disponível em {new Intl.DateTimeFormat('pt-BR').format(new Date(selected.availableFrom))}
+                  </span>
+                )}
                 {/* Conteúdo em texto, preservando quebras de linha */}
                 {selected.content && (
                   <div className="home__md">
