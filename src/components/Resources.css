@@ -56,6 +56,15 @@
   color: #000;
   font-weight: 700;
 }
+.resources__action[disabled], .resources__action.is-disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  filter: grayscale(0.2);
+}
+.resources__availability {
+  font-size: 12px;
+  color: #6b7280;
+}
 
 .resources__link {
   color: var(--accent-primary);

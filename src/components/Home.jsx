@@ -22,6 +22,7 @@ export default function Home() {
   const [activeLesson, setActiveLesson] = useState(null);
   const [lessonDetail, setLessonDetail] = useState(null);
   const [lessonStatus, setLessonStatus] = useState("idle"); // idle | loading | error
+  const [upcoming, setUpcoming] = useState([]);
   const { t } = useTranslation();
 
   const featureIcons = {
@@ -53,6 +54,13 @@ export default function Home() {
             setCourse({ ...(data || {}), lessons: Array.isArray(lessons) ? lessons : [] });
           } else {
             setCourse(data);
+          }
+          // Carrega agenda de próximas aulas
+          try {
+            const upcomingList = await API.courses.lessons.upcoming(courseSlug);
+            setUpcoming(Array.isArray(upcomingList) ? upcomingList : []);
+          } catch {
+            setUpcoming([]);
           }
           setCourseStatus("ready");
         }
@@ -258,17 +266,22 @@ export default function Home() {
                     Não foi possível carregar os detalhes da aula.
                   </div>
                 )}
-                {lessonStatus === "ready" && (
-                  <div className="home__bot-video-caption">
-                    {lessonDetail?.videoUrl || lessonDetail?.video_url ? (
-                      <a href={lessonDetail?.videoUrl || lessonDetail?.video_url} target="_blank" rel="noopener noreferrer">
-                        Abrir vídeo
-                      </a>
-                    ) : (
-                      "Em breve ficará disponível."
+                    {lessonStatus === "ready" && (
+                      <div className="home__bot-video-caption">
+                        {!lessonDetail?.isAvailable && lessonDetail?.availableFrom && (
+                          <div style={{ marginBottom: 10, color: "#6b7280" }}>
+                            Disponível em {new Intl.DateTimeFormat('pt-BR').format(new Date(lessonDetail.availableFrom))}
+                          </div>
+                        )}
+                        {lessonDetail?.videoUrl || lessonDetail?.video_url ? (
+                          <a href={lessonDetail?.videoUrl || lessonDetail?.video_url} target="_blank" rel="noopener noreferrer">
+                            Abrir vídeo
+                          </a>
+                        ) : (
+                          "Em breve ficará disponível."
+                        )}
+                      </div>
                     )}
-                  </div>
-                )}
               </div>
             )}
 
@@ -291,6 +304,11 @@ export default function Home() {
                   {lessonStatus === "error" && <div>{t("error_loading_lesson")}</div>}
                   {lessonStatus === "ready" && (
                     <>
+                      {!lessonDetail?.isAvailable && lessonDetail?.availableFrom && (
+                        <div style={{ marginBottom: 10, color: "#6b7280" }}>
+                          Disponível em {new Intl.DateTimeFormat('pt-BR').format(new Date(lessonDetail.availableFrom))}
+                        </div>
+                      )}
                       {lessonDetail?.terminalUrl || lessonDetail?.terminal_url ? (
                         <a
                           href={lessonDetail?.terminalUrl || lessonDetail?.terminal_url}
@@ -320,15 +338,15 @@ export default function Home() {
                           Disponível em {new Intl.DateTimeFormat('pt-BR').format(new Date(lessonDetail.availableFrom))}
                         </div>
                       )}
-                    {lessonDetail?.content ? (
-                      <div className="home__md">
-                        <ReactMarkdown remarkPlugins={[remarkGfm]} linkTarget="_blank">
-                          {lessonDetail.content}
-                        </ReactMarkdown>
-                      </div>
-                    ) : (
-                      t("text_content_coming_soon")
-                    )}
+                      {lessonDetail?.content ? (
+                        <div className="home__md">
+                          <ReactMarkdown remarkPlugins={[remarkGfm]} linkTarget="_blank">
+                            {lessonDetail.content}
+                          </ReactMarkdown>
+                        </div>
+                      ) : (
+                        t("text_content_coming_soon")
+                      )}
                     </>
                   )}
                 </div>
@@ -338,6 +356,21 @@ export default function Home() {
         </div>
       </div>
       {/* Gating removido: aulas sempre disponíveis */}
+      {/* Em breve: lista de próximas aulas com datas */}
+      {upcoming && upcoming.length > 0 && (
+        <div className="home__bot-video" role="region" aria-label="Em breve">
+          <div className="home__bot-video-caption">
+            <strong style={{ display: 'block', marginBottom: 8 }}>Em breve</strong>
+            <ul style={{ margin: 0, paddingLeft: 18 }}>
+              {upcoming.map((u) => (
+                <li key={u.slug} style={{ marginBottom: 4 }}>
+                  {u.title} — {new Intl.DateTimeFormat('pt-BR').format(new Date(u.availableFrom))}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      )}
     </section>
   );
 }

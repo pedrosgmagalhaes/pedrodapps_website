@@ -99,6 +99,8 @@ export const API = {
           `/api/courses/${encodeURIComponent(courseSlug)}/lessons/${encodeURIComponent(lessonSlug)}`,
           { ...opts, method: "GET" }
         ),
+      upcoming: (courseSlug, opts = {}) =>
+        jsonFetch(`/api/courses/${encodeURIComponent(courseSlug)}/lessons/upcoming`, { ...opts, method: "GET" }),
     },
     checkoutContext: (slug, queryParams = {}, opts = {}) => {
       const qp = new URLSearchParams();

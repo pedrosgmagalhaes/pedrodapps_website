@@ -111,7 +111,21 @@ export default function Lessons() {
       setSelected(null);
       return;
     }
-    setSelected(res?.lesson ?? res ?? null);
+    const detail = res?.lesson ?? res ?? null;
+    if (detail && detail.isAvailable === false && detail.availableFrom) {
+      setSelected({
+        title: detail.title,
+        description: detail.description,
+        isAvailable: false,
+        availableFrom: detail.availableFrom,
+        slug: detail.slug,
+        content: null,
+        videoUrl: null,
+      });
+      setStatus("ready");
+      return;
+    }
+    setSelected(detail);
     setStatus("ready");
   }
 
