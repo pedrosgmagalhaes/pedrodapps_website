@@ -8,8 +8,8 @@ import pixleyLogoViolet from "../assets/pixley_logo_icon_violet.svg";
 import pixleyLogoWhite from "../assets/pixley_logo_violet.png";
 import appleIcon from "../assets/apple.svg";
 import playstoreIcon from "../assets/playstore.svg";
-import { FaYoutube, FaInstagram, FaLinkedinIn, FaWhatsapp } from "react-icons/fa";
-import { SiX } from "react-icons/si";
+  import { FaYoutube, FaInstagram, FaLinkedinIn, FaWhatsapp } from "react-icons/fa";
+  import { SiX } from "react-icons/si";
 import { useLocation } from "react-router-dom";
 import { collectContextParams } from "../lib/checkoutTelemetry";
 
@@ -47,6 +47,28 @@ export default function Links() {
     });
     return `${checkoutBase}?${base.toString()}`;
   };
+  const buildWhatsAppUrl = () => {
+    const ctx = collectContextParams();
+    const lines = [];
+    lines.push("Olá");
+    const entry = ctx.entry_url || ctx.referrer || "meu acesso atual";
+    const device = ctx.device || "dispositivo";
+    lines.push(
+      `Estou entrando em contato através de ${entry}, utilizando dispositivo ${device} para ter mais informações.`
+    );
+    const utmPairs = [
+      ctx.utm_source ? `utm_source=${ctx.utm_source}` : null,
+      ctx.utm_medium ? `utm_medium=${ctx.utm_medium}` : null,
+      ctx.utm_campaign ? `utm_campaign=${ctx.utm_campaign}` : null,
+      ctx.utm_content ? `utm_content=${ctx.utm_content}` : null,
+      ctx.utm_term ? `utm_term=${ctx.utm_term}` : null,
+    ].filter(Boolean);
+    if (utmPairs.length) {
+      lines.push(`Origem de campanha: ${utmPairs.join(", ")}`);
+    }
+    const text = lines.join("\n");
+    return `https://wa.me/13215100204?text=${encodeURIComponent(text)}`;
+  };
   return (
     <section className="links" aria-label="Links rápidos">
       <div className="links__container">
@@ -82,6 +104,20 @@ export default function Links() {
                   aria-label="Entrar agora no Builders de Elite"
                 >
                   Entrar agora
+                </a>
+
+                <a
+                  className="links__item"
+                  href={buildWhatsAppUrl()}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Abrir conversa direta no WhatsApp"
+                >
+                  <FaWhatsapp className="links__icon" aria-hidden="true" />
+                  <div className="links__label">
+                    <span className="links__label-title">Contato direto no WhatsApp</span>
+                    <span className="links__label-sub">+1 (321) 510-0204</span>
+                  </div>
                 </a>
               </div>
             </div>

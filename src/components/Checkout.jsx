@@ -378,7 +378,7 @@ export default function Checkout() {
 
   const handleBoleto = async () => {
     if (!validateCommon()) return;
-    if (!doc || doc.length < 11) {
+    if (!doc || doc.replace(/\D/g, "").length < 11) {
       setStatus("error");
       setMessage("Informe um CPF/CNPJ válido.");
       return;
@@ -724,24 +724,22 @@ export default function Checkout() {
                 <h3 id="pix-title" className="checkout__panel-title">
                   Pagamento via PIX
                 </h3>
-                {nameReady && (
-                  <div className={`checkout__field fade-in`}>
-                    <label htmlFor="pix-doc" className="checkout__label">
-                      CPF/CNPJ
-                    </label>
-                    <input
-                      id="pix-doc"
-                      className="checkout__input"
-                      type="text"
-                      placeholder="CPF ou CNPJ"
-                      value={formatCpfCnpj(doc)}
-                      onChange={(e) => setDoc(e.target.value.replace(/[^0-9]/g, ""))}
-                      inputMode="numeric"
-                      autoComplete="off"
-                      pattern="\d*"
-                    />
-                  </div>
-                )}
+                <div className={`checkout__field fade-in`}>
+                  <label htmlFor="pix-doc" className="checkout__label">
+                    CPF/CNPJ
+                  </label>
+                  <input
+                    id="pix-doc"
+                    className="checkout__input"
+                    type="text"
+                    placeholder="CPF ou CNPJ"
+                    value={formatCpfCnpj(doc)}
+                    onChange={(e) => setDoc(e.target.value.replace(/[^0-9]/g, ""))}
+                    inputMode="numeric"
+                    autoComplete="off"
+                    pattern="\d*"
+                  />
+                </div>
                 {pixQr && (
                   <div className="checkout__pix-qr" aria-label="QR Code PIX">
                     <img src={pixQr} alt="QR Code PIX" className="checkout__pix-qr-img" />
@@ -752,7 +750,7 @@ export default function Checkout() {
                   className="btn btn-primary checkout__btn"
                   onClick={async () => {
                     // Exige CPF/CNPJ válido antes de gerar QR
-                    if (!doc || doc.length < 11) {
+                    if (!doc || doc.replace(/\D/g, "").length < 11) {
                       setStatus("error");
                       setMessage("Informe um CPF/CNPJ válido.");
                       return;
@@ -973,24 +971,22 @@ export default function Checkout() {
                 )}
                 {!(boletoLinhaDigitavel || boletoCodigoBarras) && (
                   <>
-                    {nameReady && (
-                      <div className={`checkout__field fade-in`}>
-                        <label htmlFor="buyer-doc" className="checkout__label">
-                          CPF/CNPJ
-                        </label>
-                        <input
-                          id="buyer-doc"
-                          className="checkout__input"
-                          type="text"
-                          placeholder="CPF ou CNPJ"
-                          value={formatCpfCnpj(doc)}
-                          onChange={(e) => setDoc(e.target.value.replace(/[^0-9]/g, ""))}
-                          inputMode="numeric"
-                          autoComplete="off"
-                          pattern="\d*"
-                        />
-                      </div>
-                    )}
+                    <div className={`checkout__field fade-in`}>
+                      <label htmlFor="buyer-doc" className="checkout__label">
+                        CPF/CNPJ
+                      </label>
+                      <input
+                        id="buyer-doc"
+                        className="checkout__input"
+                        type="text"
+                        placeholder="CPF ou CNPJ"
+                        value={formatCpfCnpj(doc)}
+                        onChange={(e) => setDoc(e.target.value.replace(/[^0-9]/g, ""))}
+                        inputMode="numeric"
+                        autoComplete="off"
+                        pattern="\d*"
+                      />
+                    </div>
                     {nameReady && doc.replace(/\D/g, "").length >= 11 && (
                       <div className={`checkout__field fade-in`}>
                         <label htmlFor="buyer-cep" className="checkout__label">

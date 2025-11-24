@@ -30,6 +30,8 @@ const CookiesPolicy = React.lazy(() => import("./components/ConsentNotice"));
 const DataDeletionPolicy = React.lazy(() => import("./components/DataDeletionPolicy"));
 const AdminTools = React.lazy(() => import("./components/AdminTools"));
 import "./App.css";
+import { FaWhatsapp } from "react-icons/fa";
+import { collectContextParams } from "./lib/checkoutTelemetry";
 import ViewportSection from "./components/ViewportSection";
 import heroBg from "./assets/builderselite.png";
 import TopBar from "./components/TopBar";
@@ -370,6 +372,41 @@ function App() {
           />
         </Routes>
       </main>
+      {(["/", "/links"].includes(pathname)) && (
+        (() => {
+          const ctx = collectContextParams();
+          const lines = [];
+          lines.push("Olá");
+          const entry = ctx.entry_url || ctx.referrer || "meu acesso atual";
+          const device = ctx.device || "dispositivo";
+          lines.push(
+            `Estou entrando em contato através de ${entry}, utilizando dispositivo ${device} para ter mais informações.`
+          );
+          const utmPairs = [
+            ctx.utm_source ? `utm_source=${ctx.utm_source}` : null,
+            ctx.utm_medium ? `utm_medium=${ctx.utm_medium}` : null,
+            ctx.utm_campaign ? `utm_campaign=${ctx.utm_campaign}` : null,
+            ctx.utm_content ? `utm_content=${ctx.utm_content}` : null,
+            ctx.utm_term ? `utm_term=${ctx.utm_term}` : null,
+          ].filter(Boolean);
+          if (utmPairs.length) {
+            lines.push(`Origem de campanha: ${utmPairs.join(", ")}`);
+          }
+          const text = encodeURIComponent(lines.join("\n"));
+          const href = `https://wa.me/13215100204?text=${text}`;
+          return (
+            <a
+              href={href}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Abrir conversa no WhatsApp"
+              className="floating-whatsapp-btn"
+            >
+              <FaWhatsapp size={24} aria-hidden="true" />
+            </a>
+          );
+        })()
+      )}
     </div>
   );
 }
