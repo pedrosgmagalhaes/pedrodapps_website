@@ -2,8 +2,8 @@ import React from "react";
 import Terminal from "./Terminal";
 
 export default function WelcomeTerminal({
-  title = "Bem-vindo ao grupo Builders de Elite",
-  description = "Conteúdos exclusivos para usuários avançados, vídeo aulas, download de bots, suporte e outros conteúdos riquíssimos.",
+  title = "Builders de Elite",
+  description = "O Builders de Elite é um programa voltado para criadores Web3 com o objetivo de gerar receita por meio de cripto de forma independente, com liberdade e empreendedorismo. Aqui você acessa conteúdos práticos, ferramentas avançadas e comunidade para acelerar sua jornada.",
   promptLabel = "builders-de-elite:~$",
   inputPlaceholder = "digite um comando (ex.: hello)",
   runLabel = "EXECUTAR",
@@ -49,6 +49,13 @@ export default function WelcomeTerminal({
         commands={defaultCommands}
         onRun={onRun}
       />
+      <div className="home__welcome" style={{ marginTop: 14 }}>
+        <p className="home__welcome-text">
+          O curso é organizado em módulos com vídeos gravados, espaço para perguntas na comunidade,
+          arquivos e downloads dos bots, além de aulas ao vivo para aprofundar os conteúdos e tirar
+          dúvidas em tempo real.
+        </p>
+      </div>
     </>
   );
 }

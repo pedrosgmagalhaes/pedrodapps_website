@@ -321,6 +321,7 @@ export const API = {
       jsonFetch("/api/auth/me", {
         ...opts,
         method: "GET",
+        token: getToken(),
       }),
     logout: (opts = {}) =>
       jsonFetch("/api/auth/logout", {

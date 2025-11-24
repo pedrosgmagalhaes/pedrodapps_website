@@ -9,6 +9,7 @@
   /* Conteúdo deslocado para a direita para liberar a sidebar fixa à esquerda */
   width: calc(100vw - 300px);
   margin-left: 300px;
+  max-width: 1680px;
 }
 
 .home__layout {
@@ -108,6 +109,30 @@
 .home__sidebar-item:hover {
   border-color: var(--accent-primary);
   color: var(--accent-primary);
+}
+
+.home__sidebar-item[disabled],
+.home__sidebar-item.is-disabled,
+.home__sidebar-item[aria-disabled="true"] {
+  opacity: 0.7;
+  cursor: not-allowed;
+  filter: grayscale(0.2);
+  pointer-events: none;
+}
+
+.home__badge {
+  display: inline-block;
+  margin-left: 8px;
+  padding: 2px 6px;
+  border-radius: 6px;
+  font-size: 11px;
+  border: 1px solid rgb(255 255 255 / 12%);
+}
+
+.home__badge--soon {
+  color: #e7d46b;
+  background: rgb(231 212 107 / 14%);
+  border-color: rgb(231 212 107 / 22%);
 }
 
 .home__sidebar-item .icon {
@@ -695,6 +720,15 @@
   color: #fff;
   font-size: 12px;
   text-decoration: none;
+}
+
+/* Variante extra grande para CTAs principais */
+.botinfo__btn-download--xl {
+  gap: 12px;
+  padding: 24px 36px;
+  font-size: 20px;
+  border-radius: 12px;
+  border-width: 2px;
 }
 
 .botinfo__btn-download:hover {

@@ -36,6 +36,10 @@ export default function Login() {
   const [mobileProceed, setMobileProceed] = useState(false);
   const [turnstileToken, setTurnstileToken] = useState("");
   const navigate = useNavigate();
+  const sanitizeEmail = useCallback(
+    (value) => String(value || "").replace(/\s+/g, "").toLowerCase(),
+    []
+  );
 
   const isValidEmail = useCallback((value) => /[^\s@]+@[^\s@]+\.[^\s@]+/.test(value), []);
 
@@ -84,7 +88,7 @@ export default function Login() {
 
   useEffect(() => {
     const handler = setTimeout(() => {
-      if (email.trim() && isValidEmail(email)) {
+      if (email && isValidEmail(email)) {
         if (TURNSTILE_ENABLED && !turnstileToken) return;
         checkEmailExists(email);
       } else {
@@ -154,7 +158,7 @@ export default function Login() {
     try {
       const rm = localStorage.getItem("remember_me") === "1";
       if (rm) {
-        const savedEmail = localStorage.getItem("remember_email") || "";
+        const savedEmail = sanitizeEmail(localStorage.getItem("remember_email") || "");
         const savedPassword = localStorage.getItem("remember_password") || "";
         setEmail(savedEmail);
         setPassword(savedPassword);
@@ -164,14 +168,14 @@ export default function Login() {
       // Ignora falhas de acesso ao localStorage (ex.: privacy, sandbox)
       void 0;
     }
-  }, []);
+  }, [sanitizeEmail]);
 
   // Persistir alterações quando a opção estiver ativada
   useEffect(() => {
     try {
       if (rememberMe) {
         localStorage.setItem("remember_me", "1");
-        localStorage.setItem("remember_email", email);
+        localStorage.setItem("remember_email", sanitizeEmail(email));
         localStorage.setItem("remember_password", password);
       } else {
         localStorage.setItem("remember_me", "0");
@@ -182,7 +186,7 @@ export default function Login() {
       // Ignora falhas de acesso ao localStorage (ex.: privacy, sandbox)
       void 0;
     }
-  }, [rememberMe, email, password]);
+  }, [rememberMe, email, password, sanitizeEmail]);
 
   const showPasswordFields = emailExists !== null;
   const isSignupMode = emailExists === false;
@@ -270,7 +274,8 @@ export default function Login() {
                   required
                   autoComplete="email"
                   value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  onChange={(e) => setEmail(sanitizeEmail(e.target.value))}
+                  onBlur={(e) => setEmail(sanitizeEmail(e.target.value))}
                 />
               </div>
               {isCheckingEmail && (
