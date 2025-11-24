@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import "./Home.css";
-import { FaRobot, FaPlay, FaDownload, FaLifeRing, FaBook } from "react-icons/fa";
+import { FaRobot, FaPlay, FaDownload, FaLifeRing, FaBook, FaInfoCircle } from "react-icons/fa";
 import WelcomeTerminal from "./WelcomeTerminal";
 import BotDownloadInfo from "./BotDownloadInfo";
 import SupportFeed from "./SupportFeed";
@@ -14,6 +14,7 @@ export default function Home() {
   const [progress] = useState(80);
   const [open, setOpen] = useState({ lessons: true, bots: true, honeypot: false });
   const [lessonOpenMap, setLessonOpenMap] = useState({});
+  const [moduleOpenMap, setModuleOpenMap] = useState({});
   const [activePanel, setActivePanel] = useState("welcome"); // welcome | honeypot_download | lesson_video | lesson_download | lesson_support
   // Gating removido: não usamos overlay de liberação
   // Countdown removido
@@ -49,19 +50,22 @@ export default function Home() {
         const data = await API.courses.get(courseSlug);
         if (mounted) {
           // Se o curso não trouxer lições embutidas, busca a lista separadamente
+          let baseLessons = [];
           if (!data?.lessons || !Array.isArray(data.lessons)) {
             const lessons = await API.courses.lessons.list(courseSlug);
-            setCourse({ ...(data || {}), lessons: Array.isArray(lessons) ? lessons : [] });
+            baseLessons = Array.isArray(lessons) ? lessons : [];
+            setCourse({ ...(data || {}), lessons: baseLessons });
           } else {
+            baseLessons = Array.isArray(data.lessons) ? data.lessons : [];
             setCourse(data);
           }
-          // Carrega agenda de próximas aulas
-          try {
-            const upcomingList = await API.courses.lessons.upcoming(courseSlug);
-            setUpcoming(Array.isArray(upcomingList) ? upcomingList : []);
-          } catch {
-            setUpcoming([]);
-          }
+          // Deriva agenda de próximas aulas a partir da lista
+          const upcomingList = Array.isArray(baseLessons)
+            ? baseLessons
+                .filter((l) => !l?.isAvailable && l?.availableFrom)
+                .sort((a, b) => new Date(a.availableFrom) - new Date(b.availableFrom))
+            : [];
+          setUpcoming(upcomingList);
           setCourseStatus("ready");
         }
       } catch (err) {
@@ -127,6 +131,11 @@ export default function Home() {
 
   const toggleLesson = (slug) => {
     setLessonOpenMap((prev) => ({ ...prev, [slug]: !prev[slug] }));
+  };
+
+  const toggleModule = (slug, key) => {
+    const mapKey = `${slug}:${key}`;
+    setModuleOpenMap((prev) => ({ ...prev, [mapKey]: !prev[mapKey] }));
   };
 
   // Terminal agora é um componente reutilizável (WelcomeTerminal)
@@ -199,40 +208,101 @@ export default function Home() {
                             className={`home__collapse ${lessonOpenMap[lesson.slug] ? "is-open" : ""}`}
                           >
                             <div className="home__sidebar-list home__sublist">
-                              {(() => {
-                                const order = {
-                                  textContent: 0,
-                                  video: 1,
-                                  botDownload: 2,
-                                  support: 3,
-                                  terminal: 4,
-                                };
-                                const features = (lesson.availableFeatures || [])
-                                  .slice()
-                                  .sort((a, b) => (order[a] ?? 99) - (order[b] ?? 99));
-                                return features.map((feat) => {
-                                  const Icon = featureIcons[feat] || FaPlay; // Default to FaPlay if no icon
-                                  return (
-                                    <button
-                                      key={feat}
-                                      className="home__sidebar-item"
-                                      type="button"
-                                      onClick={() =>
-                                        handleGatedAction(() => {
-                                          setActiveLesson(lesson.slug);
-                                          setActivePanel(featurePanels[feat]);
-                                        })
-                                      }
-                                      aria-controls="home-content"
-                                    >
-                                      <span className="icon">
-                                        <Icon />
-                                      </span>
-                                      <span>{t(`features.${feat}`)}</span>
-                                    </button>
-                                  );
-                                });
-                              })()}
+                              {lesson.slug === "honeypot-rugpull-detector" ? (
+                                <div className="home__sidebar-item-group">
+                                  <button
+                                    className="home__sidebar-item"
+                                    type="button"
+                                    onClick={() => toggleModule(lesson.slug, "introducao")}
+                                    aria-expanded={!!moduleOpenMap[`${lesson.slug}:introducao`]}
+                                    aria-controls={`module-${lesson.slug}-introducao-collapse`}
+                                  >
+                                    <span className="icon">
+                                      <FaInfoCircle />
+                                    </span>
+                                    <span>Introdução</span>
+                                  </button>
+                                  <div
+                                    id={`module-${lesson.slug}-introducao-collapse`}
+                                    className={`home__collapse ${moduleOpenMap[`${lesson.slug}:introducao`] ? "is-open" : ""}`}
+                                  >
+                                    <div className="home__sidebar-list home__sublist">
+                                      {(() => {
+                                        const order = {
+                                          textContent: 0,
+                                          video: 1,
+                                          botDownload: 2,
+                                          support: 3,
+                                          terminal: 4,
+                                        };
+                                        const features = (lesson.availableFeatures || [])
+                                          .slice()
+                                          .sort((a, b) => (order[a] ?? 99) - (order[b] ?? 99));
+                                        return features.map((feat) => {
+                                          const Icon = featureIcons[feat] || FaPlay;
+                                          let label = t(`features.${feat}`);
+                                          return (
+                                            <button
+                                              key={feat}
+                                              className="home__sidebar-item"
+                                              type="button"
+                                              onClick={() =>
+                                                handleGatedAction(() => {
+                                                  setActiveLesson(lesson.slug);
+                                                  setActivePanel(featurePanels[feat]);
+                                                })
+                                              }
+                                              aria-controls="home-content"
+                                            >
+                                              <span className="icon">
+                                                <Icon />
+                                              </span>
+                                              <span>{label}</span>
+                                            </button>
+                                          );
+                                        });
+                                      })()}
+                                    </div>
+                                  </div>
+                                </div>
+                              ) : (
+                                (() => {
+                                  const order = {
+                                    textContent: 0,
+                                    video: 1,
+                                    botDownload: 2,
+                                    support: 3,
+                                    terminal: 4,
+                                  };
+                                  const features = (lesson.availableFeatures || [])
+                                    .slice()
+                                    .sort((a, b) => (order[a] ?? 99) - (order[b] ?? 99));
+                                  return features.map((feat) => {
+                                    const Icon = featureIcons[feat] || FaPlay;
+                                    const baseLabel = t(`features.${feat}`);
+                                    const label = feat === "video" ? `${baseLabel}:` : baseLabel;
+                                    return (
+                                      <button
+                                        key={feat}
+                                        className="home__sidebar-item"
+                                        type="button"
+                                        onClick={() =>
+                                          handleGatedAction(() => {
+                                            setActiveLesson(lesson.slug);
+                                            setActivePanel(featurePanels[feat]);
+                                          })
+                                        }
+                                        aria-controls="home-content"
+                                      >
+                                        <span className="icon">
+                                          <Icon />
+                                        </span>
+                                        <span>{label}</span>
+                                      </button>
+                                    );
+                                  });
+                                })()
+                              )}
                             </div>
                           </div>
                         </div>
@@ -377,7 +447,7 @@ export default function Home() {
                       )}
                       {lessonDetail?.content ? (
                         <div className="home__md">
-                          <ReactMarkdown remarkPlugins={[remarkGfm]} linkTarget="_blank">
+                          <ReactMarkdown remarkPlugins={[remarkGfm]}>
                             {lessonDetail.content}
                           </ReactMarkdown>
                         </div>

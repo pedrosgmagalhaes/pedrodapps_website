@@ -2,14 +2,14 @@ import React from "react";
 import ViewportSection from "./ViewportSection";
 import "./Links.css";
 import pedrodappsIcon from "../assets/pedrodapps_icon.png";
-import buildersImg from "../assets/builderselite_transparent.png";
-import pedroLogo from "../assets/pedro_dapps_logo.png"; 
+import buildersImg from "../assets/builders.png";
+import pedroLogo from "../assets/pedro_dapps_logo.png";
 import pixleyLogoViolet from "../assets/pixley_logo_icon_violet.svg";
 import pixleyLogoWhite from "../assets/pixley_logo_violet.png";
 import appleIcon from "../assets/apple.svg";
 import playstoreIcon from "../assets/playstore.svg";
-  import { FaYoutube, FaInstagram, FaLinkedinIn, FaWhatsapp } from "react-icons/fa";
-  import { SiX } from "react-icons/si";
+import { FaYoutube, FaInstagram, FaLinkedinIn, FaWhatsapp } from "react-icons/fa";
+import { SiX } from "react-icons/si";
 import { useLocation } from "react-router-dom";
 import { collectContextParams } from "../lib/checkoutTelemetry";
 
@@ -47,7 +47,6 @@ export default function Links() {
     });
     return `${checkoutBase}?${base.toString()}`;
   };
-
   return (
     <section className="links" aria-label="Links rápidos">
       <div className="links__container">

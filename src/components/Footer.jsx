@@ -1,7 +1,7 @@
 import React from "react";
 import "./Footer.css";
 import logoPedrodApps from "../assets/pedro_dapps_logo.png";
-import { FaYoutube, FaInstagram, FaLinkedinIn, FaWhatsapp } from "react-icons/fa";
+import { FaYoutube, FaInstagram, FaLinkedinIn } from "react-icons/fa";
 
 const Footer = () => {
   return (
@@ -44,15 +44,6 @@ const Footer = () => {
               rel="noopener noreferrer"
             >
               <FaLinkedinIn className="social__icon" size={18} aria-hidden="true" />
-            </a>
-            <a
-              className="social"
-              href="https://wa.me/13215100204"
-              aria-label="WhatsApp"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <FaWhatsapp className="social__icon" size={18} aria-hidden="true" />
             </a>
           </div>
         </div>

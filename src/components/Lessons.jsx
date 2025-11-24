@@ -230,7 +230,7 @@ export default function Lessons() {
                 {/* Conteúdo em texto, preservando quebras de linha */}
                 {selected.content && (
                   <div className="home__md">
-                    <ReactMarkdown remarkPlugins={[remarkGfm]} linkTarget="_blank">
+                    <ReactMarkdown remarkPlugins={[remarkGfm]}>
                       {selected.content}
                     </ReactMarkdown>
                   </div>

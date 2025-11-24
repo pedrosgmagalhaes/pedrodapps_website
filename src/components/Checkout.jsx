@@ -221,46 +221,6 @@ export default function Checkout() {
         const qp = Object.fromEntries(Array.from(query.entries()));
         const res = await API.courses.checkoutContext(courseSlug, qp);
         if (!res?.error) {
-          const approvedList = Array.isArray(res?.payments?.approvedMethods)
-            ? res.payments.approvedMethods
-            : [];
-          const pixApproved = approvedList.includes("pix") || approvedList.includes("boleto");
-          const hasSlug = Boolean(
-            res?.payments?.pixley?.linkSlug ||
-              res?.payments?.pixleyLinkSlug ||
-              res?.course?.pixleyLinkSlug ||
-              res?.pixleyLinkSlug
-          );
-          if (pixApproved && !hasSlug) {
-            const priceCents = res?.product?.totalCents || res?.course?.priceCents;
-            const priceBrl = priceCents ? priceCents / 100 : null;
-            const createBody = {};
-            if (res?.payments?.pixley?.allowCustomAmount === true && priceBrl) {
-              createBody.amount = Number(priceBrl);
-            }
-            createBody.description = "Checkout via site";
-            createBody.metadata = { ...utm, course: courseSlug };
-            try {
-              const created = await API.courses.pixleyLinkCreate(courseSlug, createBody);
-              const slugCandidate =
-                created?.linkSlug ||
-                created?.slug ||
-                created?.data?.linkSlug ||
-                created?.data?.slug ||
-                created?.data?.link?.slug ||
-                created?.link?.slug ||
-                null;
-              if (slugCandidate) {
-                res.course = res.course || {};
-                res.course.pixleyLinkSlug = slugCandidate;
-                res.pixleyLinkSlug = slugCandidate;
-                res.payments = res.payments || {};
-                res.payments.pixley = { ...(res.payments.pixley || {}), linkSlug: slugCandidate };
-              }
-            } catch (e) {
-              void e;
-            }
-          }
           setCtx(res);
           // Ajusta método inicial com base em recomendação + métodos aprovados
           const recommended = res?.payments?.recommended;
@@ -418,7 +378,7 @@ export default function Checkout() {
 
   const handleBoleto = async () => {
     if (!validateCommon()) return;
-    if (!doc || doc.replace(/\D/g, "").length < 11) {
+    if (!doc || doc.length < 11) {
       setStatus("error");
       setMessage("Informe um CPF/CNPJ válido.");
       return;
@@ -764,22 +724,24 @@ export default function Checkout() {
                 <h3 id="pix-title" className="checkout__panel-title">
                   Pagamento via PIX
                 </h3>
-                <div className={`checkout__field fade-in`}>
-                  <label htmlFor="pix-doc" className="checkout__label">
-                    CPF/CNPJ
-                  </label>
-                  <input
-                    id="pix-doc"
-                    className="checkout__input"
-                    type="text"
-                    placeholder="CPF ou CNPJ"
-                    value={formatCpfCnpj(doc)}
-                    onChange={(e) => setDoc(e.target.value.replace(/[^0-9]/g, ""))}
-                    inputMode="numeric"
-                    autoComplete="off"
-                    pattern="\d*"
-                  />
-                </div>
+                {nameReady && (
+                  <div className={`checkout__field fade-in`}>
+                    <label htmlFor="pix-doc" className="checkout__label">
+                      CPF/CNPJ
+                    </label>
+                    <input
+                      id="pix-doc"
+                      className="checkout__input"
+                      type="text"
+                      placeholder="CPF ou CNPJ"
+                      value={formatCpfCnpj(doc)}
+                      onChange={(e) => setDoc(e.target.value.replace(/[^0-9]/g, ""))}
+                      inputMode="numeric"
+                      autoComplete="off"
+                      pattern="\d*"
+                    />
+                  </div>
+                )}
                 {pixQr && (
                   <div className="checkout__pix-qr" aria-label="QR Code PIX">
                     <img src={pixQr} alt="QR Code PIX" className="checkout__pix-qr-img" />
@@ -789,9 +751,8 @@ export default function Checkout() {
                   type="button"
                   className="btn btn-primary checkout__btn"
                   onClick={async () => {
-                    if (!validateCommon()) return;
                     // Exige CPF/CNPJ válido antes de gerar QR
-                    if (!doc || doc.replace(/\D/g, "").length < 11) {
+                    if (!doc || doc.length < 11) {
                       setStatus("error");
                       setMessage("Informe um CPF/CNPJ válido.");
                       return;
@@ -829,10 +790,7 @@ export default function Checkout() {
                         payload.amount = Number(PRICE_BRL);
                       }
                       const data = await API.courses.pixleyQr(courseSlug, payload);
-                      if (data?.error) {
-                        const backendMsg = data?.data?.error || data?.data?.message;
-                        throw new Error(backendMsg ? String(backendMsg) : "request_failed");
-                      }
+                      if (data?.error) throw new Error("request_failed");
                       if (data?.qrCode) {
                         const v = String(data.qrCode);
                         if (v.startsWith("data:image")) {
@@ -848,16 +806,14 @@ export default function Checkout() {
                         const img = await QRCode.toDataURL(v);
                         setPixQr(img);
                       } else {
-                        const msg = data?.message || data?.status || "invalid_response";
-                        throw new Error(String(msg));
+                        throw new Error("invalid_response");
                       }
                       setPixQrId(String(data?.qrCodeId || data?.id || ""));
                       setStatus("success");
                       setMessage("Confirmar pagamento PIX");
-                    } catch (err) {
+                    } catch {
                       setStatus("error");
-                      const msg = err?.message || "Não foi possível gerar o QR Code de PIX.";
-                      setMessage(msg);
+                      setMessage("Não foi possível gerar o QR Code de PIX.");
                     }
                   }}
                 >
@@ -1017,22 +973,24 @@ export default function Checkout() {
                 )}
                 {!(boletoLinhaDigitavel || boletoCodigoBarras) && (
                   <>
-                    <div className={`checkout__field fade-in`}>
-                      <label htmlFor="buyer-doc" className="checkout__label">
-                        CPF/CNPJ
-                      </label>
-                      <input
-                        id="buyer-doc"
-                        className="checkout__input"
-                        type="text"
-                        placeholder="CPF ou CNPJ"
-                        value={formatCpfCnpj(doc)}
-                        onChange={(e) => setDoc(e.target.value.replace(/[^0-9]/g, ""))}
-                        inputMode="numeric"
-                        autoComplete="off"
-                        pattern="\d*"
-                      />
-                    </div>
+                    {nameReady && (
+                      <div className={`checkout__field fade-in`}>
+                        <label htmlFor="buyer-doc" className="checkout__label">
+                          CPF/CNPJ
+                        </label>
+                        <input
+                          id="buyer-doc"
+                          className="checkout__input"
+                          type="text"
+                          placeholder="CPF ou CNPJ"
+                          value={formatCpfCnpj(doc)}
+                          onChange={(e) => setDoc(e.target.value.replace(/[^0-9]/g, ""))}
+                          inputMode="numeric"
+                          autoComplete="off"
+                          pattern="\d*"
+                        />
+                      </div>
+                    )}
                     {nameReady && doc.replace(/\D/g, "").length >= 11 && (
                       <div className={`checkout__field fade-in`}>
                         <label htmlFor="buyer-cep" className="checkout__label">

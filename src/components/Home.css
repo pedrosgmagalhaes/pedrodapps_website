@@ -102,6 +102,7 @@
   cursor: pointer;
   font-size: 13px;
   text-align: left;
+  width: 100%;
 }
 
 .home__sidebar-item:hover {
@@ -130,6 +131,7 @@
   background: rgb(255 255 255 / 2%);
   border-color: rgb(255 255 255 / 5%);
   margin-top: 8px; /* Adicionando margin-top para espaçamento após o Vídeo Aula */
+  width: 100%;
 }
 
 /* Título e vídeo do bot dentro da Home */
