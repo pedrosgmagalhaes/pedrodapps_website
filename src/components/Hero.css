@@ -1,17 +1,19 @@
 /* Seção Hero */
 .hero {
-  background-color: #100e04;
-  padding: 160px 0 0; /* mais altura e espaçamento inferior */
+  background-color: #ffffff;
   color: var(--text-primary);
-  text-shadow: none; /* remove quaisquer sombras no bloco */
-  position: relative; /* permite sobreposição decorativa à direita */
-  overflow: hidden; /* garante que o overlay ocupe toda a seção sem gerar scroll */
+  text-shadow: none;
+  position: relative;
+  overflow: hidden;
+}
 
-  /* Imagem contida; cor sólida #100E04 preenche o restante */
-  background-image: url("../assets/builderselite.png");
-  background-size: contain;
-  background-position: center;
-  background-repeat: no-repeat;
+.hero.hero--loading {
+  opacity: 0;
+}
+
+.hero.hero--ready {
+  opacity: 1;
+  transition: opacity 480ms ease;
 }
 
 /* Overlay Matrix fica abaixo do conteúdo, acima do background da seção */
@@ -22,6 +24,67 @@
   pointer-events: none;
   width: 100%;
   height: 100%;
+}
+
+.hero__video-frame {
+  position: relative;
+  width: 100%;
+  max-width: 680px;
+  margin: 0 auto;
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.hero__video-frame::before {
+  content: "";
+  position: absolute;
+  inset: -4px;
+  border-radius: 18px;
+  background: conic-gradient(from 180deg, #79ff6b, #38c6ff, #ff6bb8, #79ff6b);
+  filter: blur(14px);
+  animation: heroFrameGlow 6s linear infinite;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.hero__bg-video {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  z-index: 1;
+  transform: translateY(8px);
+  opacity: 0;
+  animation: heroVideoIntro 900ms ease-out forwards;
+}
+
+.hero__video-frame:hover {
+  box-shadow: 0 16px 36px rgb(0 0 0 / 16%);
+}
+
+.hero__video-frame:hover .hero__bg-video {
+  transform: scale(1.015);
+}
+
+@keyframes heroVideoIntro {
+  from {
+    transform: translateY(8px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes heroFrameGlow {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 .hero__matrix canvas {

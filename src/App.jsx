@@ -33,7 +33,7 @@ import "./App.css";
 import { FaWhatsapp } from "react-icons/fa";
 import { collectContextParams } from "./lib/checkoutTelemetry";
 import ViewportSection from "./components/ViewportSection";
-import heroBg from "./assets/builderselite.png";
+import heroPoster from "./assets/buildersdeelite.png";
 import TopBar from "./components/TopBar";
 
 function App() {
@@ -74,10 +74,10 @@ function App() {
     }
   }, [pathname]);
 
-  // Precarrega a imagem de fundo do Hero para evitar atraso mesmo com lazy
+  // Precarrega a imagem de fallback do Hero (poster)
   useEffect(() => {
     const img = new Image();
-    img.src = heroBg;
+    img.src = heroPoster;
   }, []);
 
   useEffect(() => {

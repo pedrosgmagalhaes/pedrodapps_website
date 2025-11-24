@@ -749,6 +749,7 @@ export default function Checkout() {
                   type="button"
                   className="btn btn-primary checkout__btn"
                   onClick={async () => {
+                    if (!validateCommon()) return;
                     // Exige CPF/CNPJ válido antes de gerar QR
                     if (!doc || doc.replace(/\D/g, "").length < 11) {
                       setStatus("error");
@@ -788,7 +789,10 @@ export default function Checkout() {
                         payload.amount = Number(PRICE_BRL);
                       }
                       const data = await API.courses.pixleyQr(courseSlug, payload);
-                      if (data?.error) throw new Error("request_failed");
+                      if (data?.error) {
+                        const backendMsg = data?.data?.error || data?.data?.message;
+                        throw new Error(backendMsg ? String(backendMsg) : "request_failed");
+                      }
                       if (data?.qrCode) {
                         const v = String(data.qrCode);
                         if (v.startsWith("data:image")) {
@@ -804,14 +808,16 @@ export default function Checkout() {
                         const img = await QRCode.toDataURL(v);
                         setPixQr(img);
                       } else {
-                        throw new Error("invalid_response");
+                        const msg = data?.message || data?.status || "invalid_response";
+                        throw new Error(String(msg));
                       }
                       setPixQrId(String(data?.qrCodeId || data?.id || ""));
                       setStatus("success");
                       setMessage("Confirmar pagamento PIX");
-                    } catch {
+                    } catch (err) {
                       setStatus("error");
-                      setMessage("Não foi possível gerar o QR Code de PIX.");
+                      const msg = err?.message || "Não foi possível gerar o QR Code de PIX.";
+                      setMessage(msg);
                     }
                   }}
                 >
