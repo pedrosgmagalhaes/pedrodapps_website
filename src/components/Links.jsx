@@ -105,20 +105,6 @@ export default function Links() {
                 >
                   Entrar agora
                 </a>
-
-                <a
-                  className="links__item"
-                  href={buildWhatsAppUrl()}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label="Abrir conversa direta no WhatsApp"
-                >
-                  <FaWhatsapp className="links__icon" aria-hidden="true" />
-                  <div className="links__label">
-                    <span className="links__label-title">Contato direto no WhatsApp</span>
-                    <span className="links__label-sub">+1 (321) 510-0204</span>
-                  </div>
-                </a>
               </div>
             </div>
           </div>
