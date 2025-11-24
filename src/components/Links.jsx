@@ -2,8 +2,8 @@ import React from "react";
 import ViewportSection from "./ViewportSection";
 import "./Links.css";
 import pedrodappsIcon from "../assets/pedrodapps_icon.png";
-import buildersImg from "../assets/builders.png";
-import pedroLogo from "../assets/pedro_dapps_logo.png";
+import buildersImg from "../assets/builderselite_transparent.png";
+import pedroLogo from "../assets/pedro_dapps_logo.png"; 
 import pixleyLogoViolet from "../assets/pixley_logo_icon_violet.svg";
 import pixleyLogoWhite from "../assets/pixley_logo_violet.png";
 import appleIcon from "../assets/apple.svg";
@@ -47,28 +47,7 @@ export default function Links() {
     });
     return `${checkoutBase}?${base.toString()}`;
   };
-  const buildWhatsAppUrl = () => {
-    const ctx = collectContextParams();
-    const lines = [];
-    lines.push("Olá");
-    const entry = ctx.entry_url || ctx.referrer || "meu acesso atual";
-    const device = ctx.device || "dispositivo";
-    lines.push(
-      `Estou entrando em contato através de ${entry}, utilizando dispositivo ${device} para ter mais informações.`
-    );
-    const utmPairs = [
-      ctx.utm_source ? `utm_source=${ctx.utm_source}` : null,
-      ctx.utm_medium ? `utm_medium=${ctx.utm_medium}` : null,
-      ctx.utm_campaign ? `utm_campaign=${ctx.utm_campaign}` : null,
-      ctx.utm_content ? `utm_content=${ctx.utm_content}` : null,
-      ctx.utm_term ? `utm_term=${ctx.utm_term}` : null,
-    ].filter(Boolean);
-    if (utmPairs.length) {
-      lines.push(`Origem de campanha: ${utmPairs.join(", ")}`);
-    }
-    const text = lines.join("\n");
-    return `https://wa.me/13215100204?text=${encodeURIComponent(text)}`;
-  };
+
   return (
     <section className="links" aria-label="Links rápidos">
       <div className="links__container">

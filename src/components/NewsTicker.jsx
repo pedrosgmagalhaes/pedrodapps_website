@@ -161,12 +161,7 @@ export default function NewsTicker({ ids = DEFAULT_IDS, vsCurrency = "BRL", refr
                   const iconUrl = getIconUrl(item.id, item.symbol);
                   return (
                     <li className="news-ticker__item" key={`${idx}-${item.id}`}>
-                      <a
-                        href={item.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="news-ticker__link"
-                      >
+                      <div className="news-ticker__link" role="group" aria-label={`${item.name} ${item.symbol}`}>
                         {iconUrl && (
                           <img
                             src={iconUrl}
@@ -183,7 +178,7 @@ export default function NewsTicker({ ids = DEFAULT_IDS, vsCurrency = "BRL", refr
                         <span className={`news-ticker__change ${isUp ? "up" : "down"}`}>
                           {changeStr}
                         </span>
-                      </a>
+                      </div>
                     </li>
                   );
                 })}

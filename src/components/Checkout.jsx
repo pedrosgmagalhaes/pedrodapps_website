@@ -221,6 +221,46 @@ export default function Checkout() {
         const qp = Object.fromEntries(Array.from(query.entries()));
         const res = await API.courses.checkoutContext(courseSlug, qp);
         if (!res?.error) {
+          const approvedList = Array.isArray(res?.payments?.approvedMethods)
+            ? res.payments.approvedMethods
+            : [];
+          const pixApproved = approvedList.includes("pix") || approvedList.includes("boleto");
+          const hasSlug = Boolean(
+            res?.payments?.pixley?.linkSlug ||
+              res?.payments?.pixleyLinkSlug ||
+              res?.course?.pixleyLinkSlug ||
+              res?.pixleyLinkSlug
+          );
+          if (pixApproved && !hasSlug) {
+            const priceCents = res?.product?.totalCents || res?.course?.priceCents;
+            const priceBrl = priceCents ? priceCents / 100 : null;
+            const createBody = {};
+            if (res?.payments?.pixley?.allowCustomAmount === true && priceBrl) {
+              createBody.amount = Number(priceBrl);
+            }
+            createBody.description = "Checkout via site";
+            createBody.metadata = { ...utm, course: courseSlug };
+            try {
+              const created = await API.courses.pixleyLinkCreate(courseSlug, createBody);
+              const slugCandidate =
+                created?.linkSlug ||
+                created?.slug ||
+                created?.data?.linkSlug ||
+                created?.data?.slug ||
+                created?.data?.link?.slug ||
+                created?.link?.slug ||
+                null;
+              if (slugCandidate) {
+                res.course = res.course || {};
+                res.course.pixleyLinkSlug = slugCandidate;
+                res.pixleyLinkSlug = slugCandidate;
+                res.payments = res.payments || {};
+                res.payments.pixley = { ...(res.payments.pixley || {}), linkSlug: slugCandidate };
+              }
+            } catch (e) {
+              void e;
+            }
+          }
           setCtx(res);
           // Ajusta método inicial com base em recomendação + métodos aprovados
           const recommended = res?.payments?.recommended;

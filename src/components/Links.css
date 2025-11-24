@@ -228,13 +228,14 @@
   padding: 18px 16px;
   margin-bottom: 20px;
   border-radius: 14px;
-  background: linear-gradient(90deg, rgb(34 197 94 / 20%), rgb(12 84 44 / 18%));
+  background: rgb(255 255 255 / 6%);
   border: 1px solid rgb(255 255 255 / 14%);
   box-shadow:
     0 12px 28px rgb(0 0 0 / 35%),
     inset 0 0 0 1px rgb(255 255 255 / 8%);
   text-align: left;
   animation: highlight-glow 6s ease-in-out infinite;
+  color: var(--neutral-white);
 }
 
 @keyframes highlight-glow {
@@ -247,8 +248,8 @@
 
   50% {
     box-shadow:
-      0 16px 36px rgb(34 197 94 / 28%),
-      0 0 22px rgb(34 197 94 / 22%),
+      0 16px 36px rgb(0 0 0 / 18%),
+      0 0 22px rgb(0 0 0 / 10%),
       inset 0 0 0 1px rgb(255 255 255 / 10%);
   }
 }
@@ -259,7 +260,7 @@
   max-width: 680px;
   border-radius: 12px;
   object-fit: contain;
-  filter: drop-shadow(0 2px 12px rgb(34 197 94 / 35%));
+  filter: drop-shadow(0 2px 12px rgb(0 0 0 / 20%));
 }
 
 .links__highlight-content {
@@ -269,7 +270,7 @@
 
 .links__highlight-eyebrow {
   font-size: 0.8rem;
-  color: #a9a9c8;
+  color: rgb(255 255 255 / 80%);
   letter-spacing: 0.4px;
 }
 
@@ -277,11 +278,12 @@
   font-size: 1.15rem;
   font-weight: 800;
   letter-spacing: 0.6px;
+  color: var(--neutral-white);
 }
 
 .links__highlight-subtitle {
   font-size: 0.95rem;
-  color: #d6d6ee;
+  color: rgb(255 255 255 / 85%);
 }
 
 .links__highlight-actions {
@@ -313,15 +315,18 @@
 .links__highlight-btn:hover {
   transform: translateY(-1px);
   background: rgb(34 197 94 / 95%);
-  box-shadow: 0 8px 18px rgb(34 197 94 / 32%);
+  box-shadow: 0 8px 18px rgb(0 0 0 / 20%);
 }
 
 .links__highlight-btn--secondary {
-  background: rgb(255 255 255 / 14%);
+  background: rgb(255 255 255 / 6%);
+  color: var(--neutral-white);
+  border: 1px solid rgb(255 255 255 / 18%);
 }
 
 .links__highlight-btn--secondary:hover {
   background: rgb(255 255 255 / 22%);
+  border-color: rgb(255 255 255 / 30%);
 }
 
 @media (width <= 480px) {

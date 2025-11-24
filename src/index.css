@@ -7,7 +7,7 @@
 
 :root {
   /* Cores principais baseadas no esquema fornecido */
-  --bg-primary: #100e04;
+  --bg-primary: #000;
   --bg-primary-rgb: 16 14 4; /* RGB equivalente para permitir alpha no overlay */
   --bg-secondary: #7be33d;
   --bg-tertiary: #fff;

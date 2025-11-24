@@ -1,19 +1,11 @@
 /* Seção Hero */
 .hero {
-  background-color: #ffffff;
+  background-color: #000;
   color: var(--text-primary);
-  text-shadow: none;
-  position: relative;
-  overflow: hidden;
-}
+  text-shadow: none; /* remove quaisquer sombras no bloco */
+  position: relative; /* permite sobreposição decorativa à direita */
+  overflow: hidden; /* garante que o overlay ocupe toda a seção sem gerar scroll */
 
-.hero.hero--loading {
-  opacity: 0;
-}
-
-.hero.hero--ready {
-  opacity: 1;
-  transition: opacity 480ms ease;
 }
 
 /* Overlay Matrix fica abaixo do conteúdo, acima do background da seção */
@@ -26,65 +18,15 @@
   height: 100%;
 }
 
-.hero__video-frame {
-  position: relative;
-  width: 100%;
-  max-width: 680px;
-  margin: 0 auto;
-  border-radius: 16px;
-  overflow: hidden;
-}
-
-.hero__video-frame::before {
-  content: "";
-  position: absolute;
-  inset: -4px;
-  border-radius: 18px;
-  background: conic-gradient(from 180deg, #79ff6b, #38c6ff, #ff6bb8, #79ff6b);
-  filter: blur(14px);
-  animation: heroFrameGlow 6s linear infinite;
-  z-index: 0;
-  pointer-events: none;
-}
-
 .hero__bg-video {
   position: relative;
   display: block;
   width: 100%;
+  max-width: 680px;
   height: auto;
+  margin: 0 auto;
   object-fit: contain;
   z-index: 1;
-  transform: translateY(8px);
-  opacity: 0;
-  animation: heroVideoIntro 900ms ease-out forwards;
-}
-
-.hero__video-frame:hover {
-  box-shadow: 0 16px 36px rgb(0 0 0 / 16%);
-}
-
-.hero__video-frame:hover .hero__bg-video {
-  transform: scale(1.015);
-}
-
-@keyframes heroVideoIntro {
-  from {
-    transform: translateY(8px);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
-}
-
-@keyframes heroFrameGlow {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
 }
 
 .hero__matrix canvas {
@@ -733,56 +675,8 @@
   pointer-events: none;
   z-index: 0;
   will-change: opacity, filter;
-  animation: dotsTwinkleRight 6s ease-in-out infinite;
-  background-image:
-    radial-gradient(
-      36px 36px at 84% 18%,
-      rgb(129 223 77 / 30%) 0,
-      rgb(129 223 77 / 14%) 35%,
-      rgb(129 223 77 / 0%) 60%
-    ),
-    radial-gradient(
-      24px 24px at 72% 32%,
-      rgb(129 223 77 / 28%) 0,
-      rgb(129 223 77 / 12%) 38%,
-      rgb(129 223 77 / 0%) 60%
-    ),
-    radial-gradient(
-      48px 48px at 90% 48%,
-      rgb(129 223 77 / 22%) 0,
-      rgb(129 223 77 / 10%) 40%,
-      rgb(129 223 77 / 0%) 70%
-    ),
-    radial-gradient(
-      28px 28px at 66% 56%,
-      rgb(129 223 77 / 28%) 0,
-      rgb(129 223 77 / 12%) 36%,
-      rgb(129 223 77 / 0%) 62%
-    ),
-    radial-gradient(
-      16px 16px at 80% 70%,
-      rgb(129 223 77 / 32%) 0,
-      rgb(129 223 77 / 16%) 40%,
-      rgb(129 223 77 / 0%) 68%
-    ),
-    radial-gradient(
-      40px 40px at 94% 72%,
-      rgb(129 223 77 / 24%) 0,
-      rgb(129 223 77 / 10%) 40%,
-      rgb(129 223 77 / 0%) 70%
-    ),
-    radial-gradient(
-      22px 22px at 70% 84%,
-      rgb(129 223 77 / 30%) 0,
-      rgb(129 223 77 / 14%) 40%,
-      rgb(129 223 77 / 0%) 68%
-    ),
-    radial-gradient(
-      12px 12px at 88% 86%,
-      rgb(129 223 77 / 35%) 0,
-      rgb(129 223 77 / 18%) 40%,
-      rgb(129 223 77 / 0%) 68%
-    );
+  animation: none;
+  background-image: none;
 }
 
 /* Bolinhas à esquerda também, com brilho alternado */
@@ -793,32 +687,8 @@
   pointer-events: none;
   z-index: 0;
   will-change: opacity, filter;
-  animation: dotsTwinkleLeft 7.5s ease-in-out infinite;
-  background-image:
-    radial-gradient(
-      20px 20px at 18% 22%,
-      rgb(129 223 77 / 28%) 0,
-      rgb(129 223 77 / 12%) 40%,
-      rgb(129 223 77 / 0%) 68%
-    ),
-    radial-gradient(
-      16px 16px at 30% 36%,
-      rgb(129 223 77 / 26%) 0,
-      rgb(129 223 77 / 12%) 38%,
-      rgb(129 223 77 / 0%) 60%
-    ),
-    radial-gradient(
-      24px 24px at 12% 54%,
-      rgb(129 223 77 / 22%) 0,
-      rgb(129 223 77 / 10%) 40%,
-      rgb(129 223 77 / 0%) 70%
-    ),
-    radial-gradient(
-      14px 14px at 26% 72%,
-      rgb(129 223 77 / 30%) 0,
-      rgb(129 223 77 / 14%) 42%,
-      rgb(129 223 77 / 0%) 68%
-    );
+  animation: none;
+  background-image: none;
 }
 
 /* Moedas decorativas saltando lentamente */
