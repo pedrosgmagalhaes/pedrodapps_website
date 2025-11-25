@@ -1,7 +1,7 @@
 .home {
   background: var(--bg-primary);
   color: #e7e7e7;
-  min-height: 100vh;
+  min-height: 90vh;
   display: flex;
   flex-direction: column;
   padding: 32px 0 0;
@@ -11,7 +11,7 @@
   /* Conteúdo deslocado para a direita para liberar a sidebar fixa à esquerda */
   width: calc(100vw - 300px);
   margin-left: 300px;
-  max-width: 1680px;
+  width: 80%;
   flex: 1;
 }
 
@@ -41,8 +41,12 @@
 }
 
 /* Faz o primeiro grupo (Aulas) ocupar toda a altura disponível */
-.home__sidebar-group:first-of-type { flex: 1; }
-.home__sidebar-group:first-of-type .home__collapse.is-open { max-height: none; }
+.home__sidebar-group:first-of-type {
+  flex: 1;
+}
+.home__sidebar-group:first-of-type .home__collapse.is-open {
+  max-height: none;
+}
 .home__sidebar-group:first-of-type .home__sidebar-list:not(.home__sublist) {
   flex: 1;
   overflow-y: auto;
@@ -173,7 +177,9 @@
   justify-content: center;
   color: rgb(231 231 231 / 75%);
   font-size: 12px;
-  transition: transform 0.2s ease, color 0.2s ease;
+  transition:
+    transform 0.2s ease,
+    color 0.2s ease;
 }
 
 .home__sidebar-item:hover .home__chevron,
@@ -264,27 +270,63 @@
   line-height: 1.75;
   color: rgb(231 231 231 / 92%);
 }
-.home__md h1, .home__md h2, .home__md h3, .home__md h4 {
+.home__md h1,
+.home__md h2,
+.home__md h3,
+.home__md h4 {
   margin: 12px 0 8px;
   font-weight: 800;
   color: #f5f7ff;
 }
-.home__md h1 { font-size: 22px; letter-spacing: 0.3px; }
-.home__md h2 { font-size: 18px; letter-spacing: 0.2px; }
-.home__md h3 { font-size: 16px; }
-.home__md h4 { font-size: 15px; }
+.home__md h1 {
+  font-size: 22px;
+  letter-spacing: 0.3px;
+}
+.home__md h2 {
+  font-size: 18px;
+  letter-spacing: 0.2px;
+}
+.home__md h3 {
+  font-size: 16px;
+}
+.home__md h4 {
+  font-size: 15px;
+}
 
-.home__md p { margin: 10px 0; }
-.home__md strong { font-weight: 800; color: #ffffff; }
-.home__md em { font-style: italic; opacity: 0.95; }
+.home__md p {
+  margin: 10px 0;
+}
+.home__md strong {
+  font-weight: 800;
+  color: #ffffff;
+}
+.home__md em {
+  font-style: italic;
+  opacity: 0.95;
+}
 
-.home__md ul, .home__md ol { margin: 10px 0 10px 22px; }
-.home__md ul { list-style: disc; }
-.home__md ol { list-style: decimal; }
-.home__md li { margin: 6px 0; }
+.home__md ul,
+.home__md ol {
+  margin: 10px 0 10px 22px;
+}
+.home__md ul {
+  list-style: disc;
+}
+.home__md ol {
+  list-style: decimal;
+}
+.home__md li {
+  margin: 6px 0;
+}
 
-.home__md a { color: var(--accent-primary); text-decoration: none; }
-.home__md a:hover { text-decoration: underline; filter: brightness(1.2); }
+.home__md a {
+  color: var(--accent-primary);
+  text-decoration: none;
+}
+.home__md a:hover {
+  text-decoration: underline;
+  filter: brightness(1.2);
+}
 
 .home__md blockquote {
   margin: 10px 0;
@@ -301,19 +343,31 @@
   margin: 14px 0;
 }
 
-.home__md table { width: 100%; border-collapse: collapse; margin: 12px 0; }
-.home__md th, .home__md td {
+.home__md table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 12px 0;
+}
+.home__md th,
+.home__md td {
   border: 1px solid rgb(255 255 255 / 10%);
   padding: 8px 10px;
 }
-.home__md thead th { background: rgb(255 255 255 / 6%); font-weight: 700; }
-.home__md tbody tr:nth-child(odd) { background: rgb(255 255 255 / 3%); }
+.home__md thead th {
+  background: rgb(255 255 255 / 6%);
+  font-weight: 700;
+}
+.home__md tbody tr:nth-child(odd) {
+  background: rgb(255 255 255 / 3%);
+}
 
 .home__md code {
   background: rgb(16 18 28 / 70%);
   padding: 2px 6px;
   border-radius: 6px;
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-family:
+    ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New",
+    monospace;
 }
 .home__md pre {
   background: rgb(16 18 28 / 80%);
@@ -406,13 +460,22 @@
   display: inline-block;
   height: 12px;
   border-radius: 8px;
-  background: linear-gradient(90deg, rgba(255,255,255,0.08) 25%, rgba(255,255,255,0.18) 50%, rgba(255,255,255,0.08) 75%);
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.08) 25%,
+    rgba(255, 255, 255, 0.18) 50%,
+    rgba(255, 255, 255, 0.08) 75%
+  );
   background-size: 200% 100%;
   animation: home-skeleton 1.2s ease-in-out infinite;
 }
 @keyframes home-skeleton {
-  0% { background-position: 200% 0; }
-  100% { background-position: 0 0; }
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: 0 0;
+  }
 }
 
 .home__terminal {
