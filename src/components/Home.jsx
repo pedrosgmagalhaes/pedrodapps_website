@@ -14,7 +14,7 @@ export default function Home() {
   const [open, setOpen] = useState(() => {
     const w = typeof window !== "undefined" ? window.innerWidth : 1024;
     const isSmall = w <= 480;
-    return { lessons: !isSmall, bots: !isSmall, honeypot: false };
+    return { lessons: true, bots: !isSmall, honeypot: false };
   });
   const [lessonOpenMap, setLessonOpenMap] = useState({});
   const [activePanel, setActivePanel] = useState("welcome"); // welcome | honeypot_download | lesson_video | lesson_download | lesson_support
@@ -231,7 +231,6 @@ export default function Home() {
     setLessonOpenMap((prev) => ({ ...prev, [slug]: !prev[slug] }));
   };
 
-
   return (
     <section className="home" id="home" aria-labelledby="home-title">
       <div className="home__container">
@@ -253,7 +252,7 @@ export default function Home() {
                 onClick={() => toggle("lessons")}
                 aria-expanded={open.lessons}
               >
-                Aulas
+                Honeyspot $& Reg Oull Detector
               </button>
               <div className={`home__collapse ${open.lessons ? "is-open" : ""}`}>
                 <div className="home__sidebar-list">
@@ -294,7 +293,9 @@ export default function Home() {
                       .map((lesson) => (
                         <div key={lesson.slug} className="home__sidebar-item-group">
                           {(() => {
-                            const available = Boolean(lesson.isAvailable ?? lesson.available ?? true);
+                            const available = Boolean(
+                              lesson.isAvailable ?? lesson.available ?? true
+                            );
                             return (
                               <button
                                 className={`home__sidebar-item ${available ? "" : "is-disabled"}`}
@@ -333,7 +334,9 @@ export default function Home() {
                                 const features = (lesson.availableFeatures || [])
                                   .slice()
                                   .sort((a, b) => (order[a] ?? 99) - (order[b] ?? 99));
-                                const available = Boolean(lesson.isAvailable ?? lesson.available ?? true);
+                                const available = Boolean(
+                                  lesson.isAvailable ?? lesson.available ?? true
+                                );
                                 return features.map((feat) => {
                                   const Icon = featureIcons[feat] || FaPlay; // Default to FaPlay if no icon
                                   return (

@@ -361,6 +361,11 @@
   border-bottom: 1px solid rgb(255 255 255 / 8%);
 }
 
+.home__run-actions {
+  display: inline-flex;
+  gap: 8px;
+}
+
 .home__prompt {
   background: rgb(255 255 255 / 4%);
   border: 1px solid rgb(255 255 255 / 10%);
@@ -599,6 +604,7 @@
   .home__terminal-header {
     padding: 10px 12px;
     gap: 10px;
+    flex-direction: column;
   }
 
   .home__prompt {
@@ -618,6 +624,12 @@
     min-width: 72px;
     padding: 0 12px;
     align-self: stretch;
+    width: 100%;
+  }
+
+  .home__run-actions {
+    display: block;
+    width: 100%;
   }
 
   .home__run-icon {

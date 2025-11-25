@@ -110,7 +110,7 @@ export default function Terminal({
             disabled={running}
           />
         </div>
-        <div style={{ display: "flex", gap: 8 }}>
+        <div className="home__run-actions">
           <button
             className={`home__run-btn ${running ? "is-running" : ""}`}
             onClick={run}
