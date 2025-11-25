@@ -16,7 +16,6 @@ export default defineConfig(({ mode }) => {
     // Fallback seguro para env em clientes onde import.meta.env não esteja disponível
     define: {
       __APP_VITE_GOOGLE_CLIENT_ID__: JSON.stringify(env.VITE_GOOGLE_CLIENT_ID || ""),
-      __APP_VITE_STRIPE_PUBLIC_KEY__: JSON.stringify(env.VITE_STRIPE_PUBLIC_KEY || ""),
     },
   };
 });

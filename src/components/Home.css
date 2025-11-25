@@ -517,6 +517,21 @@
   .home__layout {
     grid-template-columns: 1fr;
   }
+  .home__container {
+    width: 100%;
+    margin-left: 0;
+  }
+  .home__sidebar {
+    position: static;
+    width: 100%;
+    height: auto;
+    top: auto;
+    left: auto;
+    margin-bottom: 12px;
+  }
+  .home__sidebar-group:first-of-type .home__collapse.is-open {
+    max-height: 50vh;
+  }
 }
 
 /* Ajustes de responsividade para telas pequenas */
@@ -526,7 +541,8 @@
   }
 
   .home__container {
-    width: 95vw;
+    width: 100%;
+    margin-left: 0;
   }
 
   .home__header {
@@ -547,6 +563,10 @@
 
   .home__sidebar {
     position: static;
+    width: 100%;
+    height: auto;
+    top: auto;
+    left: auto;
     padding: 12px;
   }
 

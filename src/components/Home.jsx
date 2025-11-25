@@ -11,7 +11,11 @@ import remarkGfm from "remark-gfm";
 
 export default function Home() {
   const courseSlug = "builders-de-elite";
-  const [open, setOpen] = useState({ lessons: true, bots: true, honeypot: false });
+  const [open, setOpen] = useState(() => {
+    const w = typeof window !== "undefined" ? window.innerWidth : 1024;
+    const isSmall = w <= 480;
+    return { lessons: !isSmall, bots: !isSmall, honeypot: false };
+  });
   const [lessonOpenMap, setLessonOpenMap] = useState({});
   const [activePanel, setActivePanel] = useState("welcome"); // welcome | honeypot_download | lesson_video | lesson_download | lesson_support
   // Gating removido: não usamos overlay de liberação
