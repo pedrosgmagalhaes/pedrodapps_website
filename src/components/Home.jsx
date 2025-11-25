@@ -1,7 +1,17 @@
 import React, { useEffect, useRef, useState } from "react";
 import "./Home.css";
-import { FaRobot, FaPlay, FaDownload, FaLifeRing, FaBook } from "react-icons/fa";
+import {
+  FaRobot,
+  FaPlay,
+  FaDownload,
+  FaLifeRing,
+  FaBook,
+  FaArrowLeft,
+  FaChevronDown,
+  FaChevronUp,
+} from "react-icons/fa";
 import WelcomeTerminal from "./WelcomeTerminal";
+import Footer from "./Footer";
 import BotDownloadInfo from "./BotDownloadInfo";
 import SupportFeed from "./SupportFeed";
 import { API, getBaseURL } from "../lib/api";
@@ -30,6 +40,7 @@ export default function Home() {
   const [videoLoading, setVideoLoading] = useState(false);
   const [upcoming, setUpcoming] = useState([]);
   const { t } = useTranslation();
+  const [focusedLesson, setFocusedLesson] = useState(null);
 
   const featureIcons = {
     video: FaPlay,
@@ -232,71 +243,87 @@ export default function Home() {
   };
 
   return (
-    <section className="home" id="home" aria-labelledby="home-title">
-      <div className="home__container">
-        <header className="home__header">
-          <div className="home__brand" role="heading" aria-level={1}>
-            <h1 id="home-title" className="home__brand-title">
-              <a href="/members/home" aria-label="Voltar para a Home">
-                {course?.title || "Builders de Elite"}
-              </a>
-            </h1>
-          </div>
-        </header>
-        <div className="home__layout">
-          <aside className="home__sidebar" aria-label="Sidebar navigation">
-            <div className="home__sidebar-group">
+    <>
+      <section className="home" id="home" aria-labelledby="home-title">
+        <div className="home__container">
+          <header className="home__header">
+            <div className="home__brand" role="heading" aria-level={1}>
+              <h1 id="home-title" className="home__brand-title">
+                <a href="/members/home" aria-label="Voltar para a Home">
+                  {course?.title || "Builders de Elite"}
+                </a>
+              </h1>
+            </div>
+          </header>
+          <div className="home__layout">
+          <aside className={`home__sidebar ${focusedLesson ? "is-focused" : ""}`} aria-label="Sidebar navigation">
+              <div className="home__sidebar-group">
               <button
                 className="home__sidebar-heading"
                 type="button"
                 onClick={() => toggle("lessons")}
                 aria-expanded={open.lessons}
               >
-                Honeyspot $& Reg Oull Detector
+                Honeyspot $& Reg Pull Detector
+                <span className="home__chevron">
+                  {open.lessons ? <FaChevronUp /> : <FaChevronDown />}
+                </span>
               </button>
-              <div className={`home__collapse ${open.lessons ? "is-open" : ""}`}>
-                <div className="home__sidebar-list">
-                  {courseStatus === "loading" ? (
-                    <>
-                      {[0, 1, 2].map((i) => (
-                        <div
-                          key={`skeleton-${i}`}
-                          className="home__sidebar-item"
-                          aria-disabled="true"
-                        >
-                          <span className="icon">
-                            <FaPlay />
-                          </span>
-                          <span
-                            className="skeleton-line"
-                            style={{ width: i === 0 ? "60%" : i === 1 ? "48%" : "36%" }}
-                          />
-                        </div>
-                      ))}
-                    </>
-                  ) : courseStatus === "error" ? (
-                    <div
-                      className="home__sidebar-item"
-                      aria-disabled="true"
-                      role="status"
-                      aria-live="polite"
-                    >
-                      <span className="icon">
-                        <FaPlay />
-                      </span>
-                      <span>Não foi possível carregar as aulas.</span>
-                    </div>
+              {focusedLesson && (
+                <button
+                  className="home__back-btn"
+                  type="button"
+                  onClick={() => setFocusedLesson(null)}
+                  aria-label="Voltar à lista de aulas"
+                >
+                  <FaArrowLeft className="home__back-icon" />
+                  <span>Voltar às aulas anteriores</span>
+                </button>
+              )}
+                <div className={`home__collapse ${open.lessons ? "is-open" : ""}`}>
+                  <div className={`home__sidebar-list ${focusedLesson ? "is-focused" : ""}`}>
+                    {courseStatus === "loading" ? (
+                      <>
+                        {[0, 1, 2].map((i) => (
+                          <div
+                            key={`skeleton-${i}`}
+                            className="home__sidebar-item"
+                            aria-disabled="true"
+                          >
+                            <span className="icon">
+                              <FaPlay />
+                            </span>
+                            <span
+                              className="skeleton-line"
+                              style={{ width: i === 0 ? "60%" : i === 1 ? "48%" : "36%" }}
+                            />
+                          </div>
+                        ))}
+                      </>
+                    ) : courseStatus === "error" ? (
+                      <div
+                        className="home__sidebar-item"
+                        aria-disabled="true"
+                        role="status"
+                        aria-live="polite"
+                      >
+                        <span className="icon">
+                          <FaPlay />
+                        </span>
+                        <span>Não foi possível carregar as aulas.</span>
+                      </div>
                   ) : course?.lessons && course.lessons.length > 0 ? (
                     course.lessons
                       .slice()
                       .sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
+                      .filter((l) => !focusedLesson || l.slug === focusedLesson)
                       .map((lesson) => (
-                        <div key={lesson.slug} className="home__sidebar-item-group">
-                          {(() => {
-                            const available = Boolean(
-                              lesson.isAvailable ?? lesson.available ?? true
-                            );
-                            return (
+                          <div key={lesson.slug} className="home__sidebar-item-group">
+                            {(() => {
+                              const available = Boolean(
+                                lesson.isAvailable ?? lesson.available ?? true
+                              );
+                              return (
                               <button
                                 className={`home__sidebar-item ${available ? "" : "is-disabled"}`}
                                 type="button"
@@ -315,174 +342,108 @@ export default function Home() {
                                     <span className="home__badge home__badge--soon">Em breve</span>
                                   )}
                                 </span>
+                                <span className="home__chevron">
+                                  {lessonOpenMap[lesson.slug] ? <FaChevronUp /> : <FaChevronDown />}
+                                </span>
                               </button>
-                            );
-                          })()}
-                          <div
-                            id={`lesson-${lesson.slug}-collapse`}
-                            className={`home__collapse ${lessonOpenMap[lesson.slug] ? "is-open" : ""}`}
-                          >
-                            <div className="home__sidebar-list home__sublist">
-                              {(() => {
-                                const order = {
-                                  textContent: 0,
-                                  video: 1,
-                                  botDownload: 2,
-                                  support: 3,
-                                  terminal: 4,
-                                };
-                                const features = (lesson.availableFeatures || [])
-                                  .slice()
-                                  .sort((a, b) => (order[a] ?? 99) - (order[b] ?? 99));
-                                const available = Boolean(
-                                  lesson.isAvailable ?? lesson.available ?? true
-                                );
-                                return features.map((feat) => {
-                                  const Icon = featureIcons[feat] || FaPlay; // Default to FaPlay if no icon
-                                  return (
-                                    <button
-                                      key={feat}
-                                      className={`home__sidebar-item ${available ? "" : "is-disabled"}`}
-                                      type="button"
-                                      disabled={!available}
-                                      aria-disabled={!available}
-                                      onClick={
-                                        available
-                                          ? () =>
-                                              handleGatedAction(() => {
-                                                setActiveLesson(lesson.slug);
-                                                setActivePanel(featurePanels[feat]);
-                                              })
-                                          : undefined
+                              );
+                            })()}
+                            <div
+                              id={`lesson-${lesson.slug}-collapse`}
+                              className={`home__collapse ${lessonOpenMap[lesson.slug] ? "is-open" : ""}`}
+                            >
+                              <div className="home__sidebar-list home__sublist">
+                                {(() => {
+                                  const order = {
+                                    textContent: 0,
+                                    video: 1,
+                                    botDownload: 2,
+                                    support: 3,
+                                    terminal: 4,
+                                  };
+                                  const features = (lesson.availableFeatures || [])
+                                    .slice()
+                                    .sort((a, b) => (order[a] ?? 99) - (order[b] ?? 99));
+                                  const available = Boolean(
+                                    lesson.isAvailable ?? lesson.available ?? true
+                                  );
+                                  return features.map((feat) => {
+                                    const Icon = featureIcons[feat] || FaPlay; // Default to FaPlay if no icon
+                                    return (
+                                      <button
+                                        key={feat}
+                                        className={`home__sidebar-item ${available ? "" : "is-disabled"}`}
+                                        type="button"
+                                        disabled={!available}
+                                        aria-disabled={!available}
+                                        onClick={
+                                    available
+                                      ? () =>
+                                          handleGatedAction(() => {
+                                            setActiveLesson(lesson.slug);
+                                            setActivePanel(featurePanels[feat]);
+                                            setFocusedLesson(lesson.slug);
+                                            setLessonOpenMap({ [lesson.slug]: true });
+                                          })
+                                      : undefined
                                       }
                                       aria-controls="home-content"
                                     >
                                       <span className="icon">
                                         <Icon />
-                                      </span>
-                                      <span>{t(`features.${feat}`)}</span>
-                                    </button>
-                                  );
-                                });
-                              })()}
+                                        </span>
+                                        <span>{t(`features.${feat}`)}</span>
+                                      </button>
+                                    );
+                                  });
+                                })()}
+                              </div>
                             </div>
                           </div>
-                        </div>
-                      ))
-                  ) : (
-                    <div className="home__sidebar-item" aria-disabled="true">
-                      <span className="icon">
-                        <FaPlay />
-                      </span>
-                      <span>Carregando...</span>
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div>
-          </aside>
-
-          <div className="home__content">
-            {activePanel === "welcome" && <WelcomeTerminal title={course?.title ?? undefined} />}
-            {activePanel === "honeypot_download" && (
-              <BotDownloadInfo
-                downloadUrl="/vite.svg"
-                onDownload={() => {
-                  window.open("/vite.svg", "_blank", "noopener,noreferrer");
-                }}
-              />
-            )}
-            {activePanel === "support" && <SupportFeed />}
-
-            {activePanel === "lesson_video" && (
-              <div className="home__bot-video" role="region" aria-label="Vídeo da aula">
-                {lessonStatus === "loading" && (
-                  <div className="home__bot-video-caption">
-                    <div style={{ display: "grid", gap: 10 }}>
-                      <span className="skeleton-line" style={{ width: "60%" }} />
-                      <span className="skeleton-line" style={{ width: "40%" }} />
-                      <span className="skeleton-line" style={{ width: "30%" }} />
-                    </div>
-                  </div>
-                )}
-                {lessonStatus === "error" && (
-                  <div className="home__bot-video-caption">
-                    Não foi possível carregar os detalhes da aula.
-                  </div>
-                )}
-                {lessonStatus === "ready" && (
-                  <div className="home__bot-video-caption">
-                    {!lessonDetail?.isAvailable && lessonDetail?.availableFrom && (
-                      <div style={{ marginBottom: 10, color: "#6b7280" }}>
-                        Disponível em{" "}
-                        {new Intl.DateTimeFormat("pt-BR").format(
-                          new Date(lessonDetail.availableFrom)
-                        )}
+                        ))
+                    ) : (
+                      <div className="home__sidebar-item" aria-disabled="true">
+                        <span className="icon">
+                          <FaPlay />
+                        </span>
+                        <span>Carregando...</span>
                       </div>
                     )}
-                    {(function () {
-                      const raw = lessonDetail?.videoUrl || lessonDetail?.video_url || "";
-                      const sClean = String(raw || "")
-                        .replace(/`/g, "")
-                        .replace(/\s{2,}/g, " ")
-                        .trim();
-                      if (!sClean) return "Em breve ficará disponível.";
-                      const isYouTube = /youtu\.be|youtube\.com/.test(sClean);
-                      if (isYouTube) {
-                        return <YouTubeOrVideo videoUrl={sClean} />;
-                      }
-                      const mediaUrl = (() => {
-                        try {
-                          const u = new URL(sClean);
-                          return u.toString();
-                        } catch {
-                          return encodeURI(sClean);
-                        }
-                      })();
-                      return (
-                        <>
-                          {videoLoading && <div>Carregando...</div>}
-                          <YouTubeOrVideo videoUrl={mediaUrl} />
-                        </>
-                      );
-                    })()}
                   </div>
-                )}
+                </div>
               </div>
-            )}
+            </aside>
 
-            {activePanel === "lesson_download" && (
-              <BotDownloadInfo
-                downloadUrl={
-                  lessonDetail?.sourceCodeUrl || lessonDetail?.download_url || "/vite.svg"
-                }
-                onDownload={() => {
-                  const url =
-                    lessonDetail?.sourceCodeUrl || lessonDetail?.download_url || "/vite.svg";
-                  window.open(url, "_blank", "noopener,noreferrer");
-                }}
-              />
-            )}
+            <div className="home__content">
+              {activePanel === "welcome" && <WelcomeTerminal title={course?.title ?? undefined} />}
+              {activePanel === "honeypot_download" && (
+                <BotDownloadInfo
+                  downloadUrl="/vite.svg"
+                  onDownload={() => {
+                    window.open("/vite.svg", "_blank", "noopener,noreferrer");
+                  }}
+                />
+              )}
+              {activePanel === "support" && <SupportFeed />}
 
-            {activePanel === "lesson_support" && (
-              <SupportFeed courseSlug={courseSlug} lessonSlug={activeLesson} />
-            )}
-
-            {activePanel === "lesson_terminal" && (
-              <div className="home__bot-video" role="region" aria-label={t("features.terminal")}>
-                <div className="home__bot-video-caption">
+              {activePanel === "lesson_video" && (
+                <div className="home__bot-video" role="region" aria-label="Vídeo da aula">
                   {lessonStatus === "loading" && (
-                    <div>
+                    <div className="home__bot-video-caption">
                       <div style={{ display: "grid", gap: 10 }}>
-                        <span className="skeleton-line" style={{ width: "55%" }} />
-                        <span className="skeleton-line" style={{ width: "35%" }} />
-                        <span className="skeleton-line" style={{ width: "25%" }} />
+                        <span className="skeleton-line" style={{ width: "60%" }} />
+                        <span className="skeleton-line" style={{ width: "40%" }} />
+                        <span className="skeleton-line" style={{ width: "30%" }} />
                       </div>
                     </div>
                   )}
-                  {lessonStatus === "error" && <div>{t("error_loading_lesson")}</div>}
+                  {lessonStatus === "error" && (
+                    <div className="home__bot-video-caption">
+                      Não foi possível carregar os detalhes da aula.
+                    </div>
+                  )}
                   {lessonStatus === "ready" && (
-                    <>
+                    <div className="home__bot-video-caption">
                       {!lessonDetail?.isAvailable && lessonDetail?.availableFrom && (
                         <div style={{ marginBottom: 10, color: "#6b7280" }}>
                           Disponível em{" "}
@@ -491,87 +452,164 @@ export default function Home() {
                           )}
                         </div>
                       )}
-                      {lessonDetail?.terminalUrl || lessonDetail?.terminal_url ? (
-                        <a
-                          href={lessonDetail?.terminalUrl || lessonDetail?.terminal_url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        >
-                          {t("open_terminal")}
-                        </a>
-                      ) : (
-                        t("terminal_coming_soon")
-                      )}
-                    </>
-                  )}
-                </div>
-              </div>
-            )}
-
-            {activePanel === "lesson_text" && (
-              <div className="home__bot-video" role="region" aria-label={t("features.textContent")}>
-                <div className="home__bot-video-caption">
-                  {lessonStatus === "loading" && (
-                    <div>
-                      <div style={{ display: "grid", gap: 10 }}>
-                        <span className="skeleton-line" style={{ width: "70%" }} />
-                        <span className="skeleton-line" style={{ width: "65%" }} />
-                        <span className="skeleton-line" style={{ width: "50%" }} />
-                        <span className="skeleton-line" style={{ width: "40%" }} />
-                      </div>
+                      {(function () {
+                        const raw = lessonDetail?.videoUrl || lessonDetail?.video_url || "";
+                        const sClean = String(raw || "")
+                          .replace(/`/g, "")
+                          .replace(/\s{2,}/g, " ")
+                          .trim();
+                        if (!sClean) return "Em breve ficará disponível.";
+                        const isYouTube = /youtu\.be|youtube\.com/.test(sClean);
+                        if (isYouTube) {
+                          return <YouTubeOrVideo videoUrl={sClean} />;
+                        }
+                        const mediaUrl = (() => {
+                          try {
+                            const u = new URL(sClean);
+                            return u.toString();
+                          } catch {
+                            return encodeURI(sClean);
+                          }
+                        })();
+                        return (
+                          <>
+                            {videoLoading && <div>Carregando...</div>}
+                            <YouTubeOrVideo videoUrl={mediaUrl} />
+                          </>
+                        );
+                      })()}
                     </div>
                   )}
-                  {lessonStatus === "error" && <div>{t("error_loading_lesson")}</div>}
-                  {lessonStatus === "ready" && (
-                    <>
-                      {!lessonDetail?.isAvailable && lessonDetail?.availableFrom && (
-                        <div style={{ marginBottom: 12, color: "#6b7280" }}>
-                          Disponível em{" "}
-                          {new Intl.DateTimeFormat("pt-BR").format(
-                            new Date(lessonDetail.availableFrom)
-                          )}
-                        </div>
-                      )}
-                      {lessonDetail?.content ? (
-                        <div className="home__md">
-                          <ReactMarkdown
-                            remarkPlugins={[remarkGfm]}
-                            components={{
-                              a: (props) => (
-                                <a {...props} target="_blank" rel="noopener noreferrer" />
-                              ),
-                            }}
-                          >
-                            {lessonDetail.content}
-                          </ReactMarkdown>
-                        </div>
-                      ) : (
-                        t("text_content_coming_soon")
-                      )}
-                    </>
-                  )}
                 </div>
-              </div>
-            )}
+              )}
+
+              {activePanel === "lesson_download" && (
+                <BotDownloadInfo
+                  downloadUrl={
+                    lessonDetail?.sourceCodeUrl || lessonDetail?.download_url || "/vite.svg"
+                  }
+                  onDownload={() => {
+                    const url =
+                      lessonDetail?.sourceCodeUrl || lessonDetail?.download_url || "/vite.svg";
+                    window.open(url, "_blank", "noopener,noreferrer");
+                  }}
+                />
+              )}
+
+              {activePanel === "lesson_support" && (
+                <SupportFeed courseSlug={courseSlug} lessonSlug={activeLesson} />
+              )}
+
+              {activePanel === "lesson_terminal" && (
+                <div className="home__bot-video" role="region" aria-label={t("features.terminal")}>
+                  <div className="home__bot-video-caption">
+                    {lessonStatus === "loading" && (
+                      <div>
+                        <div style={{ display: "grid", gap: 10 }}>
+                          <span className="skeleton-line" style={{ width: "55%" }} />
+                          <span className="skeleton-line" style={{ width: "35%" }} />
+                          <span className="skeleton-line" style={{ width: "25%" }} />
+                        </div>
+                      </div>
+                    )}
+                    {lessonStatus === "error" && <div>{t("error_loading_lesson")}</div>}
+                    {lessonStatus === "ready" && (
+                      <>
+                        {!lessonDetail?.isAvailable && lessonDetail?.availableFrom && (
+                          <div style={{ marginBottom: 10, color: "#6b7280" }}>
+                            Disponível em{" "}
+                            {new Intl.DateTimeFormat("pt-BR").format(
+                              new Date(lessonDetail.availableFrom)
+                            )}
+                          </div>
+                        )}
+                        {lessonDetail?.terminalUrl || lessonDetail?.terminal_url ? (
+                          <a
+                            href={lessonDetail?.terminalUrl || lessonDetail?.terminal_url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            {t("open_terminal")}
+                          </a>
+                        ) : (
+                          t("terminal_coming_soon")
+                        )}
+                      </>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {activePanel === "lesson_text" && (
+                <div
+                  className="home__bot-video"
+                  role="region"
+                  aria-label={t("features.textContent")}
+                >
+                  <div className="home__bot-video-caption">
+                    {lessonStatus === "loading" && (
+                      <div>
+                        <div style={{ display: "grid", gap: 10 }}>
+                          <span className="skeleton-line" style={{ width: "70%" }} />
+                          <span className="skeleton-line" style={{ width: "65%" }} />
+                          <span className="skeleton-line" style={{ width: "50%" }} />
+                          <span className="skeleton-line" style={{ width: "40%" }} />
+                        </div>
+                      </div>
+                    )}
+                    {lessonStatus === "error" && <div>{t("error_loading_lesson")}</div>}
+                    {lessonStatus === "ready" && (
+                      <>
+                        {!lessonDetail?.isAvailable && lessonDetail?.availableFrom && (
+                          <div style={{ marginBottom: 12, color: "#6b7280" }}>
+                            Disponível em{" "}
+                            {new Intl.DateTimeFormat("pt-BR").format(
+                              new Date(lessonDetail.availableFrom)
+                            )}
+                          </div>
+                        )}
+                        {lessonDetail?.content ? (
+                          <div className="home__md">
+                            <ReactMarkdown
+                              remarkPlugins={[remarkGfm]}
+                              components={{
+                                a: (props) => (
+                                  <a {...props} target="_blank" rel="noopener noreferrer" />
+                                ),
+                              }}
+                            >
+                              {lessonDetail.content}
+                            </ReactMarkdown>
+                          </div>
+                        ) : (
+                          t("text_content_coming_soon")
+                        )}
+                      </>
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
         </div>
-      </div>
-      {/* Gating removido: aulas sempre disponíveis */}
-      {/* Em breve: lista de próximas aulas com datas */}
-      {upcoming && upcoming.length > 0 && (
-        <div className="home__bot-video" role="region" aria-label="Em breve">
-          <div className="home__bot-video-caption">
-            <strong style={{ display: "block", marginBottom: 8 }}>Em breve</strong>
-            <ul style={{ margin: 0, paddingLeft: 18 }}>
-              {upcoming.map((u) => (
-                <li key={u.slug} style={{ marginBottom: 4 }}>
-                  {u.title} — {new Intl.DateTimeFormat("pt-BR").format(new Date(u.availableFrom))}
-                </li>
-              ))}
-            </ul>
+        {/* Gating removido: aulas sempre disponíveis */}
+        {/* Em breve: lista de próximas aulas com datas */}
+        {upcoming && upcoming.length > 0 && (
+          <div className="home__bot-video" role="region" aria-label="Em breve">
+            <div className="home__bot-video-caption">
+              <strong style={{ display: "block", marginBottom: 8 }}>Em breve</strong>
+              <ul style={{ margin: 0, paddingLeft: 18 }}>
+                {upcoming.map((u) => (
+                  <li key={u.slug} style={{ marginBottom: 4 }}>
+                    {u.title} — {new Intl.DateTimeFormat("pt-BR").format(new Date(u.availableFrom))}
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
-        </div>
-      )}
-    </section>
+        )}
+      </section>
+      <Footer />
+    </>
   );
 }
